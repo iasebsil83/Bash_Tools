@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#infinite loop
+while [ 1 ]; do
+
+	#print a random number between 0 and f
+	if [[ $RANDOM -gt 4096 ]]; then
+		if [[ $RANDOM -gt 4096 ]]; then
+			echo -n 2
+		else
+			echo -n 1
+		fi
+	else
+		echo -n 0
+	fi
+	sleep 0.1
+done

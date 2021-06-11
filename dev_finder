@@ -1,3 +1,26 @@
+#!/usr/bin/python3
+
+# ============================================
+# |              Device Finder               |
+# |                                          |
+# |     This program helps you to know where |
+# | a new device is added to your computer   |
+# | (in /dev).                               |
+# |                                          |
+# |     Another way of doing this is by      |
+# | using this command :                     |
+# |               ls -ult /dev               |
+# | after having connected the device, and   |
+# | then compare the last access times.      |
+# |                                          |
+# |Let's Code !                       By I.A.|
+# ============================================
+
+
+
+
+
+
 # ---------------- IMPORTATIONS ----------------
 import os
 
