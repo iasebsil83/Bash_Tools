@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#go in bash_tools directory
+cd ~/.bash_tools
+
+#get the latest version from GitHub (https://github.com/iasebsil83/Bash_Tools)
+git pull && echo "Bash tools updated !"
+
+#error case
+if [[ ! $? == 0 ]]; then
+	echo "Could not update Bash tools."
+fi
