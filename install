@@ -7,4 +7,5 @@
 mv Bash_Tools ~/.bash_tools && \
 echo -e "\n\n\n# Bash tools by I.A. :" >> ~/.bashrc && \
 echo -e "PATH=\"\$PATH:~/.bash_tools\"\n\n\n" >> ~/.bashrc && \
-rm ~/.bash_tools/install
+rm ~/.bash_tools/install && \
+echo "Bash tools installation done (you can find them in ~/.bash_tools)."
