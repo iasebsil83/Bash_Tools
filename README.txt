@@ -1,6 +1,6 @@
                         Bash Tools
 
-    This repository is a bunch of a little tools that can
+    This repository is a bunch of little tools that can
 help you in a bash terminal.
 
 
@@ -31,16 +31,19 @@ That should be all for the requirements.
 
 II] Installation
 
-Go to your home directory :
-    > cd ~
-
 Get the repository from GitHub :
     > git clone https://github.com/iasebsil83/Bash_Tools
-    > mv Bash_Tools .bash_tools
 
-Add the new folder to your PATH variable :
-    > echo -e "\n\n\n# Bash tools by I.A. :" >> .bashrc
-    > echo -e "PATH=\"\$PATH:$HOME/.bash_tools\"\n" >> .bashrc
+Launch the installer :
+    > ./Bash_Tools/install
+
+Installator did not launch ?
+Maybe the file is not executable :
+    > sudo chmod 777 Bash_tools/install
+
+To uninstall bash tools :
+    > remove "Bash tools" section in file ~/.bashrc
+    > rm -rf ~/.bash_tools
 
 There you go !
 
@@ -54,7 +57,7 @@ III] Use
 Now, open a new terminal.
 You should be able to run these new commands :
 
-    - updateAll        (completely update & upgrade your packages and remove
+    - update_all       (completely update & upgrade your packages and remove
                         unnecessary files.)
 
     - dev_finder       (detect the effects of a new device on your computer in /dev)
@@ -93,3 +96,4 @@ Youtube     : https://www.youtube.com/user/IAsebsil83
 GitHub repo : https://github.com/iasebsil83
 
 Let's Code !                                  By I.A.
+

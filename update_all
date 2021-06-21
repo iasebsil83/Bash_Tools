@@ -1,0 +1,38 @@
+#!/bin/bash
+
+
+
+# error messages
+function checkSuccess() {
+	if [[ $? != 0 ]]; then
+		echo "Errors occured during ${1}ing."
+	fi
+}
+
+
+
+# 1) update & full-upgrade packages
+echo -e "\nUpdating package list...\n"    && sudo apt update
+checkSuccess "updat"
+echo -e "\nUpgrading packages...\n"       && sudo apt full-upgrade
+checkSuccess "upgrad"
+
+
+
+# 2) fix broken & missing links in packages
+echo -e "\nFixing broken packages...\n"   && sudo apt install --fix-broken
+checkSuccess "break fix"
+echo -e "\nFixing missing packages...\n"  && sudo apt install --fix-missing
+checkSuccess "missing fix"
+
+
+
+# 3) remove unused packages
+echo -e "\nRemoving unused packages...\n" && sudo apt autoremove
+checkSuccess "remov"
+
+
+
+# 4) clean apt folders
+echo -e "\nCleaning all...\n"             && sudo apt autoclean
+checkSuccess "clean"

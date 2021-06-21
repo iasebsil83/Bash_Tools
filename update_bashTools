@@ -1,12 +1,22 @@
 #!/bin/bash
 
 #go in bash_tools directory
+oldPath=$(pwd)
 cd ~/.bash_tools
 
+
+
 #get the latest version from GitHub (https://github.com/iasebsil83/Bash_Tools)
-git pull && echo "Bash tools updated !"
+git pull && rm -f install && echo "Bash tools updated !"
+
+
 
 #error case
-if [[ ! $? == 0 ]]; then
+if [[ $? != 0 ]]; then
 	echo "Could not update Bash tools."
 fi
+
+
+
+#go back in previous directory
+cd $oldPath

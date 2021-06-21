@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Run multiple programs at once.
+# When stopping with CTRL+C, all programs stops
+#
+# example:
+#  > multitask tput_allColors ls pwd ./myprog1 ./myprog2
+
+
+
+#interruption catch for every task
+trap "exit 0" SIGINT
+
+
+for prog in $@; do
+
+	#start messages
+	echo "Multitask > Launching $prog..."
+
+	#run in background + end message
+    $prog && echo "Multitask > $prog terminated." &
+	sleep 1
+
+done
+

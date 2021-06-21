@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+
+# Installation program for bash tools.
+# This program removes itself when installation finished.
+cd .. && \
+mv Bash_tools ~/.bash_tools && \
+echo -e "\n\n\n# Bash tools by I.A. :" >> ~/.bashrc && \
+echo -e "PATH=\"\$PATH:~/.bash_tools\"\n\n\n" >> ~/.bashrc && \
+rm ~/.bash_tools/install
