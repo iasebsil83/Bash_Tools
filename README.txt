@@ -60,6 +60,8 @@ You should be able to run these new commands :
     - update_all       (completely update & upgrade your packages and remove
                         unnecessary files.)
 
+    - pop              (read data from file and then clear it without removing it)
+
     - dev_finder       (detect the effects of a new device on your computer in /dev)
                         [Requires python3]
 
