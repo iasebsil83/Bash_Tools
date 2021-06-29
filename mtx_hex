@@ -1,17 +1,41 @@
 #!/bin/bash
 
+
+
+#hexadecimal characters
+function echoAsHex() { #($1:number between 1 and 16)
+	n=$(($1-1))
+	case $n in
+		10) echo -n a ;;
+		11) echo -n b ;;
+		12) echo -n c ;;
+		13) echo -n d ;;
+		14) echo -n e ;;
+		15) echo -n f ;;
+		*) echo -n $n ;;
+	esac
+}
+
+
+
+#check limit
+function checkLimit() { #($1:recursion number, $2:random number previously generated)
+
+	#16 steps of 1536 ~> $RANDOM range
+	limit=$(($1 * 2048))
+
+	#check limit
+	if [[ $2 -gt limit ]]; then
+		checkLimit $(($1+1)) $2
+	else
+		echoAsHex $1
+	fi
+}
+
+
+
 #infinite loop
 while [ 1 ]; do
-
-	#print a random number between 0 and f
-	if [[ $RANDOM -gt 4096 ]]; then
-		if [[ $RANDOM -gt 4096 ]]; then
-			echo -n 2
-		else
-			echo -n 1
-		fi
-	else
-		echo -n 0
-	fi
+	checkLimit 1 $RANDOM #print a random number between 0 and f
 	sleep 0.1
 done
