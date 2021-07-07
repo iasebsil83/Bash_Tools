@@ -1,0 +1,133 @@
+#!/bin/bash
+
+
+
+# --- declarations ----
+
+#some settings
+log_dir="$PWD/log"
+log_numbers_str="15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00"
+
+#split by ' '
+IFR=' ' read -ra log_numbers <<< $log_numbers_str
+log_length=$(( ${#log_numbers[@]} - 1 ))
+
+
+
+# ---- tools ----
+
+#ask confirmation for clearing logs ($1:message before confirmation)
+function confirmClear() {
+	read -p "$1" response
+	if [[ $response != 'y' && $response != 'Y' ]]; then
+		echo "loclog: clear canceled."
+		exit 1
+	fi
+}
+
+
+
+# ---- main ----
+case $1 in
+
+	#action 1 : help
+	'' | '-h' | '--help')
+		echo "Usage : loclog [action] [option]"
+		echo "Manage a local log system."
+		echo "The actual log folder is :"
+		echo "    '$log_dir'"
+		echo
+		echo "Action :"
+		echo "  -c --clear <nbr>  : Clear the content of a log file."
+		echo "                      If no number given, clear all logs."
+		echo "                      (Include a confirmation warning before)"
+		echo "  -h --help         : Show this help message."
+		echo "  -s --show  <nbr>  : Show the content of the log number <nbr>."
+		echo "                      If no number given, show all logs."
+		echo "             <text> : Push text <text> as the latest log."
+		echo
+		echo "Examples :"
+		echo "  > loclog \"myText\""
+		echo "  #Push \"myText\" to the logs (this is now in latest-00.log)."
+		echo
+		echo "  > loclog -s 2"
+		echo "  #Show the content of the log number 02 (the 3rd latest log)."
+		echo
+		echo ""
+		if [[ $1 == '' ]]; then
+			exit 1
+		fi
+	;;
+
+	#action 2 : clear logs
+	'-c' | '--clear')
+
+		#no number given => clear all logs
+		if [[ $2 == '' ]]; then
+			confirmClear "Are you sure you want to clear all logs [y/n] ? "
+			for n in ${log_numbers[@]}; do
+				echo > $log_dir/latest-$n.log
+			done
+
+		#specific number
+		else
+			#check number
+			nbr=$(( $log_length - $2 ))
+			if [[ ${log_numbers[$nbr]} == '' || $2 -gt $log_length ]]; then
+				echo "loclog: Invalid number given '$2'."
+				exit 1
+			fi
+
+			#clear corresponding log
+			confirmClear "Are you sure you want to clear latest-"${log_numbers[$nbr]}".log [y/n] ? "
+			echo > $log_dir/latest-${log_numbers[$nbr]}.log
+		fi
+	;;
+
+	#action 3 : show logs
+	'-s' | '--show')
+
+		#no number given => show all logs
+		if [[ $2 == '' ]]; then
+			for n in ${log_numbers[@]}; do
+				echo "latest-"$n".log {"
+				cat $log_dir/latest-$n.log
+				echo "}"
+			done
+
+		#specific number
+		else
+			#check number
+			nbr=$(( $log_length - $2 ))
+			if [[ ${log_numbers[$nbr]} == '' || $2 -gt $log_length ]]; then
+				echo "loclog: Invalid number given '$2'."
+				exit 1
+			fi
+
+			#show corresponding log
+			echo "latest-"${log_numbers[$nbr]}".log {"
+			cat $log_dir/latest-${log_numbers[$nbr]}.log
+			echo "}"
+		fi
+	;;
+
+	#undefined action
+	-*)
+		echo "loclog: Undefined action '$1'."
+		exit 1
+	;;
+
+	#action 4 : push to latest log
+	*)
+		iterations_nbr=$(( $log_length - 1 ))
+
+		#shift all previous logs
+		for old in $(seq $iterations_nbr); do
+			new=$(( old + 1 ))
+			cp $log_dir/latest-${log_numbers[$new]}.log $log_dir/latest-${log_numbers[$old]}.log
+		done
+
+		#set new latest log
+		echo $1 > $log_dir/latest-00.log
+	;;
+esac

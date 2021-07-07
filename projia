@@ -1,0 +1,321 @@
+#!/bin/bash
+
+
+
+
+
+
+# ---- declarations ----
+
+#projia path
+PROJIA_PATH=$HOME/.bash_tools/.projia
+
+#global variables
+globvar_names=()
+globvar_values=()
+
+
+
+
+
+
+# ---- ls tools ----
+
+# list directories ($1:directory to list in)
+function ls_dir() {
+	cd $1 && ls | filter -d
+}
+
+
+
+
+
+
+# ---- global variables ----
+
+#add a global variable ($1:variable name, $2:value) (to use in globalvars.bash)
+function globvar_add() {
+	globvar_names+=($1)
+	globvar_values+=($2)
+}
+
+
+
+
+
+
+# ---- main ----
+case $1 in
+
+	#action 1 : help
+	'-h' | '--help' | '')
+		echo "Usage : projia [--help/action] [options]..."
+		echo "Create projects in different languages using I.A.'s libraries."
+		echo
+		echo "Action :"
+		echo "  -a --add <name>                   Add a new language named <name> to projia."
+		echo "  -d --delete <name>                Delete the language named <name> in projia."
+		echo "  -h --help                         Show this help message."
+		echo "  -n --new <lang> <pname> <libs>... Create a new project named <pname> in language <lang>"
+		echo "                                    using the libraries <libs>."
+		echo "                                    (Don't worry, a warning will be displayed before removing)"
+		echo "  -s --show <lang>                  Shows all the libraries in language <lang>."
+		echo "                                    If <lang> is empty, show languages list."
+		echo
+		echo "For now the available languages are :"
+		projia -s
+		echo
+		echo "Examples :"
+		echo "  > projia -n C myCprogram network processes"
+		echo "  #Creates a C project named myCprogram using both network and processes libraries."
+		echo
+		echo "  > projia --show C"
+		echo "  #Shows a list of the available libraries in C."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "More information about projia in ~/.bash_tools/.projia/README.txt"
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+		if [[ $1 == '' ]]; then
+			exit 1
+		fi
+	;;
+
+	#action 2 : new
+	'-n' | '--new')
+
+		#error cases
+		if [[ $2 == '' ]]; then
+			echo "projia: No language given."
+			exit 1
+		fi
+		if [[ $3 == '' ]]; then
+			echo "projia: No project name given."
+			exit 1
+		fi
+
+		#check language in list
+		languageFound=0
+		for lang in $(lsdir $PROJIA_PATH); do
+			if [[ $2 ==  $lang ]]; then
+				languageFound=1
+			fi
+		done
+		if [[ $languageFound == 0 ]]; then
+			echo "projia: Language $2 not found in projia."
+			exit 1
+		fi
+
+		#creating new project from template
+		cp -r $PROJIA_PATH/$2/default $3 || (
+			echo "projia: Could not create project $3 in language $2."
+			exit 1
+		)
+
+
+
+		#COMMAND VARIABLES
+
+		#getting command variables
+		echo "Getting command variables..."
+		project_name=$3
+		language=$2
+		temp=$(date -R | cut -d ',' -f 2 | cut -d '+' -f 1) # \
+		len=$(( ${#temp} - 2 ))                             # | <- temporary
+		temp="${temp:1:len}"                                # /
+		creation_date=${temp:0:11}
+		creation_hour=${temp:12}
+
+		#setting main source name
+		main_source=$(ls $project_name | grep '\#project_name\#')
+		main_source=${main_source[0]}                             #security to be sure to have only 1 file
+		extension=$($main_source | cut -d '.' -f 2)
+		mv $project_name/$main_source $project_name/$project_name"."$extension
+
+		echo "Setting command variables..."
+		#setting command variables in files
+		echo "ls project_name ["
+		echo $(ls $project_name)
+		echo "]"
+		for file in $(ls $project_name); do
+			newFileContent=""
+			for str in $(cat $project_name/$file 2> /dev/null); do
+				case $str in
+
+					#replace by variable content
+					*"#project_name#"*)
+						newFileContent+=${$str/\#project_name\#/$project_name}
+					;;
+					*"#language#"*)
+						newFileContent+=${$str/\#language\#/$language}
+					;;
+					*"#creation_date#"*)
+						newFileContent+=${$str/\#creation_date\#/$creation_date}
+					;;
+					*"#creation_hour#"*)
+						newFileContent+=${$str/\#creation_hour\#/$creation_hour}
+					;;
+
+					#do not replace
+					*)
+						newFileContent+=$str
+					;;
+				esac
+			done
+			echo $newFileContent > $project_name/$file
+		done
+		read -p "waiting...(DEBUG check)" a
+
+
+
+		# GLOBAL VARIABLES
+
+		#getting global variables
+		echo "Getting global variables..."
+		source ~/.bash_tools/.projia/globvars.bash
+
+		#setting global variables in files
+		echo "Setting global variables..."
+		for file in $(ls $project_name); do
+			newFileContent=""
+			for str in $(cat $project_name/$file 2> /dev/null); do
+
+				#for each global variable
+				sequenceFound=0
+				for gv in $(seq ${#globvar_names}); do
+					sequenceToFind="#"${globvar_names[$gv]}"#"
+
+					#replace by variable content
+					if [[ $str == *$sequenceToFind* ]]; then
+						newFileContent+=${$str/$sequenceToFind/${globvar_values[$gv]}}
+						sequenceFound=1
+						break
+					fi
+				done
+				if [[ sequenceFound == 0 ]]; then
+					newFileContent+=$str
+				fi
+			done
+			echo $newFileContent > $project_name/$file
+		done
+
+
+
+		# LIBRARIES
+
+		#for each wanted libraries
+		for wanted_lib_index in $(seq 4 $#); do
+			wanted_lib=${@[$wanted_lib_index]}
+
+			#check if library exists
+
+			#temp
+			touch $project_name/src/$wanted_lib.$language
+		done
+
+		#project creation succeeded
+		echo "Project $project_name has been created in language $language."
+		exit 0
+	;;
+
+	#action 3 : add
+	'-a' | '-add')
+
+		#error cases
+		if [[ $2 == '' ]]; then
+			echo "projia: No name given for new language."
+			exit 1
+		fi
+		if [[ -d $PROJIA_PATH/$2 ]]; then
+			echo "projia: Unable to create language, already exists."
+			exit 1
+		fi
+
+		#add language
+		mkdir $PROJIA_PATH/$2 && \
+		mkdir $PROJIA_PATH/$2/lib && \
+		mkdir $PROJIA_PATH/$2/default && \
+		mkdir $PROJIA_PATH/$2/default/src && \
+		touch $PROJIA_PATH/$2/default/README.md && \
+		touch "$PROJIA_PATH/$2/default/\#project_name\#.$2" && \
+		echo "Successfully added language $2 to projia." && \
+		exit 0
+
+		#error case
+		echo "projia : Unable to add language $2."
+		exit 1
+	;;
+
+	#action 4 : delete
+	'-d' | '--delete')
+
+		#error case
+		if [[ $2 == '' ]]; then
+			echo "Here is the available languages in projia :"
+			exit 1
+		fi
+
+		#check for language in list
+		for lang in $(lsdir $PROJIA_PATH); do
+			if [[ $2 ==  $lang ]]; then
+
+				#warning before deletion
+				echo "Are you sure to remove language $lang from projia ? (All settings & libraries will be removed)"
+				read -p "If you really want that, type 'Yes, remove it' : " validation
+				if [[ $validation == 'Yes, remove it' ]]; then
+
+					#delete
+					rm -rf ~/.bash_tools/.projia/$lang
+					echo "Completely removed language $lang from projia."
+					exit 0
+				else
+					#cancel
+					echo "projia: Deletion canceled."
+					exit 1
+				fi
+			fi
+		done
+
+		#error case
+		echo "projia: Language $2 not found."
+		exit 1
+	;;
+
+	#action 5 : show
+	'-s' | '--show')
+		if [[ $2 == '' ]]; then
+
+			#no argument => show language list
+			echo "Here is the available languages in projia :"
+			for lang in $(ls_languages); do
+				echo " - $lang"
+			done
+			exit 0
+		else
+
+			#check for language in list
+			for lang in $(lsdir $PROJIA_PATH); do
+				if [[ $2 ==  $lang ]]; then
+
+					#show libraries
+					echo "Here is the available libraries for language $lang :"
+					for lib in $(ls ~/.bash_tools/.projia/$lang/lib); do
+						echo " - $lib"
+					done
+					exit 0
+				fi
+			done
+
+			#error case
+			echo "projia: Language $2 not found."
+			exit 1
+		fi
+	;;
+
+	#action 6 : undefined
+	*)
+		echo "projia: '$1' is not an available action."
+		echo "Use 'projia --help' for more details."
+		exit 1
+	;;
+esac

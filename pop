@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# read data from file + clear it (without removing it)
-cat $1 && echo "" > $1

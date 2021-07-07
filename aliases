@@ -1,0 +1,31 @@
+# ---------------- Bash Tools : aliases ----------------
+#
+# WARNING : This file is NOT a Bash Tool program.
+#           It has been made to give users some cool
+#           and useful aliases.
+#
+#     If you want to apply one of these aliases to your
+# shell, simply copy the line inside your ~/.bashrc file.
+#
+#     To add all these aliases to your shell in one
+# command, use :
+#   > source $HOME/.bash_tools/aliases
+#
+# ------------------------------------------------------
+
+
+
+#LS_COMPLETE
+
+# ls with complete path
+# use : ls_complete
+#       ls_complete <path>
+alias ls_complete="ls -d $PWD/$(history | tail -n1 | cut -d ' ' -f 19)/* && :"
+
+
+
+# POP
+
+# read a file & clear it (not removing it)
+# use : pop <file>
+alias pop="cat $(history | tail -n1 | cut -d ' ' -f 32) && echo '' > $(history | tail -n1 | cut -d ' ' -f 32) && :"
