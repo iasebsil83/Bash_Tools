@@ -1,11 +1,14 @@
 # ---------------- Bash Tools : aliases ----------------
 #
 # WARNING : This file is NOT a Bash Tool program.
-#           It has been made to give users some cool
-#           and useful aliases.
+#           It has been made to give to users some cool
+#           and helpful aliases.
 #
 #     If you want to apply one of these aliases to your
 # shell, simply copy the line inside your ~/.bashrc file.
+#
+#     Some aliases are functions indeed. It is exactly
+# the same result, do as they were aliases.
 #
 #     To add all these aliases to your shell in one
 # command, use :
@@ -15,17 +18,160 @@
 
 
 
+#SHOW_BASH_TOOLS
+
+# Show all the available bash tools.
+# (Aliases not included !)
+#
+# Use : show_bashtools
+#
+# WARNING : Requires alias/function "ls_complete" (under this one)
+alias show_bash_tools="sbt_temp=\$(ls_complete \$HOME/.bash_tools | filter -e) && for sbt_t in \${sbt_temp[@]}; do echo \${sbt_t/\"$HOME/.bash_tools/\"/}; done"
+
+
+
 #LS_COMPLETE
 
-# ls with complete path
-# use : ls_complete
+# Exactly like command ls but with complete path
+#
+# Use : ls_complete
 #       ls_complete <path>
-alias ls_complete="ls -d $PWD/$(history | tail -n1 | cut -d ' ' -f 19)/* && :"
+function ls_complete() { if [[ $1 == '' ]]; then ls -d $PWD/*; elif [[ ${1:0:1} == '/' ]]; then ls -d $1/*; else ls -d $PWD/$1/*; fi; }
 
 
 
 # POP
 
-# read a file & clear it (not removing it)
-# use : pop <file>
-alias pop="cat $(history | tail -n1 | cut -d ' ' -f 32) && echo '' > $(history | tail -n1 | cut -d ' ' -f 32) && :"
+# Read a file & clear it (not removing it)
+#
+# Use : pop <file>
+function pop() { cat $1 && echo '' > $1; }
+
+
+
+#LAST_CMD
+
+# Outputs the last command entered (under single text format).
+#
+# Use : last_cmd
+#
+# WARNING : Requires the alias "current_cmd" (under this one)
+alias last_cmd="current=\$(current_cmd) && total=\$(history | tail -n2) && echo \$total | cut -c6-\$((\${#total}-\${#current}-10))"
+
+
+
+#CURRENT_CMD (very complex alias to use, you're not ready for that)
+
+# Outputs the current command text in execution (under single text format).
+#
+# Use : current_cmd
+#
+# DISCLAIMER {
+#   It can be mindblowing to understand how to use this command properly.
+#
+#
+#
+#   I] EXPLANATION
+#
+#   This command is giving itself so if my command is :
+#     > echo "My current command is ["$(current_cmd)"]"
+#   The output will be :
+#     > My current command is [echo "My current command is ["$(current_cmd)"]"]
+#
+#      You might think that it can never be useful in any cases except maybe
+#   for doing eternal recursion...
+#   I agree with you on that, but here is an IMPORTANT thing :
+#       Aliases are not replaced by their text with it !
+#
+#   So you can do :
+#     > alias showText="echo \"My current command is [\"\$(current_cmd)\"]\""
+#     > showText
+#   And the output will be :
+#     > My current command is [showText]
+#
+#
+#
+#   II] USE
+#
+#   Basically I found only ONE use for this command :
+#       This is a way to turn an alias into a 1 argument function.
+#       (1 argument for the moment but maybe you can do with more)
+#
+#       You probably know that aliases are only text replacement so when a
+#   command is beeing read in order to be executed, the arguments has not
+#   been read yet (because they are after the command).
+#   So an alias can't have arguments.
+#
+#       Using current_cmd, it can... but that is not the only alternative.
+#   Infact, there is another way to do so, easier to understand and use
+#   and allowing multiple arguments :
+#       Using function declaration & call inside alias.
+#
+#       In term of execution, the only difference with current_cmd is that
+#   each time you use your alias, you declare/re-declare a function that
+#   can be called even after your alias has finished.
+#   With current_cmd it is only available on the alias call.
+#
+#
+#
+#   III] Examples
+#
+#   Let's do a simple square calculator :
+#
+#   Using a standard function :
+#     > function square() {
+#     >     echo $(( $1 ** 2 ))
+#     > }
+#     > square 4
+#   Output :
+#     > 16     (all is working normally)
+#
+#
+#
+#   Using a standard alias :
+#     > alias square="echo \$(( \$1 ** 2 ))"
+#     > square 4
+#   Output :
+#     > SYNTAX ERROR : Cannot evaluate expression $(( ** 2 ))
+#
+#   And that's normal.
+#   $1 has no value. Therefore, the expression to analyse is only $(( ** 2 )).
+#
+#
+#
+#   Using function in alias :
+#     > alias square="function f_square() { echo \$(( \$1 ** 2 ));}; f_square"
+#     > square 4
+#   Output :
+#     > 16   (also working)
+#
+#       Here we declared a function f_square that echoes the square of his
+#   first argument ($1) and then we call it so the rest of the text after the
+#   alias call are given as arguments for f_square().
+#       Moreover you can call f_square() even after the use of alias "square"
+#   because you declared the function directly in your terminal.
+#   (You no longer need the alias so maybe it is better just to declare the
+#    function directly into your .bashrc file)
+#
+#
+#
+#   Now let's use current_cmd in alias :
+#     > alias square="echo \$(( \$(current_cmd | cut -c10-) ** 2 )) && :"
+#     > square 4
+#   Output :
+#     > 16 (also working)
+#
+#   Let see the execution of "square4" step by step:
+#     - When command is in execution, current_cmd echoes the command itself so :
+#          $(current_cmd)                # will return "square 4"
+#     - We only want the argument so we cut it from index 10 until the end :
+#          $(current_cmd | cut -c10-)   # will return "4"
+#     - Then show the square of the argument :
+#         echo $(( $(current_cmd | cut -c10-) ** 2 ))
+#     - Finally put it into an alias.
+#       (Add the backslashes before the dollars)
+#
+#   That was a bit long but now you shall be able to understand how this command
+#   works and maybe find a better use of it !
+# }
+alias current_cmd="lastcmd_temp=\$(history | tail -n1) && lastcmd_temp=\${lastcmd_temp:5} && echo \$lastcmd_temp"

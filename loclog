@@ -9,18 +9,18 @@ log_dir="$PWD/log"
 log_numbers_str="15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00"
 
 #split by ' '
-IFR=' ' read -ra log_numbers <<< $log_numbers_str
+IFS=' ' read -ra log_numbers <<< $log_numbers_str
 log_length=$(( ${#log_numbers[@]} - 1 ))
 
 
 
 # ---- tools ----
 
-#ask confirmation for clearing logs ($1:message before confirmation)
-function confirmClear() {
+#ask confirmation for clearing logs ($1:message before, $2:message after)
+function confirm() {
 	read -p "$1" response
 	if [[ $response != 'y' && $response != 'Y' ]]; then
-		echo "loclog: clear canceled."
+		echo $2
 		exit 1
 	fi
 }
@@ -34,14 +34,25 @@ case $1 in
 	'' | '-h' | '--help')
 		echo "Usage : loclog [action] [option]"
 		echo "Manage a local log system."
-		echo "The actual log folder is :"
-		echo "    '$log_dir'"
+		echo
+		if [[ -d log ]]; then
+			echo "The actual log folder is :"
+			echo "    '$log_dir'"
+		else
+			echo "/!\ WARNING /!\ : NO LOG FOLDER DETECTED !"
+			echo "Please create one before any use of logs :"
+			echo "    loclog -n"
+		fi
 		echo
 		echo "Action :"
 		echo "  -c --clear <nbr>  : Clear the content of a log file."
 		echo "                      If no number given, clear all logs."
 		echo "                      (Include a confirmation warning before)"
+		echo "  -d --delete       : Delete the current log folder if existing."
+		echo "                      (Include a confirmation warning before)"
 		echo "  -h --help         : Show this help message."
+		echo "  -n --new          : Create a new log directory in current path"
+		echo "                      with ${#log_numbers[@]} latests logs ready to use."
 		echo "  -s --show  <nbr>  : Show the content of the log number <nbr>."
 		echo "                      If no number given, show all logs."
 		echo "             <text> : Push text <text> as the latest log."
@@ -62,9 +73,15 @@ case $1 in
 	#action 2 : clear logs
 	'-c' | '--clear')
 
+		#check log directory
+		if [[ ! -d log ]]; then
+			echo "loclog: Could not find a log folder here : Aborted clear."
+			exit 1
+		fi
+
 		#no number given => clear all logs
 		if [[ $2 == '' ]]; then
-			confirmClear "Are you sure you want to clear all logs [y/n] ? "
+			confirm "Are you sure you want to clear all logs [y/n] ? " "loclog: Canceled clear."
 			for n in ${log_numbers[@]}; do
 				echo > $log_dir/latest-$n.log
 			done
@@ -79,13 +96,64 @@ case $1 in
 			fi
 
 			#clear corresponding log
-			confirmClear "Are you sure you want to clear latest-"${log_numbers[$nbr]}".log [y/n] ? "
+			confirm "Are you sure you want to clear latest-"${log_numbers[$nbr]}".log [y/n] ? " "loclog: Canceled clear."
 			echo > $log_dir/latest-${log_numbers[$nbr]}.log
 		fi
 	;;
 
-	#action 3 : show logs
+	#action 3 : delete logs
+	'-d' | '--delete')
+
+		#detect log folder
+		if [[ -d log ]]; then
+
+			#confirmation
+			echo "Are you sure you want to delete log folder"
+			confirm "(All data inside will be erased) [y/n] ? " "loclog: Canceled delete."
+
+			#remove log
+			rm -rf log
+			echo "Deleted log folder."
+
+		#error case
+		else
+			echo "loclog: No log folder detected here."
+			exit 1
+		fi
+	;;
+
+	#action 4 : new log directory
+	'-n' | '--new')
+
+		#check if log folder already exists
+		if [[ -e log ]]; then
+			echo "A log file or folder already exists in your location."
+			confirm "Do you really want to reset it (All data inside will be erased) [y/n] ? " "loclog: Canceled log directory creation."
+
+			#remove old log folder
+			echo "Removing existant log file or folder..."
+			rm -rf log && echo "Done." || {
+				echo "loclog: Aborted."
+				exit 1
+			}
+		fi
+
+		#create a new log directory + all the latests logs (empty)
+		mkdir log
+		for n in ${log_numbers[@]}; do
+			touch log/latest-$n.log
+		done
+		echo "Successfully created log folder with ${#log_numbers[@]} latests logs ready to use inside."
+	;;
+
+	#action 5 : show logs
 	'-s' | '--show')
+
+		#check log directory
+		if [[ ! -d log ]]; then
+			echo "loclog: Could not find a log folder here : Aborted show."
+			exit 1
+		fi
 
 		#no number given => show all logs
 		if [[ $2 == '' ]]; then
@@ -117,8 +185,14 @@ case $1 in
 		exit 1
 	;;
 
-	#action 4 : push to latest log
+	#action 6 : push to latest log
 	*)
+		#check log directory
+		if [[ ! -d log ]]; then
+			echo "loclog: Could not find a log folder here : Aborted push."
+			exit 1
+		fi
+
 		iterations_nbr=$(( $log_length - 1 ))
 
 		#shift all previous logs

@@ -59,9 +59,9 @@ You should be able to run these new commands :
     - mtx_hex
     - multitask                        (comming soon...)
     - projia           [Requires grep] (in development...)
-    - tput_allColors   [Requires tput]
+    - tput_allcolors   [Requires tput]
     - update_all
-    - update_bashTools [Requires git]
+    - update_bashtools [Requires git]
 
     Bash Tools also includes some pretty cool aliases (not active by default).
 You should probably go check it out at :
