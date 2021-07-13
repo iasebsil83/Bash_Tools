@@ -1,4 +1,4 @@
-###Bash Tools
+### Bash Tools
 
     This repository contains a bunch of little tools that
 can help you in a bash terminal or just make the use of
@@ -7,7 +7,7 @@ your bash terminal easier.
 
 
 
-##I] Requirements
+## I] Requirements
 
 Here is what you need to use Bash tools :
 
@@ -26,7 +26,7 @@ That should be all for the requirements.
 
 
 
-##II] Installation
+## II] Installation
 
 Get the repository from GitHub :
 ```bash
@@ -55,7 +55,7 @@ There you go !
 
 
 
-##III] Use
+## III] Use
 
 Now, open a new terminal.
 You should be able to run these new commands :
@@ -63,15 +63,15 @@ You should be able to run these new commands :
 |   command   | package dependencies | bash_tools dependencies|  state  |
 |:------------|---------------------:|-----------------------:|:-------:|
 | bashtools   |                  git |                   keep | working |
-| current_cmd |                      |                        | working |
+| current_cmd |                      |                        |     bug |
 | find_dev    |                      |                        | working |
 | keep        |                      |                        | working |
-| last_cmd    |                      |            current_cmd | working |
+| last_cmd    |                      |            current_cmd |     bug |
 | loclog      |                      |                        | working |
 | ls_complete |                      |                        | working |
-| multitask   |                      |                        | in dev  |
+| multitask   |                      |                        |  in dev |
 | pop         |                      |                        | working |
-| projia      |                 grep |                   keep | in dev  |
+| projia      |                 grep |                   keep |  in dev |
 | randsuite   |                      |                        | working |
 | tput_colors |                 tput |                        | working |
 | update_all  |                  apt |                        | working |
@@ -81,21 +81,7 @@ To get any help on a command, use its help option as follow :
 <command> --help
 ```
 
-That's it for the available tools.
-
-
-
-
-##IV] Problems
-
-If you don't find these commands in your new terminal, maybe your system don't
-recognize them as executables. You can solve this by doing :
-
-```bash
-chmod 777 ~/.bash_tools/* && chmod 666 ~/.bash_tools/README.txt
-```
-
-Hope you will enjoy using these tools !
+That's it for the available tools, I hope you will enjoy using them !
 
 
 
