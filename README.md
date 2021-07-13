@@ -1,8 +1,7 @@
 # **Bash Tools**
 
-    ***This repository contains a bunch of little tools that
-can help you in a bash terminal or just make the use of
-your bash terminal easier.***
+***This repository contains a bunch of little tools that can help you in a bash terminal or just make the use of your bash terminal easier.***
+&nbsp;
 &nbsp;
 
 
@@ -22,7 +21,8 @@ Here is what you need to use Bash tools :
       are specified.
 
 That should be all for the requirements.
-$nbsp;
+&nbsp;
+&nbsp;
 
 
 
@@ -52,6 +52,7 @@ rm -rf ~/.bash_tools
 
 There you go !
 &nbsp;
+&nbsp;
 
 
 
@@ -60,21 +61,21 @@ There you go !
 Now, open a new terminal.
 You should be able to run these new commands :
 
-|   command   | package dependencies | bash_tools dependencies|  state  |
-|:------------|---------------------:|-----------------------:|:-------:|
-| bashtools   |                  git |                   keep | working |
-| current_cmd |                      |                        |     bug |
-| find_dev    |                      |                        | working |
-| keep        |                      |                        | working |
-| last_cmd    |                      |            current_cmd |     bug |
-| loclog      |                      |                        | working |
-| ls_complete |                      |                        | working |
-| multitask   |                      |                        |  in dev |
-| pop         |                      |                        | working |
-| projia      |                 grep |                   keep |  in dev |
-| randsuite   |                      |                        | working |
-| tput_colors |                 tput |                        | working |
-| update_all  |                  apt |                        | working |
+|  *command*  |*package dependencies*|*bash_tools dependencies*| *state* |
+|:------------|---------------------:|------------------------:|:-------:|
+| bashtools   |                  git |                    keep | working |
+| current_cmd |                      |                         |     bug |
+| find_dev    |                      |                         | working |
+| keep        |                      |                         | working |
+| last_cmd    |                      |             current_cmd |     bug |
+| loclog      |                      |                         | working |
+| ls_complete |                      |                         | working |
+| multitask   |                      |                         |  in dev |
+| pop         |                      |                         | working |
+| projia      |                 grep |                    keep |  in dev |
+| randsuite   |                      |                         | working |
+| tput_colors |                 tput |                         | working |
+| update_all  |                  apt |                         | working |
 
 To get any help on a command, use its help option as follow :
 ```bash
@@ -82,12 +83,13 @@ To get any help on a command, use its help option as follow :
 ```
 
 That's it for the available tools, I hope you will enjoy using them !
-&nbsp
+&nbsp;
+&nbsp;
 
 
 
-*Contact     : i.a.sebsil83@gmail.com*
-*Youtube     : https://www.youtube.com/user/IAsebsil83*
-*GitHub repo : https://github.com/iasebsil83*
+*Contact     : i.a.sebsil83@gmail.com*<br>
+*Youtube     : https://www.youtube.com/user/IAsebsil83*<br>
+*GitHub repo : https://github.com/iasebsil83*<br>
 
 Let's Code !                                  By I.A.
