@@ -1,6 +1,6 @@
-### **Bash Tools**
+# **Bash Tools**
 
-    **This repository contains a bunch of little tools that
+    ***This repository contains a bunch of little tools that
 can help you in a bash terminal or just make the use of
 your bash terminal easier.***
 &nbsp;
