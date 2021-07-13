@@ -1,0 +1,66 @@
+#!/bin/bash
+
+
+
+# DISCLAIMER {
+#   It can be mindblowing to understand how to use this command properly.
+#
+#   EXPLANATION
+#
+#   This command is giving itself so if my command is :
+#     > echo "My current command is ["$(current_cmd)"]"
+#   The output will be :
+#     > My current command is [echo "My current command is ["$(current_cmd)"]"]
+#
+#      You might think that it can never be useful in any cases except maybe
+#   for doing eternal recursion...
+#   I agree with you on that, but here is an IMPORTANT thing :
+#       Functions and aliases are not replaced by their text with it !
+#
+#   So you can do :
+#     > function showText() { echo "My current command is ["$(current_cmd)"]"; }
+#     > showText
+#   And the output will be :
+#     > My current command is [showText]
+#
+#       That was a bit long but now you shall be able to understand how this
+#   command works and maybe find a better use of it !
+# }
+
+
+
+# ---- main ----
+case $1 in
+
+	#action 1 : help
+	'-h' | '--help')
+		echo "Usage : current_cmd [action]"
+                echo "Outputs the current command in execution."
+		echo "(Under single text format)"
+                echo
+                echo "Action :"
+                echo "  -h, --help : Show this help message."
+                echo
+                echo "To use this command properly, it can be a bit mindblowing"
+		echo "so check out the disclaimer section in :"
+		echo "    $HOME/.bash_tools/current_cmd"
+		echo "to have more details."
+                echo
+                echo "This command is part of \"Bash Tools\"."
+                echo "For more information about \"Bash Tools\", please check :"
+                echo "    https://github.com/iasebsil83/Bash_Tools"
+	;;
+
+	#undefined action
+	-*)
+		echo "current_cmd: Undefined action '$1'."
+		exit 1
+	;;
+
+	#action 2 : get current command
+	*)
+		temp=$(history | tail -n1)
+		temp=${temp:5}
+		echo $temp
+	;;
+esac

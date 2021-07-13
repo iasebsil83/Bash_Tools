@@ -1,25 +1,63 @@
 #!/bin/bash
 
-# Run multiple programs at once.
-# When stopping with CTRL+C, all programs stops
-#
-# example:
-#  > multitask tput_allColors ls pwd ./myprog1 ./myprog2
-
 
 
 #interruption catch for every task
 trap "exit 0" SIGINT
 
 
-for prog in $@; do
 
-	#start messages
-	echo "Multitask > Launching $prog..."
+# ---- main ----
+case $1 in
 
-	#run in background + end message
-    $prog && echo "Multitask > $prog terminated." &
-	sleep 1
+	#action 1 : help
+	'' | '-h' | '--help')
+		echo "Usage : multitask [action]"
+		echo "Executes multiple programs at once"
+		echo "+ Show their prefixes before each line printed"
+		echo "  so you know which program has said what."
+		echo
+		echo "WARNING : stdin is also shared with ALL programs!"
+		echo
+		echo "Action :"
+		echo "  -s, --silent : Do not show the program prefixes."
+		echo "  -h, --help   : Show this help message."
+		echo
+		echo "Example : "
+		echo "  > multitask -s myprog1 ./myprog2 pwd"
+		echo "  #Executes myprog1, myprog2 and command pwd."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+		[[ $1 == '' ]] && exit 1
+	;;
 
-done
+	#action 2 : silent
+	'-s' | '--silent')
+		#for each argument
+		for prog in ${@:1}; do
+			echo "Multitask > Launching $prog in silent mode..."
+		done
+	;;
 
+	#undefined action
+	-*)
+		echo "multitask: Undefined action \'$1\'."
+		exit 1
+	;;
+
+	#action3 : titles
+	*)
+		#for each arguments
+		for prog in $@; do
+
+			#start messages
+			echo "Multitask > Launching $prog..."
+
+			#run in background + end message
+			#$prog && echo "Multitask > $prog terminated." &
+			#sleep 1
+		done
+	;;
+esac

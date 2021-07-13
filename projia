@@ -23,7 +23,7 @@ globvar_values=()
 
 # list directories ($1:directory to list in)
 function ls_dir() {
-	cd $1 && ls | filter -d
+	cd $1 && ls | keep -d
 }
 
 

@@ -1,0 +1,34 @@
+#!/bin/bash
+
+
+
+# ---- main ----
+case $1 in
+
+	#action 1 : help
+	'-h' | '--help')
+		echo "Usage : last_cmd [action]"
+		echo "Outputs the last command entered."
+		echo "(Under single text format)"
+		echo
+		echo "Action :"
+		echo "  -h, --help : Show this help message."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+	;;
+
+	#undefined action
+	-*)
+		echo "last_cmd: Undefined action '$1'."
+		exit 1
+	;;
+
+	#action 2 : get last command
+	*)
+		current=$(current_cmd)                              && \
+		total=$(history | tail -n2)                         && \
+		echo $total | cut -c6-$((${#total}-${#current}-10))
+	;;
+esac

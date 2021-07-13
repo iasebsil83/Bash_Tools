@@ -64,10 +64,10 @@ case $1 in
 		echo "  > loclog -s 2"
 		echo "  #Show the content of the log number 02 (the 3rd latest log)."
 		echo
-		echo ""
-		if [[ $1 == '' ]]; then
-			exit 1
-		fi
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+		[[ $1 == '' ]] && exit 1
 	;;
 
 	#action 2 : clear logs

@@ -7,7 +7,7 @@ case $1 in
 
 	#action 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : filter [action]"
+		echo "Usage : keep [action]"
 		echo "Reads standard input and output only a selection."
 		echo
 		echo "Action :"
@@ -19,16 +19,14 @@ case $1 in
 		echo "  -w, --writable    : Keep only existing user writable files."
 		echo "  -x, --executables : Keep only existing user executable files."
 		echo
-		echo "Examples : "
-		echo "  > ls -a | filter -d"
+		echo "Example : "
+		echo "  > ls -a | keep -d"
 		echo "  #list all current files & folders but keeping only directories."
 		echo
 		echo "This command is part of \"Bash Tools\"."
 		echo "For more information about \"Bash Tools\", please check :"
 		echo "    https://github.com/iasebsil83/Bash_Tools"
-		if [[ $1 == '' ]]; then
-			exit 1
-		fi
+		[[ $1 == '' ]] && exit 1
 	;;
 
 	#action 2 : directories only
@@ -123,12 +121,7 @@ case $1 in
 
 	#undefined action
 	-*)
-		echo "filter: Undefined action '$1'."
+		echo "keep: Undefined action '$1'."
 		exit 1
-	;;
-
-	#no action given => call help menu with error
-	*)
-		filter
 	;;
 esac

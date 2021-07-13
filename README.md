@@ -29,18 +29,26 @@ That should be all for the requirements.
 ##II] Installation
 
 Get the repository from GitHub :
-    > git clone https://github.com/iasebsil83/Bash_Tools
+```bash
+git clone https://github.com/iasebsil83/Bash_Tools
+```
 
 Launch the installer :
-    > ./Bash_Tools/install
+```bash
+./Bash_Tools/install
+```
 
 Installator did not launch ?
 Maybe the file is not executable :
-    > sudo chmod 777 Bash_tools/install
+```bash
+chmod 777 Bash_tools/install
+```
 
 To uninstall bash tools :
-    > remove "Bash tools" section in file ~/.bashrc
-    > rm -rf ~/.bash_tools
+```bash
+remove "Bash tools" section in file ~/.bashrc
+rm -rf ~/.bash_tools
+```
 
 There you go !
 
@@ -52,23 +60,26 @@ There you go !
 Now, open a new terminal.
 You should be able to run these new commands :
 
-    - dev_finder       [Requires python3]
-    - filter
-    - loclog
-    - mtx_bin
-    - mtx_hex
-    - multitask                        (comming soon...)
-    - projia           [Requires grep] (in development...)
-    - tput_allcolors   [Requires tput]
-    - update_all
-    - update_bashtools [Requires git]
-
-    Bash Tools also includes some pretty cool aliases (not active by default).
-You should probably go check it out at :
-        ~/.bash_tools/aliases
+|   command   | package dependencies | bash_tools dependencies|  state  |
+|:------------|---------------------:|-----------------------:|:-------:|
+| bashtools   |                  git |                   keep | working |
+| current_cmd |                      |                        | working |
+| find_dev    |                      |                        | working |
+| keep        |                      |                        | working |
+| last_cmd    |                      |            current_cmd | working |
+| loclog      |                      |                        | working |
+| ls_complete |                      |                        | working |
+| multitask   |                      |                        | in dev  |
+| pop         |                      |                        | working |
+| projia      |                 grep |                   keep | in dev  |
+| randsuite   |                      |                        | working |
+| tput_colors |                 tput |                        | working |
+| update_all  |                  apt |                        | working |
 
 To get any help on a command, use its help option as follow :
-    > <command> --help
+```bash
+<command> --help
+```
 
 That's it for the available tools.
 
@@ -80,7 +91,9 @@ That's it for the available tools.
 If you don't find these commands in your new terminal, maybe your system don't
 recognize them as executables. You can solve this by doing :
 
-    > chmod 777 ~/.bash_tools/* && chmod 666 ~/.bash_tools/README.txt ~/.bash_tools/aliases
+```bash
+chmod 777 ~/.bash_tools/* && chmod 666 ~/.bash_tools/README.txt
+```
 
 Hope you will enjoy using these tools !
 
