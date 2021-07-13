@@ -4,6 +4,8 @@
 
 &nbsp;
 
+&nbsp;
+
 
 
 ## I] Requirements
@@ -21,6 +23,8 @@ Here is what you need to use Bash tools :
       are specified.
 
 That should be all for the requirements.
+
+&nbsp;
 
 &nbsp;
 
@@ -51,6 +55,8 @@ rm -rf ~/.bash_tools
 ```
 
 There you go !
+
+&nbsp;
 
 &nbsp;
 
@@ -86,10 +92,12 @@ That's it for the available tools, I hope you will enjoy using them !
 
 &nbsp;
 
+&nbsp;
+
 
 
 *Contact     : i.a.sebsil83@gmail.com*<br>
 *Youtube     : https://www.youtube.com/user/IAsebsil83*<br>
 *GitHub repo : https://github.com/iasebsil83*<br>
 
-Let's Code !                                  By I.A.
+Let's Code ! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By I.A.
