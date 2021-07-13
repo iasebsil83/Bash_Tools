@@ -48,9 +48,8 @@ Maybe the file is not executable :
 chmod 777 Bash_tools/install
 ```
 
-To uninstall bash tools :
+To uninstall bash tools, remove "Bash tools" section in file ~/.bashrc and then :
 ```bash
-remove "Bash tools" section in file ~/.bashrc
 rm -rf ~/.bash_tools
 ```
 
