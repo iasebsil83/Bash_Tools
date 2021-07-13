@@ -24,7 +24,10 @@ case $1 in
 	#action 2 : show
 	'-s' | '--show')
 		echo "Here is a list of the available Bash Tools :"
-		ls $HOME/.bash_tools | keep -f | keep -x
+		current_dir=$PWD
+		cd $HOME/.bash_tools
+		ls | keep -f | keep -x
+		cd $current_dir
 	;;
 
 	#action 3 : update
