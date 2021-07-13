@@ -1,7 +1,7 @@
 # **Bash Tools**
 
 ***This repository contains a bunch of little tools that can help you in a bash terminal or just make the use of your bash terminal easier.***
-&nbsp;
+
 &nbsp;
 
 
@@ -21,7 +21,7 @@ Here is what you need to use Bash tools :
       are specified.
 
 That should be all for the requirements.
-&nbsp;
+
 &nbsp;
 
 
@@ -51,7 +51,7 @@ rm -rf ~/.bash_tools
 ```
 
 There you go !
-&nbsp;
+
 &nbsp;
 
 
@@ -83,7 +83,7 @@ To get any help on a command, use its help option as follow :
 ```
 
 That's it for the available tools, I hope you will enjoy using them !
-&nbsp;
+
 &nbsp;
 
 
