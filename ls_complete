@@ -34,13 +34,28 @@ case $1 in
 		if [[ $1 == '' ]]; then
 			ls -d $PWD/*
 
-		#full path given
-		elif [[ ${1:0:1} == '/' ]]; then
-			ls -d $1/*
-
-		#relative path given
 		else
-			ls -d $PWD/$1/*
+			#get both string and char array from $1
+			dir_str=$1
+			dir_arr=()
+			while read -n1 c; do
+				dir_arr+=($c)
+			done <<< $1
+
+			#remove '/' at the end
+			lastIndex=$(( ${#dir_arr[@]} - 1 ))
+			if [[ ${dir_arr[$lastIndex]} == '/' ]]; then
+				dir_str=${dir_str:0:-1}
+			fi
+
+			#full path given (starts by '/')
+			if [[ ${dir_str:0:1} == '/' ]]; then
+				ls -d $dir_str/*
+
+			#relative path given
+			else
+				ls -d $PWD/$dir_str/*
+			fi
 		fi
 	;;
 esac
