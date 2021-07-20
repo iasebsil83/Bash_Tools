@@ -2,6 +2,16 @@
 
 
 
+# ---- one column display ----
+oneColumn=0
+for arg in $@; do
+	if [[ $arg == '-l' || $arg == '--line' ]]; then
+		oneColumn=1
+	fi
+done
+
+
+
 # ---- main ----
 case $1 in
 
@@ -12,6 +22,7 @@ case $1 in
                 echo
                 echo "Action :"
                 echo "  -h, --help : Show this help message."
+		echo "  -l, --line : Display only 1 result per line."
                 echo
                 echo "Example : "
                 echo "  > ls_complete ~"
@@ -22,17 +33,34 @@ case $1 in
                 echo "    https://github.com/iasebsil83/Bash_Tools"
 	;;
 
+	#action 2 : 1 result per line activated
+	'-l' | '--line')
+
+		#rebuild command excluding the -l/--line found
+		newCommand="ls_complete "
+		for arg in $@; do
+			if [[ $arg != '-l' && $arg != '--line' ]]; then
+				newCommand+=$arg' '
+			fi
+		done
+		echo "$($newCommand)"
+	;;
+
 	#undefined action
 	-*)
 		echo "ls_complete: Undefined action '$1'."
 		exit 1
 	;;
 
-	#action 2 : ls with complete path
+	#action 3 : ls with complete path
 	*)
 		#current directory
 		if [[ $1 == '' ]]; then
-			ls -d $PWD/*
+			if [[ $oneColumn == 1 ]]; then
+				echo "$(ls -d $PWD/*)"
+			else
+				ls -d $PWD/*
+			fi
 
 		else
 			#get both string and char array from $1
@@ -50,11 +78,19 @@ case $1 in
 
 			#full path given (starts by '/')
 			if [[ ${dir_str:0:1} == '/' ]]; then
-				ls -d $dir_str/*
+				if [[ $oneColumn == 1 ]]; then
+					echo "$(ls -d $dir_str/*)"
+				else
+					ls -d $dir_str/*
+				fi
 
 			#relative path given
 			else
-				ls -d $PWD/$dir_str/*
+				if [[ $oneColumn == 1 ]]; then
+					echo "$(ls -d $PWD/$dir_str/*)"
+				else
+					 ls -d $PWD/$dir_str/*
+				fi
 			fi
 		fi
 	;;

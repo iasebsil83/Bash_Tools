@@ -24,10 +24,10 @@ case $1 in
 	#action 2 : show
 	'-s' | '--show')
 		echo "Here is a list of the available Bash Tools :"
-		current_dir=$PWD
-		cd $HOME/.bash_tools
-		ls | keep -f | keep -x
-		cd $current_dir
+		list=$(ls_complete $HOME/.bash_tools | keep -f | keep -x)
+		for l in ${list[@]}; do
+			echo ' - '${l/"$HOME/.bash_tools/"/}
+		done
 	;;
 
 	#action 3 : update

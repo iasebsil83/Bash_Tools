@@ -62,6 +62,6 @@ case $1 in
 			echo "update_all: Error cleaning apt folders."
 			exit 1
 		}
-		echo "\nAll packages have been updated."
+		echo -e "\nAll packages have been updated."
 	;;
 esac
