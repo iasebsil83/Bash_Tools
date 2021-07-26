@@ -5,6 +5,8 @@
 # ---- one column display ----
 oneColumn=0
 for arg in $@; do
+
+	#catch action 'line'
 	if [[ $arg == '-l' || $arg == '--line' ]]; then
 		oneColumn=1
 	fi

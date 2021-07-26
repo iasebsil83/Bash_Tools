@@ -2,8 +2,15 @@
 
 
 
+
+
+
 # ---- definitions ----
-default_delay=0.1
+delay=0.1    #default values
+separator=''
+
+
+
 
 
 
@@ -48,6 +55,82 @@ function HEX_random() {
 
 
 
+
+
+
+# ---- delay ----
+delayFound=0
+for arg in $@; do
+
+	#catch action 'delay'
+	if [[ $arg == '-d' || $arg == '--delay' ]]; then
+		delayFound=1
+		continue
+	fi
+
+	#action catched => get value on next argument
+	if [[ $delayFound == 1 ]]; then
+
+		#error cases
+		seq $arg &> /dev/null || {
+			echo "randsuite: Invalid delay '$arg' (Number required)."
+			exit 1
+		}
+		#if [[ ${arg%.*} -lt 0 ]]; then
+		#	echo "randsuite: Delay must be positive."
+		#	exit 1
+		#fi
+
+		#get delay
+		delay=$arg
+		delayFound=0
+	fi
+done
+
+#error case
+if [[ $delayFound == 1 ]]; then
+	echo "randsuite: Expected number after '-d' or '--delay'."
+	exit 1
+fi
+
+#special case: delay is set to -0 => remove negative sign
+if [[ ${delay:0:1} == '-' ]]; then
+	delay=${delay:1}
+fi
+
+
+
+
+
+
+# ---- separator ----
+separatorFound=0
+for arg in $@; do
+
+	#catch action 'separator'
+	if [[ $arg == '-s' || $arg == '--separator' ]]; then
+		separatorFound=1
+		continue
+	fi
+
+	#action catched => get value on next argument
+	if [[ $separatorFound == 1 ]]; then
+		separator=$arg
+		separatorFound=0
+	fi
+done
+
+#error case
+if [[ $separatorFound == 1 ]]; then
+	echo "randsuite: Expected string after '-s' or '--separator'."
+	exit 1
+fi
+
+
+
+
+
+
 # ---- main ----
 case $1 in
 
@@ -57,16 +140,16 @@ case $1 in
                 echo "Display a suite of random characters."
                 echo
                 echo "Action :"
-                echo "  -b, --bin  [nbr]                   : Displays 0 or 1 randomly 'nbr' times."
-		echo "                                       (leave 'nbr' empty for infinite loop)"
-		echo "             [-d/--delay <delay>]      Delay between generation (default is 0.1s)."
-		echo "             [-s/--separator [char]]   Separator between numbers."
-		echo "                                       (default is NONE, leave empty for ' ')."
-                echo "  -h, --help                         : Show this help message."
-                echo "  -H, --hex  [nbr]                   : Displays 0 to f randomly 'nbr' times."
-		echo "                                       (leave 'nbr' empty for infinite loop)"
-		echo "             [-d/--delay <delay>]      Same thing as '-b'."
-                echo "             [-s/--separator [char]]   Same thing as '-b'."
+                echo "  -b, --bin  [nbr]                  : Displays 0 or 1 randomly 'nbr' times."
+		echo "                                      (leave 'nbr' empty for infinite loop)"
+		echo "             [-d/--delay <delay>]     Delay between generation (default is 0.1s)."
+		echo "             [-s/--separator [str]]   Separator between numbers."
+		echo "                                      (default is NONE, leave empty for ' ')."
+                echo "  -h, --help                        : Show this help message."
+                echo "  -H, --hex  [nbr]                  : Displays 0 to f randomly 'nbr' times."
+		echo "                                      (leave 'nbr' empty for infinite loop)"
+		echo "             [-d/--delay <delay>]     Same thing as '-b'."
+                echo "             [-s/--separator [str]]   Same thing as '-b'."
 		echo
                 echo "Examples : "
                 echo "  > randsuite -b"
@@ -86,79 +169,80 @@ case $1 in
 
 	#action 2 : binary suite
 	'-b' | '--bin')
-		case $2 in
 
-			#no other arguments => infinite loop with standard delay
-			'')
-				while [[ 1 ]]; do BIN_random; sleep $default_delay; done
-			;;
+		#no next arguments or it is another action => infinite loop
+		if [[ $2 == '' || ${2:0:1} == '-' ]]; then
+			while [[ 1 ]]; do
+				BIN_random;
+				printf -- $separator
+				sleep $delay;
+			done
 
-			#delay directly specified => infinite loop with custom delay
-			'-d' | '--delay')
-				while [[ 1 ]]; do BIN_random; sleep $3; done
-			;;
+		#iteration number specified => finite loop
+		else
+			#error case
+			seq $2 &> /dev/null || {
+				echo "randsuite: Invalid iteration number '$2' (Integer required)."
+				exit 1
+			}
 
-			#iteration number specified => finite loop
-			*)
-				if [[ $3 == '-d' || $3 == '--delay' ]]; then
-					[[ $4 == '' ]] && echo "randsuite: Action '-d' requires an argument." && exit 1
-
-					#delay specified => finite loop with custom delay
-					for randsuite_temp in $(seq $2); do
-						BIN_random
-						sleep $4
-					done
-				else
-
-					#no delay specified => finite loop with default delay
-					for randsuite_temp in $(seq $2); do
-						BIN_random
-						sleep $default_delay
-					done
-				fi
-			;;
-		esac
+			#finite loop
+			for randsuite_temp in $(seq $2); do
+				BIN_random
+				printf -- $separator
+				sleep $delay
+			done
+		fi
 	;;
 
 	#action 3 : hexadecimal suite
 	'-H' | '--hex')
-		case $2 in
 
-			#no other arguments => infinite loop with standard delay
-			'')
-				while [[ 1 ]]; do HEX_random; sleep $default_delay; done
-			;;
+		#no next arguments or it is another action => infinite loop
+		if [[ $2 == '' || ${2:0:1} == '-' ]]; then
+			while [[ 1 ]]; do
+				HEX_random;
+				printf -- $separator
+				sleep $delay;
+			done
 
-			#delay directly specified => infinite loop with custom delay
-			'-d' | '--delay')
-				while [[ 1 ]]; do HEX_random; sleep $3; done
-			;;
+		#iteration number specified => finite loop
+		else
+			#error case
+			seq $2 &> /dev/null || {
+				echo "randsuite: Invalid iteration number '$2' (Integer required)."
+				exit 1
+			}
 
-			#iteration number specified => finite loop
-			*)
-				if [[ $3 == '-d' || $3 == '--delay' ]]; then
-					[[ $4 == '' ]] && echo "randsuite: Action '-d' requires an argument." && exit 1
+			#finite loop
+			for randsuite_temp in $(seq $2); do
+				HEX_random
+				printf -- $separator
+				sleep $delay
+			done
+		fi
+	;;
 
-					#delay specified => finite loop with custom delay
-					for randsuite_temp in $(seq $2); do
-						HEX_random
-						sleep $4
-					done
-				else
+	#delay => a numeric base must be set first
+	'-d' | '--delay')
+		echo "randsuite: A numeric base must be set first."
+		exit 1
+	;;
 
-					#no delay specified => finite loop with default delay
-					for randsuite_temp in $(seq $2); do
-						HEX_random
-						sleep $default_delay
-					done
-				fi
-			;;
-		esac
+	#separator => a numberic base must be set first
+	'-s' | '--separator')
+		echo "randsuite: A numeric base must be set first."
+		exit 1
 	;;
 
 	#undefined action
 	-*)
 		echo "randsuite: Undefined action '$1'."
 		exit 1
+	;;
+
+	#other => help with exit code 1
+	*)
+		randsuite
 	;;
 esac
