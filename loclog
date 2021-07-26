@@ -32,7 +32,7 @@ case $1 in
 
 	#action 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : loclog [action] [option]"
+		echo "Usage : loclog [action/text] [option]"
 		echo "Manage a local log system."
 		echo
 		if [[ -d log ]]; then
@@ -45,17 +45,19 @@ case $1 in
 		fi
 		echo
 		echo "Action :"
-		echo "  -c --clear <nbr>  : Clear the content of a log file."
-		echo "                      If no number given, clear all logs."
-		echo "                      (Include a confirmation warning before)"
-		echo "  -d --delete       : Delete the current log folder if existing."
-		echo "                      (Include a confirmation warning before)"
-		echo "  -h --help         : Show this help message."
-		echo "  -n --new          : Create a new log directory in current path"
-		echo "                      with ${#log_numbers[@]} latests logs ready to use."
-		echo "  -s --show  <nbr>  : Show the content of the log number <nbr>."
-		echo "                      If no number given, show all logs."
-		echo "             <text> : Push text <text> as the latest log."
+		echo "  -c --clear <nbr>    : Clear the content of a log file."
+		echo "                        If no number given, clear all logs."
+		echo "                        (Include a confirmation warning before)"
+		echo "  -d --delete         : Delete the current log folder if existing."
+		echo "                        (Include a confirmation warning before)"
+		echo "  -h --help           : Show this help message."
+		echo "  -n --new            : Create a new log directory in current path"
+		echo "                        with ${#log_numbers[@]} latests logs ready to use."
+		echo "  -s --show  <nbr>    : Show the content of the log number <nbr>."
+		echo "                        If no number given, show all logs."
+		echo "             <text>   : Push text <text> as the latest log."
+		echo "  -t --track <stream> : Reads the standard output of <stream> and store it"
+		echo "                        into logs dynamically."
 		echo
 		echo "Examples :"
 		echo "  > loclog \"myText\""
@@ -177,6 +179,15 @@ case $1 in
 			cat $log_dir/latest-${log_numbers[$nbr]}.log
 			echo "}"
 		fi
+	;;
+
+	'-t' | '--track')
+
+		#while stream exists
+		while [[ -e $2 ]]; do
+			loclog $(cat $2)
+			sleep 0.1        #temporization
+		done
 	;;
 
 	#undefined action

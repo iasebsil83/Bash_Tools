@@ -56,6 +56,11 @@ case $1 in
 
 	#action 3 : ls with complete path
 	*)
+		#check whether there is nothing to show (special case for '-d /*')
+		if [[ ! "$(ls $1)" ]]; then
+			exit 0
+		fi
+
 		#current directory
 		if [[ $1 == '' ]]; then
 			if [[ $oneColumn == 1 ]]; then
