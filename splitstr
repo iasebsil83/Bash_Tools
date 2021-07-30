@@ -1,0 +1,79 @@
+#!/bin/bash
+
+
+
+# ---- main ----
+case $1 in
+
+	#action 1 : help
+	'' | '-h' | '--help')
+		echo "Usage : splitstr [action] <delimiter>"
+		echo "Splits the content from standard input into a string array."
+		echo
+		echo "Action :"
+		echo "  -h, --help : Show this help message."
+		echo
+		echo "Example :"
+		echo "  > echo 'my name is Stephan' | splitstr ' '"
+		echo "  #Returns an array : ['my','name','is','Stephan']"
+		echo
+		echo "WARNING : If an array is given as input, each element of the array"
+		echo "          will be split but the result will stay in one long array."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+		[[ $1 == '' ]] && exit 1 || exit 0
+	;;
+
+	#undefined action
+	-*)
+		echo "splitstr: Undefined action '$1'."
+		exit 1
+	;;
+
+	#action 2 : split string
+	*)
+		#error case
+		if [[ $1 == '' ]]; then
+			echo "splitstr: No delimiter given."
+			exit 1
+		fi
+
+		#get delimiter length
+		delim_len=${#1}
+
+		#for each string in standard input
+		input=$(cat)
+		for s in ${input[@]}; do
+
+			startIndex=0
+			#for each character in string
+			for c in $(seq 0 ${#s}); do
+
+				#delimiter found
+				if [[ ${s:0:$c} == *$1 ]]; then
+
+					#get element length
+					elem_len=$(($c - $delim_len - $startIndex))
+					if [[ $elem_len -lt 0 ]]; then
+						elem_len=0
+					fi
+
+					#diplay revious element if existing
+					if [[ ${s:$startIndex:$elem_len} != '' ]]; then
+						echo "${s:$startIndex:$elem_len}"
+					fi
+
+					#set new start index
+					startIndex=$(($c))
+				fi
+			done
+
+			#print last element if existing
+			if [[ ${s:$startIndex} != '' ]]; then
+				echo "${s:$startIndex}"
+			fi
+		done
+	;;
+esac

@@ -76,9 +76,7 @@ case $1 in
 		echo "More information about projia in ~/.bash_tools/.projia/README.txt"
 		echo "For more information about \"Bash Tools\", please check :"
 		echo "    https://github.com/iasebsil83/Bash_Tools"
-		if [[ $1 == '' ]]; then
-			exit 1
-		fi
+		[[ $1 == '' ]] && exit 1 || exit 0
 	;;
 
 	#action 2 : new

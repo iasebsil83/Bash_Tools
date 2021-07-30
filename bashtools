@@ -18,13 +18,13 @@ case $1 in
 		echo "This command is part of \"Bash Tools\"."
 		echo "For more information about \"Bash Tools\", please check :"
 		echo "    https://github.com/iasebsil83/Bash_Tools"
-		[[ $1 == '' ]] && exit 1
+		[[ $1 == '' ]] && exit 1 || exit 0
 	;;
 
 	#action 2 : show
 	'-s' | '--show')
 		echo "Here is a list of the available Bash Tools :"
-		list=$(ls_complete $HOME/.bash_tools | keep -f | keep -x)
+		list=$(fulls $HOME/.bash_tools | keep -f | keep -x)
 		for l in ${list[@]}; do
 			echo ' - '${l/"$HOME/.bash_tools/"/}
 		done

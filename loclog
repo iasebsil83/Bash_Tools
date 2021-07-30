@@ -69,7 +69,7 @@ case $1 in
 		echo "This command is part of \"Bash Tools\"."
 		echo "For more information about \"Bash Tools\", please check :"
 		echo "    https://github.com/iasebsil83/Bash_Tools"
-		[[ $1 == '' ]] && exit 1
+		[[ $1 == '' ]] && exit 1 || exit 0
 	;;
 
 	#action 2 : clear logs

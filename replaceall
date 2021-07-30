@@ -1,0 +1,212 @@
+#!/bin/bash
+
+
+
+# ---- utilities ----
+
+#remove arguments ($1:argument1 to remove, $2:argument2 to remove, $@:the rest of the arguments)
+function removeArgs() {
+	newArgs=''
+	for arg in $@; do
+		if [[ $arg != $1 && $arg != $2 ]]; then
+			newArgs+=$arg' '
+		fi
+	done
+	echo $newArgs
+}
+
+
+
+# ---- file & directory cases ----
+
+#file ($1:promptEnabled, $@:all user arguments after action 'file')
+function replaceall_file() {
+
+	#check void arguments
+	[[ $2 == '' ]] && echo "replaceall: No file given."       && exit 1
+	[[ $3 == '' ]] && echo "replaceall: No src string given." && exit 1
+
+	#check if file can be read
+	input=$(cat $2 2> /dev/null) || {
+		echo "replaceall: File '$2' not accessible."
+		return 1
+	}
+
+	#prompt
+	if [[ $1 == 1 ]]; then
+		echo "Do you really want to overwrite file '$2'"
+		read -p "replacing occurrences of '$3' by '$4' [y/n] ? " response
+		if [[ $response != 'y' && $response != 'Y' ]]; then
+			echo "replaceall: Canceled replacement."
+			return 1
+		fi
+	fi
+
+	#for each string in file
+	echo -n '' > $2
+	cnt=0
+	for s in "${input[@]}"; do
+
+		#replace until no more occurrence found
+		line=$s
+		while [[ $line == *$3* ]]; do
+			line="${line/$3/$4}"
+			cnt=$(($cnt + 1))
+		done
+
+		#write line character per character
+		for c in $(seq 0 ${#line}); do
+			echo -n "${line[$c]}" >> $2
+		done
+		echo '' >> $2
+	done
+	echo "Replaced $cnt occurrences of '$3' by '$4' in file '$2'."
+}
+
+#directory ($1:includeAllFiles, $2:promptEnabled, $@:all user arguments after action 'directory')
+function replaceall_dir() {
+
+	#check void arguments
+	[[ $3 == '' ]] && echo "replaceall: No directory given."  && exit 1
+	[[ $4 == '' ]] && echo "replaceall: No src string given." && exit 1
+
+	#include all files
+	if [[ $1 == 1 ]]; then
+		file_list=$(ls $3 -A 2> /dev/null) || {
+			echo "replaceall: Directory '$3' not found."
+			return 1
+		}
+
+	#don't include hidden files
+	else
+		file_list=$(ls $3 2> /dev/null) || {
+			echo "replaceall: Directory '$3' not found."
+			return 1
+		}
+	fi
+
+	#for each 'file' in directory
+	for f in ${file_list[@]}; do
+
+		#it's a directory => analyse recursively
+		if [[ -d $3/$f ]]; then
+			replaceall_dir $1 $2 $3/$f $4 $5
+
+		#it's a file => replace in file
+		elif [[ -f $3/$f ]]; then
+			replaceall_file $2 $3/$f $4 $5
+		fi
+	done
+}
+
+
+
+# ---- main ----
+case $1 in
+
+	#action 1 : help
+	'' | '-h' | '--help')
+		echo "Usage : replaceall [action(s)] [file/directory] <src> <dst>"
+		echo "Replace all occurrences of a string by another."
+		echo
+		echo "Action :"
+		echo "  -a, --all       <dir>  : Same thing as '-d' including hidden files."
+		echo "  -d, --directory <dir>  : Replace in every file inside the directory given at the end."
+		echo "  -f, --file      <file> : Replace in the file given at the end."
+		echo "  -h, --help             : Show this help message."
+		echo "  -l, --list             : Replace in list given via standard input."
+		echo "  -n, --noprompt         : Don't ask before overwriting files."
+		echo
+		echo "WARNING : Spaces are not supported in strings!"
+		echo
+		echo "Examples :"
+		echo "  > replaceall -d mydir 'have to' must"
+		echo "  #Replaces all occurrences of 'have to' by 'must' in all files inside 'mydir'"
+		echo
+		echo "  > ls -d /usr/include/* | replaceall --list /usr/include/"
+		echo "  #replace /usr/include/ by '' (nothing) in output of 'ls -d /usr/include/*'"
+		echo "  #(Equivalent of 'ls /usr/include')"
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+		[[ $1 == '' ]] && exit 1 || exit 0
+	;;
+
+	#action 2 : replace in directory including hidden files
+	'-a' | '--all')
+		replaceall_dir 1 1 $(removeArgs '-a' '--all' $@) #all files, prompt
+	;;
+
+	#action 3 : replace in directory
+	'-d' | '--directory')
+		replaceall_dir 0 1 $(removeArgs '-d' '--directory' $@) #not all files, prompt
+	;;
+
+	#action 4 : replace in file
+	'-f' | '--file')
+		replaceall_file 1 $(removeArgs '-f' '--file' $@) #prompt
+	;;
+
+	#action 5 : replace in list given in stdin
+	'-l' | '--list')
+		[[ $2 == '' ]] && echo "replaceall: No src string given." && exit 1
+
+		#for each string in standard input
+		input=$(cat)
+		for s in ${input[@]}; do
+
+			#replace until no more occurrence found
+			line=$s
+			while [[ $line == *$2* ]]; do
+				line="${line/$2/$3}"
+			done
+			echo $line
+		done
+	;;
+
+	#action 6 : no prompt
+	'-n' | '--noprompt')
+		case $2 in
+
+			#all files
+			'-a' | '--all')
+				replaceall_dir 1 0 $(removeArgs '-n' '--noprompt' $(removeArgs '-a' '--all' $@)) #all files, no prompt
+			;;
+
+			#directory
+			'-d' | '--directory')
+				replaceall_dir 0 0 $(removeArgs '-n' '--noprompt' $(removeArgs '-d' '--directory' $@)) #not all files, no prompt
+			;;
+
+			#file
+			'-f' | '--file')
+				replaceall_file 0 $(removeArgs '-n' '--noprompt' $(removeArgs '-f' '--file' $@)) #no prompt
+			;;
+
+			#undefined action
+			-*)
+				echo "replaceall: Undefined action '$2'."
+				exit 1
+			;;
+
+			#need an action
+			*)
+				echo "replaceall: One more action is required."
+				exit 1
+			;;
+		esac
+	;;
+
+	#undefined action
+	-*)
+		echo "replaceall: Undefined action '$1'."
+		exit 1
+	;;
+
+	#need an action
+	*)
+		echo "replaceall: An action is required."
+		exit 1
+	;;
+esac

@@ -1,0 +1,123 @@
+#!/bin/bash
+
+
+
+# ---- utilities ----
+
+#remove arguments ($1:argument1 to remove, $2:argument2 to remove, $@:the rest of the arguments)
+function removeArgs() {
+	newArgs=''
+	for arg in $@; do
+		if [[ $arg != $1 && $arg != $2 ]]; then
+			newArgs+=$arg' '
+		fi
+	done
+	echo $newArgs
+}
+
+
+
+# ---- fulls ----
+
+#customizable fulls ($1:all files, $2:all files without '.' and '..', $3:format endings,
+#                    $4:long mode, $5:one line,                       $6:rest of the command)
+function fulls_custom() {
+
+	#build arguments
+	args=''
+	[[ $1 == 1 ]] && args+='-a '
+	[[ $2 == 1 ]] && args+='-A '
+	[[ $3 == 1 ]] && args+='-F '
+	[[ $4 == 1 ]] && args+='-l '
+	[[ $5 == 1 ]] && args+='-1 '
+	args+=$6
+
+	#get path given by user
+	path=''
+	for arg in $6; do
+		if [[ $arg != '-'* ]]; then
+			path=$arg
+			break
+		fi
+	done
+
+	#remove '/' at the end
+	if [[ $path == *'/' ]]; then
+		path_new_len=$(( ${#path} - 1 ))
+		path=${path:0:$path_new_len}
+	fi
+
+	#absolute path
+	if [[ $path == '/'* ]]; then
+
+		#for each element in ls output
+		for e in $(ls $args); do
+			echo "$path/$e"
+		done
+
+	#relative path
+	else
+		#for each element in ls output
+		for e in $(ls $args); do
+			echo "$PWD/$path/$e"
+		done
+	fi
+}
+
+
+
+# ---- main ----
+case $1 in
+
+	#action 1 : help
+	'-h' | '--help')
+		echo "Usage : fulls [action] [path]"
+                echo "Exactly the same thing as command 'ls' but with full path output."
+                echo
+                echo "Action :"
+                echo "  -h, --help   : Show this help message."
+		echo "  -a, --all    : Include hidden files                  (similar to 'ls -a')."
+		echo "  -A, --All    : Same as '-a' without '.' and '..'     (similar to 'ls -A')."
+		echo "  -F, --Format : Add an ending character for file type (similar to 'ls -F')."
+		echo "  -l, --long   : Display mode informations on files.   (similar to 'ls -l')."
+		echo "  -1, --one    : Display only 1 result per line.       (similar to 'ls -1')."
+                echo
+                echo "Example : "
+                echo "  > fulls ~"
+                echo "  #list all current files & folders in $HOME with their full path."
+                echo
+                echo "This command is part of \"Bash Tools\"."
+                echo "For more information about \"Bash Tools\", please check :"
+                echo "    https://github.com/iasebsil83/Bash_Tools"
+	;;
+
+	#action 1 : all files
+	'-a' | '--all')
+		fulls_custom 1 0 0 0 0 $(removeArgs '-a' '--all' $@)
+	;;
+
+	#action 2 : all files except '.' and '..'
+	'-A' | '--All')
+		fulls_custom 0 1 0 0 0 $(removeArgs '-A' '--All' $@)
+	;;
+
+	#action 3 : format ending
+	'-F' | '--Format')
+		fulls_custom 0 0 1 0 0 $(removeArgs '-F' '--Format' $@)
+	;;
+
+	#action 4 : long display
+	'-l' | '--long')
+		fulls_custom 0 0 0 1 0 $(removeArgs '-l' '--long' $@)
+	;;
+
+	#action 5 : one column
+	'-1' | '--one')
+		fulls_custom 0 0 0 0 1 $(removeArgs '-1' '--one' $@)
+	;;
+
+	#action 6 : no arguments
+	*)
+		fulls_custom 0 0 0 0 0 $@
+	;;
+esac

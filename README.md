@@ -68,17 +68,19 @@ You should be able to run these new commands :
 
 |  *command*  |*package dependencies*|*bash_tools dependencies*| *state* |
 |:------------|---------------------:|------------------------:|:-------:|
-| bashtools   |                  git |                    keep | working |
+| bashtools   |                  git |              fulls keep | working |
 | current_cmd |                      |                         |     bug |
 | find_dev    |                      |                         | working |
+| fulls       |                      |                         | working |
 | keep        |                      |                         | working |
 | last_cmd    |                      |             current_cmd |     bug |
 | loclog      |                      |                         | working |
-| ls_complete |                      |                         | working |
 | multitask   |                      |                         |  in dev |
 | pop         |                      |                         | working |
 | projia      |                 grep |                    keep |  in dev |
 | randsuite   |                      |                         | working |
+| replaceall  |                      |                         | working |
+| splitstr    |                      |                         | working |
 | tput_colors |                 tput |                         | working |
 | update_all  |                  apt |                         | working |
 
