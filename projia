@@ -19,18 +19,6 @@ globvar_values=()
 
 
 
-# ---- ls tools ----
-
-# list directories ($1:directory to list in)
-function ls_dir() {
-	cd $1 && ls | keep -d
-}
-
-
-
-
-
-
 # ---- global variables ----
 
 #add a global variable ($1:variable name, $2:value) (to use in globalvars.bash)

@@ -19,49 +19,90 @@ function removeArgs() {
 
 # ---- fulls ----
 
-#customizable fulls ($1:all files, $2:all files without '.' and '..', $3:format endings,
-#                    $4:long mode, $5:one line,                       $6:rest of the command)
-function fulls_custom() {
+#fulls execution ($@:user arguments)
+function fulls_exec() {
 
-	#build arguments
-	args=''
-	[[ $1 == 1 ]] && args+='-a '
-	[[ $2 == 1 ]] && args+='-A '
-	[[ $3 == 1 ]] && args+='-F '
-	[[ $4 == 1 ]] && args+='-l '
-	[[ $5 == 1 ]] && args+='-1 '
-	args+=$6
-
-	#get path given by user
+	#detect actions and path
+	include_hidden_files=0
+	exclude_special=0
 	path=''
-	for arg in $6; do
-		if [[ $arg != '-'* ]]; then
-			path=$arg
-			break
-		fi
+	for arg in $@; do
+		case $arg in
+
+			#action 1 : include hidden files
+			'-a' | '--all')
+				include_hidden_files=1
+			;;
+
+			#action 2 : include hidden files except '.' and '..'.
+			'-A' | '--All')
+				include_hidden_files=1
+				exclude_special=1
+			;;
+
+			#undefined action
+			-*)
+				echo "fulls: Undefined action '$arg'."
+				exit 1
+			;;
+
+			#path found => stop analysing command
+			*)
+				path=$arg
+				break
+			;;
+		esac
 	done
 
-	#remove '/' at the end
-	if [[ $path == *'/' ]]; then
-		path_new_len=$(( ${#path} - 1 ))
-		path=${path:0:$path_new_len}
-	fi
+	#path type
+	case $path in
 
-	#absolute path
-	if [[ $path == '/'* ]]; then
+		#absolute path
+		'/' | '/'*)
 
-		#for each element in ls output
-		for e in $(ls $args); do
-			echo "$path/$e"
-		done
+			#remove '/' at the end
+			if [[ $path == *'/' ]]; then
+				path_new_len=$(( ${#path} - 1 ))
+				path=${path:0:$path_new_len}
+			fi
 
-	#relative path
-	else
-		#for each element in ls output
-		for e in $(ls $args); do
-			echo "$PWD/$path/$e"
-		done
-	fi
+			#include hidden files
+			if [[ $include_hidden_files == 1 ]]; then
+				for e in $path/.*; do
+					if [[ $exclude_special == 0 || ($e != *'/.' && $e != *'/..') ]]; then
+						echo "$e"
+					fi
+				done
+			fi
+
+			#regular files
+			for e in $path/*; do
+				echo "$e"
+			done
+		;;
+
+		#relative or empty path given
+		*)
+			#add '/' at the end
+			if [[ $path != '' && $path != *'/' ]]; then
+				path=$path'/'
+			fi
+
+			#include hidden files
+			if [[ $include_hidden_files == 1 ]]; then
+				for e in $path'.'*; do
+					if [[ $exclude_special == 0 || ($e != *'.' && $e != *'..') ]]; then
+						echo "$PWD/$e"
+					fi
+				done
+			fi
+
+			#regular files
+			for e in $path*; do
+				echo "$PWD/$e"
+			done
+		;;
+	esac
 }
 
 
@@ -71,53 +112,42 @@ case $1 in
 
 	#action 1 : help
 	'-h' | '--help')
-		echo "Usage : fulls [action] [path]"
-                echo "Exactly the same thing as command 'ls' but with full path output."
-                echo
-                echo "Action :"
-                echo "  -h, --help   : Show this help message."
-		echo "  -a, --all    : Include hidden files                  (similar to 'ls -a')."
-		echo "  -A, --All    : Same as '-a' without '.' and '..'     (similar to 'ls -A')."
-		echo "  -F, --Format : Add an ending character for file type (similar to 'ls -F')."
-		echo "  -l, --long   : Display mode informations on files.   (similar to 'ls -l')."
-		echo "  -1, --one    : Display only 1 result per line.       (similar to 'ls -1')."
-                echo
-                echo "Example : "
-                echo "  > fulls ~"
-                echo "  #list all current files & folders in $HOME with their full path."
-                echo
-                echo "This command is part of \"Bash Tools\"."
-                echo "For more information about \"Bash Tools\", please check :"
-                echo "    https://github.com/iasebsil83/Bash_Tools"
+		echo "Usage : fulls [action(s)] [path]"
+		echo "Similar to 'ls' command : Lists all the files and folders existing in [path]"
+		echo "                          with their full path (from /)."
+		echo "                          If [path] is empty, the current directory is used."
+		echo
+		echo "Action :"
+		echo "  -h, --help   : Show this help message."
+		echo "  -a, --all    : Include hidden files               (similar to 'ls -a')"
+		echo "  -A, --All    : Same as '-a' without '.' and '..'. (similar to 'ls -A')"
+		echo
+		echo "Examples : "
+		echo "  > fulls ~"
+		echo "  #list all current files & folders in /usr/include with their full path."
+		echo "  > fulls -F /usr/include"
+		echo "  #list all current files & folders in $HOME with their full path"
+		echo "  #including hidden files."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
 	;;
 
-	#action 1 : all files
-	'-a' | '--all')
-		fulls_custom 1 0 0 0 0 $(removeArgs '-a' '--all' $@)
-	;;
-
-	#action 2 : all files except '.' and '..'
+	#actions
+	'-a' | '--all' |   \
 	'-A' | '--All')
-		fulls_custom 0 1 0 0 0 $(removeArgs '-A' '--All' $@)
+		fulls_exec $@
 	;;
 
-	#action 3 : format ending
-	'-F' | '--Format')
-		fulls_custom 0 0 1 0 0 $(removeArgs '-F' '--Format' $@)
+	#undefined action
+	-*)
+		echo "fulls: Undefined action '$1'."
+		exit 1
 	;;
 
-	#action 4 : long display
-	'-l' | '--long')
-		fulls_custom 0 0 0 1 0 $(removeArgs '-l' '--long' $@)
-	;;
-
-	#action 5 : one column
-	'-1' | '--one')
-		fulls_custom 0 0 0 0 1 $(removeArgs '-1' '--one' $@)
-	;;
-
-	#action 6 : no arguments
+	#no action
 	*)
-		fulls_custom 0 0 0 0 0 $@
+		fulls_exec $@
 	;;
 esac
