@@ -13,12 +13,18 @@ case $1 in
 		echo "Action :"
 		echo "  -h, --help : Show this help message."
 		echo
-		echo "Example :"
-		echo "  > echo 'my name is Stephan' | splitstr ' '"
-		echo "  #Returns an array : ['my','name','is','Stephan']"
-		echo
 		echo "WARNING : If an array is given as input, each element of the array"
 		echo "          will be split but the result will stay in one long array."
+		echo
+		echo "Example :"
+		echo "  > echo 'Hello<br>my<br>dear' | splitstr '<br>'"
+		echo "  #Returns an array : ['Hello','my','Dear']"
+		echo
+		echo "  > fulls /etc/X11 | splitstr '/'"
+		echo "  #Returns an array : ["
+		echo "  #    'etc','X11','app-defaults',"
+		echo "  #    'etc','X11','default-display-manager'..."
+		echo "  #]"
 		echo
 		echo "This command is part of \"Bash Tools\"."
 		echo "For more information about \"Bash Tools\", please check :"

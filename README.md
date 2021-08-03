@@ -76,12 +76,14 @@ You should be able to run these new commands :
 | last_cmd    |                      |             current_cmd |     bug |
 | loclog      |                      |                         | working |
 | multitask   |                      |                         |  in dev |
+| nbr         |                      |                         | working |
 | pop         |                      |                         | working |
 | projia      |                 grep |                    keep |  in dev |
 | randsuite   |                      |                         | working |
 | replaceall  |                      |                         | working |
 | splitstr    |                      |                         | working |
 | tput_colors |                 tput |                         | working |
+| travelfs    |                      |                   fulls | working |
 | update_all  |                  apt |                         | working |
 
 To get any help on a command, use its help option as follow :

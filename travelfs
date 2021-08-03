@@ -1,0 +1,188 @@
+#!/bin/bash
+
+
+
+# ---- travelfs ----
+
+#go recursively ($1:include_hidden_files, $2:only_file_name, $3:current path, $@:command to execute)
+function travelfs_go() {
+
+	#recreate command to execute
+	command_to_execute=''
+	index=0
+	for arg in $@; do
+
+		#ignore the first 3 arguments
+		if [[ $index -lt 3 ]]; then
+			index=$(($index + 1))
+
+		#store in command to execute
+		else
+			command_to_execute+=$arg' '
+		fi
+	done
+
+	#set fulls command
+	fulls_args=''
+	if [[ $include_hidden_files != 0 ]]; then
+		ls_args='-A'
+	fi
+	cmd=$(fulls $ls_args $3) || {
+		echo "travelfs: Unable to full list files & folders inside '$3' (internal error, please report)."
+		exit 2
+	}
+
+	#for each files & folder in current location
+	for f in ${cmd[@]}; do
+
+		#set current file name
+		current_file_name=''
+		if [[ $only_file_name != 0 ]]; then
+
+			#get latest element in path fragments
+			for pf in $(echo $f | splitstr '/'); do
+				current_file_name=$pf
+			done
+		else
+			current_file_name=$f
+		fi
+
+		#replace CURRENT by current file name
+		command_list=$(echo ${command_to_execute[@]} | replaceall -l CURRENT $current_file_name)
+
+		#concatenate command in 1 line
+		command_line=''
+		for arg in ${command_list[@]}; do
+			command_line+=$arg' '
+		done
+
+		#execute command
+		${command_line[@]}
+
+		#not empty subdirectory detection
+		if [[ -d $f && $(ls $f) != '' ]]; then
+			travelfs_go $include_hidden_files $only_file_name $f ${command_to_execute[@]}
+		fi
+	done
+}
+
+#travelfs ($@:user arguments)
+function travelfs_exec() {
+
+	#detect actions, path and command to execute
+	include_hidden_files=0
+	only_file_name=0
+	path=''
+	command_to_execute=''
+	mode=0
+	for arg in $@; do
+
+		#mode 0 : argument & path detection
+		if [[ $mode == 0 ]]; then
+			case $arg in
+
+				#action 2 : include hidden files
+				'-a' | '--all')
+					include_hidden_files=1
+				;;
+
+				#action 3 : only file name
+				'-r' | '--relative')
+					only_file_name=1
+				;;
+
+				#undefined action
+				-*)
+					echo "travelfs: Undefined action '$arg'."
+					exit 1
+				;;
+
+				#path found => mode 2 : store command to execute
+				*)
+					path=$arg
+					mode=1
+				;;
+			esac
+
+		#mode 2 : store command to execute
+		else
+			command_to_execute+=$arg' '
+		fi
+	done
+
+	#error cases
+	if [[ $path == '' || ! -e $path ]]; then
+		echo "travelfs: Invalid path given : '$1'. Doesn't exist."
+		exit 1
+	fi
+
+	#force path to be absolute
+	if [[ $path != '/'* ]]; then
+		path=$PWD/$path
+	fi
+
+	#go recursively
+	travelfs_go $include_hidden_files $only_file_name $path ${command_to_execute[@]}
+}
+
+
+
+# ---- main ----
+case $1 in
+
+	#action 1 : help
+	'' | '-h' | '--help')
+		echo "Usage : travelfs [action(s)] <path> <command>..."
+		echo "Travels the file system recursively from directory <path>."
+		echo "For each file processed, <command> is executed as a bash command"
+		echo "accessing the current file path by using the keyword : CURRENT."
+		echo
+		echo "Action :"
+		echo "  -a, --all      : Include hidden files/directory."
+		echo "  -h, --help     : Show this help message."
+		echo "  -r, --relative : FILENAME will be replaced by relative path."
+		echo "                   (default is full path)"
+		echo
+		echo "Examples : "
+		echo "  > travelfs /etc/default echo \"exploring : \" CURRENT"
+		echo "  #Shows each files & folders existing in /etc/default and its"
+		echo "  #sub-directories recursively."
+		echo
+		echo "WARNING : This command can take a long time to execute depending"
+		echo "          on which <path> you give it to work on."
+		echo "          Moreover, it can be system-destructive if used with"
+		echo "          root privileges. BE CAREFUL !"
+		echo
+		echo "NOTE : <command> can have multiple arguments."
+		echo "       Every word detected after it will be considered as part"
+		echo "       of the command."
+		echo "       HOWEVER, operators &, &&, | and || are NOT included."
+		echo
+		echo "  > travelfs -a -r $HOME echo CURRENT | keep -f | keep -x"
+		echo "  #Shows each executable files existing in your home directory"
+		echo "  #and its sub-directories recursively, including hidden files,"
+		echo "  #and printing only their filename."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+		[[ $1 == '' ]] && exit 1 || exit 0
+	;;
+
+	#valid actions
+	'-a' | '--all' | \
+	'-r' | '--relative')
+		travelfs_exec $@
+	;;
+
+	#undefined action
+	-*)
+		echo "travelfs: Undefined action '$1'."
+		exit 1
+	;;
+
+	#no action
+	*)
+		travelfs_exec $@
+	;;
+esac

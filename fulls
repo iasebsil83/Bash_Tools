@@ -2,21 +2,6 @@
 
 
 
-# ---- utilities ----
-
-#remove arguments ($1:argument1 to remove, $2:argument2 to remove, $@:the rest of the arguments)
-function removeArgs() {
-	newArgs=''
-	for arg in $@; do
-		if [[ $arg != $1 && $arg != $2 ]]; then
-			newArgs+=$arg' '
-		fi
-	done
-	echo $newArgs
-}
-
-
-
 # ---- fulls ----
 
 #fulls execution ($@:user arguments)

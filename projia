@@ -32,33 +32,42 @@ function globvar_add() {
 
 
 
+# ---- utilities ----
+
+#error if empty ($1:error message to display, $2:value to analyse)
+function errorIfEmpty() {
+	if [[ $2 == '' ]]; then
+		echo $1
+		exit 1
+	fi
+}
+
+
+
 # ---- main ----
 case $1 in
 
 	#action 1 : help
 	'-h' | '--help' | '')
-		echo "Usage : projia [--help/action] [options]..."
+		echo "Usage : projia [action] [options]..."
 		echo "Create projects in different languages using I.A.'s libraries."
 		echo
 		echo "Action :"
-		echo "  -a --add <name>                   Add a new language named <name> to projia."
+		echo "  -a --add    <name>                Add a new language named <name> in projia."
 		echo "  -d --delete <name>                Delete the language named <name> in projia."
+		echo "                                    (A warning will be displayed before deletion)"
 		echo "  -h --help                         Show this help message."
 		echo "  -n --new <lang> <pname> <libs>... Create a new project named <pname> in language <lang>"
 		echo "                                    using the libraries <libs>."
-		echo "                                    (Don't worry, a warning will be displayed before removing)"
-		echo "  -s --show <lang>                  Shows all the libraries in language <lang>."
+		echo "  -s --show <lang>                  Show all the available libraries in language <lang>."
 		echo "                                    If <lang> is empty, show languages list."
 		echo
-		echo "For now the available languages are :"
-		projia -s
-		echo
 		echo "Examples :"
-		echo "  > projia -n C myCprogram network processes"
-		echo "  #Creates a C project named myCprogram using both network and processes libraries."
+		echo "  > projia -n C myCproj network processes"
+		echo "  #Creates a C project named 'myCproj' using 'network' and 'processes' libraries."
 		echo
 		echo "  > projia --show C"
-		echo "  #Shows a list of the available libraries in C."
+		echo "  #Shows all the available libraries in C."
 		echo
 		echo "This command is part of \"Bash Tools\"."
 		echo "More information about projia in ~/.bash_tools/.projia/README.txt"
@@ -71,30 +80,25 @@ case $1 in
 	'-n' | '--new')
 
 		#error cases
-		if [[ $2 == '' ]]; then
-			echo "projia: No language given."
-			exit 1
-		fi
-		if [[ $3 == '' ]]; then
-			echo "projia: No project name given."
-			exit 1
-		fi
+		errorIfEmpty "projia: No language given."     $2
+		errorIfEmpty "projia: No project name given." $3
 
 		#check language in list
 		languageFound=0
 		for lang in $(lsdir $PROJIA_PATH); do
-			if [[ $2 ==  $lang ]]; then
+			if [[ $2 == $lang ]]; then
 				languageFound=1
+				break
 			fi
 		done
 		if [[ $languageFound == 0 ]]; then
-			echo "projia: Language $2 not found in projia."
+			echo "projia: Language $2 not found."
 			exit 1
 		fi
 
 		#creating new project from template
 		cp -r $PROJIA_PATH/$2/default $3 || (
-			echo "projia: Could not create project $3 in language $2."
+			echo "projia: Could not create project '$3' in language '$2'."
 			exit 1
 		)
 
@@ -113,10 +117,12 @@ case $1 in
 		creation_hour=${temp:12}
 
 		#setting main source name
+		echo "TEMP > Setting main source"
 		main_source=$(ls $project_name | grep '\#project_name\#')
 		main_source=${main_source[0]}                             #security to be sure to have only 1 file
 		extension=$($main_source | cut -d '.' -f 2)
 		mv $project_name/$main_source $project_name/$project_name"."$extension
+		echo "TEMP > done"
 
 		echo "Setting command variables..."
 		#setting command variables in files
@@ -208,10 +214,7 @@ case $1 in
 	'-a' | '-add')
 
 		#error cases
-		if [[ $2 == '' ]]; then
-			echo "projia: No name given for new language."
-			exit 1
-		fi
+		errorIfEmpty "projia: No name given for new language." $2
 		if [[ -d $PROJIA_PATH/$2 ]]; then
 			echo "projia: Unable to create language, already exists."
 			exit 1
@@ -236,10 +239,7 @@ case $1 in
 	'-d' | '--delete')
 
 		#error case
-		if [[ $2 == '' ]]; then
-			echo "Here is the available languages in projia :"
-			exit 1
-		fi
+		errorIfEmpty "" $2
 
 		#check for language in list
 		for lang in $(lsdir $PROJIA_PATH); do

@@ -2,7 +2,31 @@
 
 
 
-#---- main ----
+# ---- keep shortcuts ----
+
+#depending on mode ($1:mode)
+function keep_mode() {
+
+	#read standard input
+	input=$(cat)
+
+	#empty input is not to filter ('ls -dl' will work differently)
+	if [[ ${input[@]} == '' ]]; then
+		exit 0
+	fi
+
+	#get MODE info on file/folder
+	for element in ${input[@]}; do
+		info=$(ls -dl $element | cut -d ' ' -f 1)
+		if [[ ${info:2:1} == $1 ]]; then
+			echo $element
+		fi
+	done
+}
+
+
+
+# ---- main ----
 case $1 in
 
 	#action 1 : help
@@ -17,7 +41,7 @@ case $1 in
 		echo "  -h, --help        : Show this help message."
 		echo "  -r, --readable    : Keep only existing user readable files."
 		echo "  -w, --writable    : Keep only existing user writable files."
-		echo "  -x, --executables : Keep only existing user executable files."
+		echo "  -x, --executable  : Keep only existing user executable files."
 		echo
 		echo "Example : "
 		echo "  > ls -a | keep -d"
@@ -32,96 +56,56 @@ case $1 in
 	#action 2 : directories only
 	'-d' | '--directories')
 		input=$(cat)
-		output=()
 		for element in ${input[@]}; do
 			if [[ -d $element ]]; then
-				output+=($element)
+				echo $element
 			fi
 		done
-		echo ${output[@]}
 	;;
 
 	#action 3 : existing only
 	'-e' | '--exist')
 		input=$(cat)
-		output=()
 		for element in ${input[@]}; do
 			if [[ -e $element ]]; then
-				output+=($element)
+				echo $element
 			fi
 		done
-		echo ${output[@]}
 	;;
 
 	#action 4 : files only
 	'-f' | '--files')
 		input=$(cat)
-		output=()
 		for element in ${input[@]}; do
 			if [[ -f $element ]]; then
-				output+=($element)
+				echo $element
 			fi
 		done
-		echo ${output[@]}
 	;;
 
 	#action 5 : user readable only
 	'-r' | '--readable')
-		input=$(cat)
-
-		#empty input is not to filter ('ls -dl' will work differently)
-		[[ ${input[@]} == '' ]] && exit 0
-
-		#get MODE info on file/folder
-		output=()
-		for element in ${input[@]}; do
-			info=$(ls -dl $element | cut -d ' ' -f 1)
-			if [[ ${info:1:1} == 'r' ]]; then
-				output+=($element)
-			fi
-		done
-		echo ${output[@]}
+		keep_mode r
 	;;
 
 	#action 6 : user writable only
 	'-w' | '--writable')
-		input=$(cat)
-
-		#empty input is not to filter ('ls -dl' will work differently)
-		[[ ${input[@]} == '' ]] && exit 0
-
-		#get MODE info on file/folder
-		output=()
-		for element in ${input[@]}; do
-			info=$(ls -dl $element | cut -d ' ' -f 1)
-			if [[ ${info:2:1} == 'w' ]]; then
-				output+=($element)
-			fi
-		done
-		echo ${output[@]}
+		keep_mode w
 	;;
 
 	#action 7 : user executable only
-	'-x' | '--executables')
-		input=$(cat)
-
-		#empty input is not to filter ('ls -dl' will work differently)
-		[[ ${input[@]} == '' ]] && exit 0
-
-		#get MODE info on file/folder
-		output=()
-		for element in ${input[@]}; do
-			info=$(ls -dl $element | cut -d ' ' -f 1)
-			if [[ ${info:3:1} == 'x' ]]; then
-				output+=($element)
-			fi
-		done
-		echo ${output[@]}
+	'-x' | '--executable')
+		keep_mode x
 	;;
 
 	#undefined action
 	-*)
 		echo "keep: Undefined action '$1'."
 		exit 1
+	;;
+
+	#no action => help with exit code
+	*)
+		keep
 	;;
 esac
