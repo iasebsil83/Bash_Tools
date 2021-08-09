@@ -78,12 +78,12 @@ You should be able to run these new commands :
 | multitask   |                      |                                       |  in dev |
 | nbr         |                      |                                       | working |
 | pop         |                      |                                       | working |
-| projia      |                      |splitstr travelfs replaceall fulls keep|  in dev |
+| projia      |                  git |fulls keep replaceall splitstr travelfs| working |
 | randsuite   |                      |                                       | working |
 | replaceall  |                      |                                       | working |
 | splitstr    |                      |                                       | working |
-| tput_colors |                 tput |                                  fulls| working |
-| travelfs    |                      |                         splitstr fulls| working |
+| tput_colors |                 tput |                                 fulls | working |
+| travelfs    |                      |                         full splitstr | working |
 | update_all  |                  apt |                                       | working |
 
 To get any help on a command, use its help action as follow :
