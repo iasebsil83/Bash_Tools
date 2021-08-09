@@ -22,7 +22,7 @@
 
 #check for debug mode (no parameters)
 function ____() {
-	[[ ! DEBUG_MODE_ON == 1 ]]
+	[[ DEBUG_MODE_ON == 1 ]]
 	return $?
 }
 
