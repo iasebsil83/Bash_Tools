@@ -18,7 +18,7 @@
 # ---- debug ----
 
 #toggle debug mode (Uncomment to enable debug mode)
-DEBUG_MODE_ON=1
+#DEBUG_MODE_ON=1
 
 #check for debug mode (no parameters)
 function ____() {
