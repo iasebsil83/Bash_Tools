@@ -15,6 +15,17 @@ separator=''
 
 
 # ---- utilities ----
+
+#printf $separator including the case that it starts with '-' (no arguments)
+function printf_separator() {
+	if [[ $separator == -* ]]; then
+		printf -- $separator
+	elif [[ $separator != '' ]]; then
+		printf $separator
+	fi
+}
+
+#return 0 or 1 randomly (no arguments)
 function BIN_random() {
 	if [[ $RANDOM -gt 16384 ]]; then
 		echo -n 0
@@ -23,7 +34,8 @@ function BIN_random() {
 	fi
 }
 
-function HEX_echoAsHex() { #($1:number between 1 and 16)
+#convert from decimal into hex character ($1:number between 1 and 16)
+function HEX_echoAsHex() {
 	n=$(($1-1))
 	case $n in
 		10) echo -n a ;;
@@ -36,7 +48,8 @@ function HEX_echoAsHex() { #($1:number between 1 and 16)
 	esac
 }
 
-function HEX_checkLimit() { #($1:recursion number, $2:random number previously generated)
+#try to generate a random hex number(with recursion) ($1:recursion number, $2:random number previously generated)
+function HEX_checkLimit() {
 
 	#16 steps of 1536 ~> $RANDOM range
 	limit=$(($1 * 2048))
@@ -49,6 +62,7 @@ function HEX_checkLimit() { #($1:recursion number, $2:random number previously g
 	fi
 }
 
+#output a hex character randomly (no arguments)
 function HEX_random() {
 	HEX_checkLimit 1 $RANDOM
 }
@@ -173,9 +187,9 @@ case $1 in
 		#no next arguments or it is another action => infinite loop
 		if [[ $2 == '' || ${2:0:1} == '-' ]]; then
 			while [[ 1 ]]; do
-				BIN_random;
-				printf -- $separator
-				sleep $delay;
+				BIN_random
+				printf_separator
+				sleep $delay
 			done
 
 		#iteration number specified => finite loop
@@ -189,7 +203,7 @@ case $1 in
 			#finite loop
 			for randsuite_temp in $(seq $2); do
 				BIN_random
-				printf -- $separator
+				printf_separator
 				sleep $delay
 			done
 		fi
@@ -202,7 +216,7 @@ case $1 in
 		if [[ $2 == '' || ${2:0:1} == '-' ]]; then
 			while [[ 1 ]]; do
 				HEX_random;
-				printf -- $separator
+				printf_separator
 				sleep $delay;
 			done
 
@@ -217,7 +231,7 @@ case $1 in
 			#finite loop
 			for randsuite_temp in $(seq $2); do
 				HEX_random
-				printf -- $separator
+				printf_separator
 				sleep $delay
 			done
 		fi

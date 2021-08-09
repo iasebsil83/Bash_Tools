@@ -39,6 +39,11 @@ function fulls_exec() {
 		esac
 	done
 
+	#special case : empty directory
+	if [[ ! $(ls $path) ]]; then
+		exit 0
+	fi
+
 	#path type
 	case $path in
 

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#create relay program
+echo -e '#!/bin/bash\nIFS=":"\n$HOME/.bash_tools/.projia/./temp2 $*\n' > $HOME/.bash_tools/.projia/temp1
+chmod +x $HOME/.bash_tools/.projia/temp1
+
+
+#create 'replaceall' clone (with additional line for IFS)
+echo 'IFS=":"'                    > $HOME/.bash_tools/.projia/temp2
+cat $HOME/.bash_tools/replaceall >> $HOME/.bash_tools/.projia/temp2
+chmod +x                            $HOME/.bash_tools/.projia/temp2
+
+read
+#
+str='ALAN WAKER'
+echo "---- \$str : $str"
+args="-n:-a:$HOME/Documents/Dragia_project:__project_footer__:$str"
+echo "---- \$ARGS : $args"
+
+echo "---- CMD : $HOME/.bash_tools/.projia/./temp1 $args"
+
+read
+#execute our custom 'replaceall' via relay program
+$HOME/.bash_tools/.projia/./temp1 "$args"
+
+
+
+#remove relay program + 'replaceall' clone
+rm $HOME/.bash_tools/.projia/temp1 $HOME/.bash_tools/.projia/temp2

@@ -54,7 +54,7 @@ case $1 in
 				fi
 			done
 			if [[ $found == 0 ]]; then
-				new_dev_nbr=$((new_dev_nbr + 1))
+				new_dev_nbr=$(($new_dev_nbr + 1))
 				echo "New device detected : $a"
 			fi
 		done

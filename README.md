@@ -66,32 +66,43 @@ There you go !
 Now, open a new terminal.
 You should be able to run these new commands :
 
-|  *command*  |*package dependencies*|*bash_tools dependencies*| *state* |
-|:------------|---------------------:|------------------------:|:-------:|
-| bashtools   |                  git |              fulls keep | working |
-| current_cmd |                      |                         |     bug |
-| find_dev    |                      |                         | working |
-| fulls       |                      |                         | working |
-| keep        |                      |                         | working |
-| last_cmd    |                      |             current_cmd |     bug |
-| loclog      |                      |                         | working |
-| multitask   |                      |                         |  in dev |
-| nbr         |                      |                         | working |
-| pop         |                      |                         | working |
-| projia      |                 grep |                    keep |  in dev |
-| randsuite   |                      |                         | working |
-| replaceall  |                      |                         | working |
-| splitstr    |                      |                         | working |
-| tput_colors |                 tput |                         | working |
-| travelfs    |                      |                   fulls | working |
-| update_all  |                  apt |                         | working |
+|  *command*  |*package dependencies*|       *bash_tools dependencies*       | *state* |
+|:------------|---------------------:|--------------------------------------:|:-------:|
+| bashtools   |                  git |                            fulls keep | working |
+| current_cmd |                      |                                       |     bug |
+| find_dev    |                      |                                       | working |
+| fulls       |                      |                                       | working |
+| keep        |                      |                                       | working |
+| last_cmd    |                      |                           current_cmd |     bug |
+| loclog      |                      |                                       | working |
+| multitask   |                      |                                       |  in dev |
+| nbr         |                      |                                       | working |
+| pop         |                      |                                       | working |
+| projia      |                      |splitstr travelfs replaceall fulls keep|  in dev |
+| randsuite   |                      |                                       | working |
+| replaceall  |                      |                                       | working |
+| splitstr    |                      |                                       | working |
+| tput_colors |                 tput |                                  fulls| working |
+| travelfs    |                      |                         splitstr fulls| working |
+| update_all  |                  apt |                                       | working |
 
-To get any help on a command, use its help option as follow :
+To get any help on a command, use its help action as follow :
 ```bash
 <command> --help
 ```
 
 That's it for the available tools, I hope you will enjoy using them !
+
+&nbsp;
+
+&nbsp;
+
+**Note**: Command *'projia'* seems to have no library installed with it but actually,
+that's not the case. All the libraries will be downloaded from github during the
+installation process and they can be updated using :
+```bash
+'projia --update'
+```
 
 &nbsp;
 

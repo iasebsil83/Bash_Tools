@@ -42,24 +42,23 @@ function replaceall_file() {
 		fi
 	fi
 
-	#for each string in file
+	#reset file
 	echo -n '' > $2
+
+	#replace until no more occurrence found
 	cnt=0
-	for s in "${input[@]}"; do
-
-		#replace until no more occurrence found
-		line=$s
-		while [[ $line == *$3* ]]; do
-			line="${line/$3/$4}"
-			cnt=$(($cnt + 1))
-		done
-
-		#write line character per character
-		for c in $(seq 0 ${#line}); do
-			echo -n "${line[$c]}" >> $2
-		done
-		echo '' >> $2
+	content="${input[@]}"
+	while [[ $content == *$3* ]]; do
+		content="${content/$3/$4}"
+		cnt=$(($cnt + 1))
 	done
+
+	#write line character per character
+	for c in $(seq 0 ${#content}); do
+		echo -n "${content[$c]}" >> $2
+	done
+	echo '' >> $2
+
 	echo "Replaced $cnt occurrences of '$3' by '$4' in file '$2'."
 }
 

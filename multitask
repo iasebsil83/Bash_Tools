@@ -12,9 +12,9 @@ case $1 in
 
 	#action 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : multitask [action]"
+		echo "Usage : multitask [action] <exec>..."
 		echo "Executes multiple programs at once"
-		echo "+ Show their prefixes before each line printed"
+		echo "+ Show their prefixes before each line printed by program"
 		echo "  so you know which program has said what."
 		echo
 		echo "WARNING : stdin is also shared with ALL programs!"
@@ -35,6 +35,7 @@ case $1 in
 
 	#action 2 : silent
 	'-s' | '--silent')
+
 		#for each argument
 		for prog in ${@:1}; do
 			echo "Multitask > Launching $prog in silent mode..."
