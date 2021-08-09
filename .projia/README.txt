@@ -23,19 +23,27 @@ create all the necessary files & folders for each project. Moreover, the
 integration of some libraries and their dependencies can make the thing
 harder and longer.
 
-    Projia has been made in order to give a simple and fast way to
-create a project in these languages with all the stuff you might need
-around (src folder, README, makefile...).
-
-    Let's keep it simple and say that projia has project templates that
-will be used to create yours.
+    Projia has been made to give a simple and fast way of creating a new
+project in these languages with all the stuff you might need around (src
+folder, README, makefile...).
 
 Example :
-    Want to create a Swift project that can use a kind of network ?
+    You want to create a Swift project that can use a sort of network ?
 
      > projia --swift mySwiftProject network
 
     And there you go !
+
+
+WARNING : When first using projia, you should not have any library
+          available in any languages. That's normal cause each library
+          implemented by default is linked to an online git repository.
+
+          Don't worry, projia has an updater system for that.
+          What you will just have to do is to update your libraries
+          using :
+              > projia -u
+
 
 Possible questions :
 
@@ -52,26 +60,27 @@ Answers to these questions are below.
 II] Templates
 
 Project templates are sorted by language and stored here :
-        ~/.bash_tools/.projia/#language#/default/
+        ~/.bash_tools/.projia/<language>/default/
+(One folder per language)
 
-    All the files & folders existing in these "default" folders will be
+    All the files & folders existing in the "default" folder will be
 copied at each new project creation.
 
     So you can customize your project generation as you want by modifying
 the folders & files inside the "default" directory. Mind that you can also
 define some custom variables that you can use in your template files using
-the syntax : #myVariable#
+the syntax : __myVariable__
 They will be replaced by the text you have set.
 
 There is 2 types of variable :
  - command : Defined when a project is created (project name, language...)
- - global  : Defined in a config file. (pseudo, copyright...)
+ - global  : Defined in a configuration file. (pseudo, copyright...)
 
 Command variables are :
-    - #project_name#  (project name given by the user)
-    - #language#     (selected language)
-    - #creation_date# (format : "DD MMM YYYY")
-    - #creation_hour# (format : "HH:mm:ss")
+    - __project_name__  (project name given by the user)
+    - __language__      (selected language)
+    - __creation_date__ (format : "DD MMM YYYY")
+    - __creation_hour__ (format : "HH:mm:ss")
 
 Global variables are configurable here :
     ~/.bash_tools/.projia/globvars.bash
@@ -85,7 +94,7 @@ III] Libraries
 
     Projia has a bunch of libraries available in a few languages that
 are located in :
-    ~/.bash_tools/.projia/#language#/lib/
+    ~/.bash_tools/.projia/<language>/lib/
 
     These libraries are utility libraries for some basic stuff (file
 management, network use...) and are quite easy to manage. They are not
@@ -97,13 +106,27 @@ add your own libraries inside the "lib" folder. As soon as you do it,
 they will be automatically accessible via the command line when
 creating a new project in the corresponding language.
 
-Note : Each default library has an information header at the begining
-       of the file giving information about all you have to know in
-       order to use it.
 
-WARNING : In some rare cases, a library require specific packages or
-          other libraries. Make sure to have all the required stuff to
-          make them work.
+
+ > Adding a library :
+
+To add a library in a language, just follow these steps :
+
+    - Create a folder in ~/.bash_tools/.projia/<language>/lib/<my_lib>
+    - Add all your library files inside.
+    - If this library requires another one to work, add another file
+      named ".depend" as well in which you will give the list of all
+      the required libraries names (One per line).
+
+WARNING : At the beginning of the presentation, you may have seen that
+          all the libraries implemented by default are linked to an
+          online git repository.
+
+          That is NOT REQUIRED at all, though recommended.
+          NO MORE FILES THAN THOSE GIVEN IN THE PROJIA UPDATER WILL BE
+          MODIFIED BY 'projia -u'.
+
+That's it for libraries.
 
 
 
@@ -111,17 +134,37 @@ WARNING : In some rare cases, a library require specific packages or
 IV] Add a new language
 
     It is possible to add as many languages as possible in projia using
-the command :
-    > projia --add <languageName>
+command :
+    > projia --add <language>
 
     Make sure to use a language name that can be applied to a file or
 folder because adding a language will create a language directory in :
     ~/.bash_tools/.projia/
 
-For instance, the C++ language has been created in projia like this :
-    > projia --add C++
+For instance, the C language has been created in projia like this :
+    > projia --add C
 
-You should know all about language creation now.
+Yes it was that simple.
+
+
+
+
+V] Little tips
+
+    You might want to have multiples implementations of the same language
+so here is a solution : Add the same language under different names !
+Examples :
+    > projia --add C_standard
+    > projia --add C_mylibs
+    > projia --add C_otherlibs
+Then, you can configure ~/.bash_tools/.projia/updater to set which lib
+will be set into which language.
+
+    When adding a language, you may see that an empty makefile is
+generated by default. It can be a bit boring and even very long to write
+your makefile by hand. I really recommend you to use a makefile generator
+if you want to handle big projects.
+
 
 
 
