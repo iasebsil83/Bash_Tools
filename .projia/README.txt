@@ -34,17 +34,6 @@ Example :
 
     And there you go !
 
-
-WARNING : When first using projia, you should not have any library
-          available in any languages. That's normal cause each library
-          implemented by default is linked to an online git repository.
-
-          Don't worry, projia has an updater system for that.
-          What you will just have to do is to update your libraries
-          using :
-              > projia -u
-
-
 Possible questions :
 
 - But what kind of templates are used ?
@@ -118,9 +107,8 @@ To add a library in a language, just follow these steps :
       named ".depend" as well in which you will give the list of all
       the required libraries names (One per line).
 
-WARNING : At the beginning of the presentation, you may have seen that
-          all the libraries implemented by default are linked to an
-          online git repository.
+WARNING : You may have seen that the libraries implemented by default
+          are linked to an online git repository.
 
           That is NOT REQUIRED at all, though recommended.
           NO MORE FILES THAN THOSE GIVEN IN THE PROJIA UPDATER WILL BE
