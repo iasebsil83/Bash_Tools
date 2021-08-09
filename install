@@ -7,7 +7,7 @@
 mv Bash_Tools $HOME/.bash_tools                                             && \
 mv $HOME/.bash_tools/.projia $HOME/.projia                                  && \
 echo -e "\n\n\n# Bash tools by I.A. :"        >> ~/.bashrc                  && \
-echo -e "PATH=\"\$PATH:~/.bash_tools\"\n\n\n" >> ~/.bashrc                  && \
+echo -e "PATH=\"\$PATH:$HOME/.bash_tools\"\n\n\n" >> ~/.bashrc              && \
 rm $HOME/.bash_tools/install                                                && \
 echo "Bash tools installation done (you can find them in ~/.bash_tools)."   && \
 echo "You will need to restart a terminal to access to these new commands."
