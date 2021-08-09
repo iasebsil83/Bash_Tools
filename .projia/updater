@@ -19,7 +19,7 @@
 # ---- definitions ----
 
 #projia path
-PROJIA_PATH=$HOME/.bash_tools/.projia
+PROJIA_PATH=$HOME/.projia
 
 
 

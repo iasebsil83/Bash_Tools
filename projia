@@ -8,7 +8,7 @@
 # ---- declarations ----
 
 #projia path
-PROJIA_PATH=$HOME/.bash_tools/.projia
+PROJIA_PATH=$HOME/.projia
 
 #global variables
 globvar_names=()
@@ -142,7 +142,7 @@ case $1 in
 		echo "  #Shows all the available libraries in Swift."
 		echo
 		echo "This command is part of \"Bash Tools\"."
-		echo "More information about projia in ~/.bash_tools/.projia/README.txt"
+		echo "More information about projia in $PROJIA_PATH/README.txt"
 		echo "For more information about \"Bash Tools\", please check :"
 		echo "    https://github.com/iasebsil83/Bash_Tools"
 		[[ $1 == '' ]] && exit 1 || exit 0
@@ -221,21 +221,12 @@ case $1 in
 
 		#getting global variables
 		____ && echo "Projia new : step 4 > Getting global variables..."
-		source $HOME/.bash_tools/.projia/globvars.bash
+		source $PROJIA_PATH/globvars.bash
 		____ && echo "Projia new : step 4 > Done."
 
 		#setting global variables in file names
 		____ && echo "Projia new : step 5.1 > Setting global variables in file names..."
-		echo "GLOBVAR_NAMES  : "${globvar_names[@]}
-		echo "GLOBVAR_VALUES : "${globvar_values[@]}
 		for gv in $(seq 0  $((${#globvar_names[@]}-1))  ); do
-
-
-			echo "globvar_names [$gv] : ${globvar_names[$gv]}"
-			echo "globvar_values[$gv] : ${globvar_values[$gv]}"
-			read
-
-
 			travelfs -a $project_name $PROJIA_PATH/./replace_filename CURRENT ${globvar_names[$gv]}  ${globvar_values[$gv]}
 		done
 		____ && echo "Projia new : step 5.1 > Done."
@@ -243,14 +234,6 @@ case $1 in
 		#setting global variables in file contents
 		____ && echo "Projia new : step 5.2 > Setting global variable in file contents..."
 		for gv in $(seq 0  $((${#globvar_names[@]}-1))  ); do
-
-
-			echo "globvar_names [$gv] : ${globvar_names[$gv]}"
-			echo "globvar_values[$gv] : ${globvar_values[$gv]:1:-1}"
-			read
-
-
-			echo "    CMD : $PROJIA_PATH/./replace_content $project_name ${globvar_names[$gv]} ${globvar_values[$gv]}"
 			$PROJIA_PATH/./replace_content $project_name ${globvar_names[$gv]} ${globvar_values[$gv]}
 		done
 		____ && echo "Projia new : step 5.2 > Done."
@@ -265,7 +248,6 @@ case $1 in
 		for arg in $(seq 4 $#); do
 			lib_list+=(${@:$arg:1})
 		done
-		echo "lib_list[@] : ${lib_list[@]}"
 
 		#create lib directory in new project (if not already existing)
 		mkdir $project_name/lib 2> /dev/null
@@ -319,7 +301,7 @@ case $1 in
 				if [[ $validation == 'Yes, remove it' ]]; then
 
 					#delete
-					rm -rf $HOME/.bash_tools/.projia/$lang
+					rm -rf $PROJIA_PATH/$lang
 					echo "Completely removed language $lang from projia."
 					exit 0
 				else

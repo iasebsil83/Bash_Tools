@@ -50,7 +50,7 @@ chmod 777 Bash_tools/install
 
 To uninstall bash tools, remove "Bash tools" section in file ~/.bashrc and then :
 ```bash
-rm -rf ~/.bash_tools
+rm -rf ~/.bash_tools ~/.projia
 ```
 
 There you go !
