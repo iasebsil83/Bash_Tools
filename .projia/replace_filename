@@ -37,7 +37,7 @@ src=$2
 dst=${3:1:-1}
 
 #2) set new_filename
-new_filename=$(echo $1 | replaceall -l $src $dst > /dev/null) || {
+new_filename=$(echo $1 | replaceall -l $src $dst) || {
 	echo "projia/replace_filename: Error in filename replacement."
 	exit 1
 }

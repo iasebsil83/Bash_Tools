@@ -170,10 +170,10 @@ case $1 in
 
 		#creating new project from template
 		____ && echo "Projia new : step 1 > Creating project '$3'..."
-		cp -r $PROJIA_PATH/$2/default $3 || (
+		cp -r $PROJIA_PATH/$2/default $3 || {
 			echo "projia: Could not create project '$3' in language '$2'."
 			exit 1
-		)
+		}
 		____ && echo "Projia new : step 1 > Done."
 
 
