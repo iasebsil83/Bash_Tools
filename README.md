@@ -76,7 +76,6 @@ You should be able to run these new commands :
 | last_cmd    |                      |                           current_cmd |     bug |
 | loclog      |                      |                                       | working |
 | multitask   |                      |                                       |  in dev |
-| nbr         |                      |                                       | working |
 | pop         |                      |                                       | working |
 | projia      |                  git |fulls keep replaceall splitstr travelfs| working |
 | randsuite   |                      |                                       | working |
