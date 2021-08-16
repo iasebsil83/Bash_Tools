@@ -49,6 +49,9 @@ case $1 in
 			cd $oldPath
 			exit 1
 		}
+
+		#remove projia files (moved in $HOME directory. Use 'projia -u'  to update them)
+		rm -rf $HOME/.bash_tools/.projia
 	;;
 
 	#undefined action
