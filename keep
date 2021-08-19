@@ -4,7 +4,7 @@
 
 # ---- keep shortcuts ----
 
-#depending on mode ($1:mode)
+#depending on mode ($1:index to seek, $2:mode)
 function keep_mode() {
 
 	#read standard input
@@ -18,7 +18,7 @@ function keep_mode() {
 	#get MODE info on file/folder
 	for element in ${input[@]}; do
 		info=$(ls -dl $element | cut -d ' ' -f 1)
-		if [[ ${info:2:1} == $1 ]]; then
+		if [[ ${info:$1:1} == $2 ]]; then
 			echo $element
 		fi
 	done
@@ -85,17 +85,17 @@ case $1 in
 
 	#action 5 : user readable only
 	'-r' | '--readable')
-		keep_mode r
+		keep_mode 1 r
 	;;
 
 	#action 6 : user writable only
 	'-w' | '--writable')
-		keep_mode w
+		keep_mode 2 w
 	;;
 
 	#action 7 : user executable only
 	'-x' | '--executable')
-		keep_mode x
+		keep_mode 3 x
 	;;
 
 	#undefined action

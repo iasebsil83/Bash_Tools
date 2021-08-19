@@ -34,7 +34,7 @@ case $1 in
 	'-u' | '--update')
 
 		#go in bash_tools directory
-		oldPath=$(pwd)
+		oldPath=$PWD
 		cd $HOME/.bash_tools
 
 		#get the latest version from GitHub (https://github.com/iasebsil83/Bash_Tools)
