@@ -40,7 +40,7 @@ case $1 in
 		#get the latest version from GitHub (https://github.com/iasebsil83/Bash_Tools)
 		git pull && {
 			#success
-			#rm -f install
+			rm -f install
 			echo "Bash tools updated !"
 			cd $oldPath
 		} || {
