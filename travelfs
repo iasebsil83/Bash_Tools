@@ -39,7 +39,7 @@ function travelfs_go() {
 		current_file_name=''
 		if [[ $only_file_name != 0 ]]; then
 
-			#get latest element in path fragments
+			#get last element in path fragments
 			for pf in $(echo $f | splitstr '/'); do
 				current_file_name=$pf
 			done

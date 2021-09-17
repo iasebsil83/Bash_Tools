@@ -69,11 +69,9 @@ You should be able to run these new commands :
 |  *command*  |*package dependencies*|       *bash_tools dependencies*       | *state* |
 |:------------|---------------------:|--------------------------------------:|:-------:|
 | bashtools   |                  git |                            fulls keep | working |
-| current_cmd |                      |                                       |     bug |
 | find_dev    |                      |                                       | working |
 | fulls       |                      |                                       | working |
 | keep        |                      |                                       | working |
-| last_cmd    |                      |                           current_cmd |     bug |
 | loclog      |                      |                                       | working |
 | multitask   |                      |                                       |  in dev |
 | pop         |                      |                                       | working |
