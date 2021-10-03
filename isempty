@@ -1,0 +1,48 @@
+#!/bin/bash
+
+
+
+# ---- main ----
+case $1 in
+
+	#action 1 : help
+	'-h' | '--help')
+		echo "Usage : isempty [action] [folder]"
+		echo "Returns 0 if given folder is empty (except if showing help menu)."
+		echo "Else, returns the number of elements existing in the folder."
+		echo
+		echo "Returning 255 (-1) if an error occured."
+		echo
+		echo "Action :"
+		echo "  -h, --help : Show this help message."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+		exit 0
+	;;
+
+	#undefined action
+	-*)
+		echo "isempty: Undefined action '$1'."
+		exit 255
+	;;
+
+	#no directory
+	'')
+		echo "isempty: No directory given."
+		exit 255
+	;;
+
+	#check folder
+	*)
+		#not a directory
+		if [[ ! -d $1 ]]; then
+			echo "isempty: '$1' is not a directory."
+			exit 255
+		fi
+
+		#count how many elements exist inside
+		exit $(ls -aA $1 | wc -l)
+	;;
+esac
