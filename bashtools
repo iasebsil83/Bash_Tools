@@ -10,7 +10,7 @@ case $1 in
 		echo "Usage : bashtools [action]"
 		echo "Do something on Bash Tools."
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -h, --help   : Show this help message."
 		echo "  -s, --show   : Show all the available Bash Tools commands."
 		echo "  -u, --update : Update Bash Tools to the latest version."

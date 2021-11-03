@@ -153,7 +153,7 @@ case $1 in
 		echo "Usage : randsuite [action]"
                 echo "Display a suite of random characters."
                 echo
-                echo "Action :"
+                echo "Actions :"
                 echo "  -b, --bin  [nbr]                  : Displays 0 or 1 randomly 'nbr' times."
 		echo "                                      (leave 'nbr' empty for infinite loop)"
 		echo "             [-d/--delay <delay>]     Delay between generation (default is 0.1s)."
@@ -165,7 +165,7 @@ case $1 in
 		echo "             [-d/--delay <delay>]     Same thing as '-b'."
                 echo "             [-s/--separator [str]]   Same thing as '-b'."
 		echo
-                echo "Examples : "
+                echo "Examples :"
                 echo "  > randsuite -b"
                 echo "  #generates a binary random suite like 0110010010... indefinitely."
 		echo

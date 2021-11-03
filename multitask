@@ -12,6 +12,9 @@ case $1 in
 
 	#action 1 : help
 	'' | '-h' | '--help')
+		echo "THIS COMMAND HAS NOT BEEN FINISHED YET."
+		echo "IT DOES NOTHING FOR THE MOMENT."
+		echo
 		echo "Usage : multitask [action] <exec>..."
 		echo "Executes multiple programs at once"
 		echo "+ Show their prefixes before each line printed by program"
@@ -19,7 +22,7 @@ case $1 in
 		echo
 		echo "WARNING : stdin is also shared with ALL programs!"
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -s, --silent : Do not show the program prefixes."
 		echo "  -h, --help   : Show this help message."
 		echo

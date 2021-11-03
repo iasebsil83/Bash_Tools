@@ -11,7 +11,7 @@ case $1 in
 		echo "Shows all the available colors in tput."
 		echo "Argument 'nbr' is the number of colors to display per line."
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -h, --help : Show this help message."
 		echo
 		echo "This command is part of \"Bash Tools\"."

@@ -120,7 +120,7 @@ case $1 in
 		echo "Usage : projia <action> [options]..."
 		echo "Create projects in different languages using I.A.'s libraries (or custom)."
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -a, --add    <name>           : Add a new language named <name> in projia."
 		echo "  -d, --delete <name>           : Delete the language named <name> in projia."
 		echo "                                  (A warning will be displayed before deletion)"

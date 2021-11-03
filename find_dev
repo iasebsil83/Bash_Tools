@@ -16,7 +16,7 @@ case $1 in
 		echo "after having connected the device,"
 		echo "and then compare the last access times."
                 echo
-                echo "Action :"
+                echo "Actions :"
                 echo "  -h, --help : Show this help message."
                 echo
                 echo "This command is part of \"Bash Tools\"."

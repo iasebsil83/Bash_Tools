@@ -107,7 +107,7 @@ case $1 in
 		echo "                          with their full path (from /)."
 		echo "                          If [path] is empty, the current directory is used."
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -h, --help   : Show this help message."
 		echo "  -a, --all    : Include hidden files               (similar to 'ls -a')"
 		echo "  -A, --All    : Same as '-a' without '.' and '..'. (similar to 'ls -A')"
@@ -115,7 +115,7 @@ case $1 in
 		echo "Examples : "
 		echo "  > fulls ~"
 		echo "  #list all current files & folders in /usr/include with their full path."
-		echo "  > fulls -F /usr/include"
+		echo "  > fulls -A /usr/include"
 		echo "  #list all current files & folders in $HOME with their full path"
 		echo "  #including hidden files."
 		echo

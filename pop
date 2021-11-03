@@ -10,7 +10,7 @@ case $1 in
 		echo "Usage : pop [action] [file]"
 		echo "Read a file & clear it (not removing it)."
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -h, --help : Show this help message."
 		echo
 		echo "This command is part of \"Bash Tools\"."

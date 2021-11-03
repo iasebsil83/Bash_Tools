@@ -2,19 +2,28 @@
 
 
 
+# ---- declarations ----
+
+#actions
+include_hidden_files=0
+only_file_name=0
+exclude_symlinks=0
+
+
+
 # ---- travelfs ----
 
-#go recursively ($1:include_hidden_files, $2:only_file_name, $3:current path, $@:command to execute)
+#go recursively ($1:current path, $@:command to execute)
 function travelfs_go() {
 
 	#recreate command to execute
 	command_to_execute=''
-	index=0
+	first=1
 	for arg in $@; do
 
-		#ignore the first 3 arguments
-		if [[ $index -lt 3 ]]; then
-			index=$(($index + 1))
+		#ignore the first argument
+		if [[ $first == 1 ]]; then
+			first=0
 
 		#store in command to execute
 		else
@@ -27,13 +36,20 @@ function travelfs_go() {
 	if [[ $include_hidden_files != 0 ]]; then
 		ls_args='-A'
 	fi
-	cmd=$(fulls $ls_args $3) || {
-		echo "travelfs: Unable to full list files & folders inside '$3' (internal error, please report)."
+	cmd=$(fulls $ls_args $1) || {
+		echo "travelfs: Unable to list all elements inside '$1' (internal error, please report)."
 		exit 2
 	}
 
-	#for each files & folder in current location
+	#for each element in current location
 	for f in ${cmd[@]}; do
+
+		#exclude symlinks
+		if [[ $exclude_symlinks == 1 ]]; then
+			readlink -v $f &> /dev/null && {
+				continue
+			}
+		fi
 
 		#set current file name
 		current_file_name=''
@@ -61,7 +77,7 @@ function travelfs_go() {
 
 		#not empty subdirectory detection
 		if [[ -d $f && $(ls $f) != '' ]]; then
-			travelfs_go $include_hidden_files $only_file_name $f ${command_to_execute[@]}
+			travelfs_go $f ${command_to_execute[@]}
 		fi
 	done
 }
@@ -70,8 +86,6 @@ function travelfs_go() {
 function travelfs_exec() {
 
 	#detect actions, path and command to execute
-	include_hidden_files=0
-	only_file_name=0
 	path=''
 	command_to_execute=''
 	mode=0
@@ -81,14 +95,19 @@ function travelfs_exec() {
 		if [[ $mode == 0 ]]; then
 			case $arg in
 
-				#action 2 : include hidden files
+				#include hidden files
 				'-a' | '--all')
 					include_hidden_files=1
 				;;
 
-				#action 3 : only file name
+				#only file name
 				'-r' | '--relative')
 					only_file_name=1
+				;;
+
+				#exclude symlinks
+				'-s' | '--symlinks')
+					exclude_symlinks=1
 				;;
 
 				#undefined action
@@ -97,14 +116,14 @@ function travelfs_exec() {
 					exit 1
 				;;
 
-				#path found => mode 2 : store command to execute
+				#path found => mode 1 : store command to execute
 				*)
 					path=$arg
 					mode=1
 				;;
 			esac
 
-		#mode 2 : store command to execute
+		#mode 1 : store command to execute
 		else
 			command_to_execute+=$arg' '
 		fi
@@ -122,7 +141,7 @@ function travelfs_exec() {
 	fi
 
 	#go recursively
-	travelfs_go $include_hidden_files $only_file_name $path ${command_to_execute[@]}
+	travelfs_go $path ${command_to_execute[@]}
 }
 
 
@@ -137,16 +156,22 @@ case $1 in
 		echo "For each file processed, <command> is executed as a bash command"
 		echo "accessing the current file path by using the keyword : CURRENT."
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -a, --all      : Include hidden files/directory."
 		echo "  -h, --help     : Show this help message."
-		echo "  -r, --relative : FILENAME will be replaced by relative path."
+		echo "  -r, --relative : CURRENT will be replaced by relative path."
 		echo "                   (default is full path)"
+		echo "                   The path is relative from the actual location inside the command,"
+		echo "                   not from the location where the command has been executed."
+		echo "  -s, --symlinks : Exclude symlinks in results."
 		echo
-		echo "Examples : "
+		echo "Examples :"
 		echo "  > travelfs /etc/default echo \"exploring : \" CURRENT"
 		echo "  #Shows each files & folders existing in /etc/default and its"
 		echo "  #sub-directories recursively."
+		echo
+		echo "  > travelfs -r -s /etc { [[ -f CURRENT ]]; echo $? }"
+		echo "  #"
 		echo
 		echo "WARNING : This command can take a long time to execute depending"
 		echo "          on which <path> you give it to work on."
@@ -169,19 +194,7 @@ case $1 in
 		[[ $1 == '' ]] && exit 1 || exit 0
 	;;
 
-	#valid actions
-	'-a' | '--all' | \
-	'-r' | '--relative')
-		travelfs_exec $@
-	;;
-
-	#undefined action
-	-*)
-		echo "travelfs: Undefined action '$1'."
-		exit 1
-	;;
-
-	#no action
+	#anything
 	*)
 		travelfs_exec $@
 	;;

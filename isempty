@@ -13,7 +13,7 @@ case $1 in
 		echo
 		echo "Returning 255 (-1) if an error occured."
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -h, --help : Show this help message."
 		echo
 		echo "This command is part of \"Bash Tools\"."

@@ -44,7 +44,7 @@ case $1 in
 			echo "    loclog -n"
 		fi
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -c --clear <nbr>    : Clear the content of a log file."
 		echo "                        If no number given, clear all logs."
 		echo "                        (Include a confirmation warning before)"

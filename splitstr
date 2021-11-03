@@ -10,13 +10,13 @@ case $1 in
 		echo "Usage : splitstr [action] <delimiter>"
 		echo "Splits the content from standard input into a string array."
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -h, --help : Show this help message."
 		echo
 		echo "WARNING : If an array is given as input, each element of the array"
 		echo "          will be split but the result will stay in one long array."
 		echo
-		echo "Example :"
+		echo "Examples :"
 		echo "  > echo 'Hello<br>my<br>dear' | splitstr '<br>'"
 		echo "  #Returns an array : ['Hello','my','Dear']"
 		echo

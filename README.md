@@ -12,7 +12,7 @@
 
 Here is what you need to use Bash tools :
 
-    - Linux OS
+    - A Linux based operating system. (preferably Debian based)
 
     - Some tools are using additional packages which are
       already installed on most of debian-based systems
@@ -71,6 +71,7 @@ You should be able to run these new commands :
 | bashtools   |                  git |                            fulls keep | working |
 | find_dev    |                      |                                       | working |
 | fulls       |                      |                                       | working |
+| human       |                      |                                       |  in dev |
 | keep        |                      |                                       | working |
 | loclog      |                      |                                       | working |
 | multitask   |                      |                                       |  in dev |
@@ -79,8 +80,9 @@ You should be able to run these new commands :
 | randsuite   |                      |                                       | working |
 | replaceall  |                      |                                       | working |
 | splitstr    |                      |                                       | working |
+| sz          |                      |                   fulls keep travelfs | working |
 | tput_colors |                 tput |                                 fulls | working |
-| travelfs    |                      |                         full splitstr | working |
+| travelfs    |                      |             fulls replaceall splitstr | working |
 | update_all  |                  apt |                                       | working |
 
 To get any help on a command, use its help action as follow :

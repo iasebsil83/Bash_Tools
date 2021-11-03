@@ -34,7 +34,7 @@ case $1 in
 		echo "Usage : keep [action]"
 		echo "Reads standard input and output only a selection."
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -d, --directories : Keep only existing directories."
 		echo "  -e, --exist       : Keep only existing files or directories."
 		echo "  -f, --files       : Keep only existing files."
@@ -43,7 +43,7 @@ case $1 in
 		echo "  -w, --writable    : Keep only existing user writable files."
 		echo "  -x, --executable  : Keep only existing user executable files."
 		echo
-		echo "Example : "
+		echo "Example :"
 		echo "  > ls -a | keep -d"
 		echo "  #list all current files & folders but keeping only directories."
 		echo

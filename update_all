@@ -10,7 +10,7 @@ case $1 in
 		echo "Usage : update_all [action]"
 		echo "Update, upgrade, fix and clean all installed apt packages."
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -h, --help : Show this help message."
 		echo
 		echo "This command is part of \"Bash Tools\"."

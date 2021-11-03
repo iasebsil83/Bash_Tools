@@ -108,7 +108,7 @@ case $1 in
 		echo "Usage : replaceall [action(s)] [file/directory] <src> <dst>"
 		echo "Replace all occurrences of a string by another."
 		echo
-		echo "Action :"
+		echo "Actions :"
 		echo "  -a, --all       <dir>  : Same thing as '-d' including hidden files."
 		echo "  -d, --directory <dir>  : Replace in every file inside the directory given at the end."
 		echo "  -f, --file      <file> : Replace in the file given at the end."
