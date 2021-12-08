@@ -73,24 +73,32 @@ function fulls_exec() {
 
 		#relative or empty path given
 		*)
-			#add '/' at the end
-			if [[ $path != '' && $path != *'/' ]]; then
-				path=$path'/'
-			fi
+			#directories
+			if [[ -d $path ]]; then
 
-			#include hidden files
-			if [[ $include_hidden_files == 1 ]]; then
-				for e in $path'.'*; do
-					if [[ $exclude_special == 0 || ($e != *'.' && $e != *'..') ]]; then
-						echo "$PWD/$e"
-					fi
+				#add '/' at the end
+				if [[ $path != '' && $path != *'/' ]]; then
+					path=$path'/'
+				fi
+
+				#include hidden files (for directories only)
+				if [[ $include_hidden_files == 1 ]]; then
+					for e in $path'.'*; do
+						if [[ $exclude_special == 0 || ($e != *'.' && $e != *'..') ]]; then
+							echo "$PWD/$e"
+						fi
+					done
+				fi
+
+				#regular directories
+				for e in $path*; do
+					echo "$PWD/$e"
 				done
-			fi
 
-			#regular files
-			for e in $path*; do
-				echo "$PWD/$e"
-			done
+			#files
+			else
+				echo "$PWD/$path"
+			fi
 		;;
 	esac
 }
@@ -109,7 +117,7 @@ case $1 in
 		echo
 		echo "Actions :"
 		echo "  -h, --help   : Show this help message."
-		echo "  -a, --all    : Include hidden files               (similar to 'ls -a')"
+		echo "  -a, --all    : Include hidden files.              (similar to 'ls -a')"
 		echo "  -A, --All    : Same as '-a' without '.' and '..'. (similar to 'ls -A')"
 		echo
 		echo "Examples : "

@@ -7,7 +7,7 @@ case $1 in
 
 	#action 1 : help
 	'-h' | '--help')
-		echo "Usage : isempty [action] [folder]"
+		echo "Usage : isempty [action] <folder>"
 		echo "Returns 0 if given folder is empty (except if showing help menu)."
 		echo "Else, returns the number of elements existing in the folder."
 		echo

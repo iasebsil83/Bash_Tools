@@ -45,7 +45,7 @@ case $1 in
 		echo
 		echo "Example :"
 		echo "  > ls -a | keep -d"
-		echo "  #list all current files & folders but keeping only directories."
+		echo "  #list all current files & folders but keep only directories."
 		echo
 		echo "This command is part of \"Bash Tools\"."
 		echo "For more information about \"Bash Tools\", please check :"

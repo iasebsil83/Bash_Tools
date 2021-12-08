@@ -32,7 +32,7 @@ case $1 in
 
 	#action 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : loclog [action/text] [option]"
+		echo "Usage : loclog [action] [text]"
 		echo "Manage a local log system."
 		echo
 		if [[ -d log ]]; then
@@ -52,7 +52,7 @@ case $1 in
 		echo "                        (Include a confirmation warning before)"
 		echo "  -h --help           : Show this help message."
 		echo "  -n --new            : Create a new log directory in current path"
-		echo "                        with ${#log_numbers[@]} latests logs ready to use."
+		echo "                        with ${#log_numbers[@]} latest logs ready to use."
 		echo "  -s --show  <nbr>    : Show the content of the log number <nbr>."
 		echo "                        If no number given, show all logs."
 		echo "             <text>   : Push text <text> as the latest log."

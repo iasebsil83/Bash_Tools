@@ -7,7 +7,7 @@ case $1 in
 
 	#action 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : pop [action] [file]"
+		echo "Usage : pop [action] <file>"
 		echo "Read a file & clear it (not removing it)."
 		echo
 		echo "Actions :"

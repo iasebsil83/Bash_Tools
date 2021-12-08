@@ -105,18 +105,20 @@ case $1 in
 
 	#action 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : replaceall [action(s)] [file/directory] <src> <dst>"
+		echo "Usage : replaceall [action(s)] [file/directory] <src> [dst]"
 		echo "Replace all occurrences of a string by another."
 		echo
 		echo "Actions :"
 		echo "  -a, --all       <dir>  : Same thing as '-d' including hidden files."
-		echo "  -d, --directory <dir>  : Replace in every file inside the directory given at the end."
-		echo "  -f, --file      <file> : Replace in the file given at the end."
+		echo "  -d, --directory <dir>  : Replace in every file inside the directory given."
+		echo "  -f, --file      <file> : Replace in the file given."
 		echo "  -h, --help             : Show this help message."
 		echo "  -l, --list             : Replace in list given via standard input."
 		echo "  -n, --noprompt         : Don't ask before overwriting files."
 		echo
-		echo "WARNING : Spaces are not supported in strings!"
+		echo "WARNING : Spaces are not supported in <src> strings!"
+		echo
+		echo "NOTE : Argument [dst] can be undefined so that the command is more like a 'removeall'."
 		echo
 		echo "Examples :"
 		echo "  > replaceall -d mydir 'have to' must"
