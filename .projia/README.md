@@ -109,13 +109,13 @@ creating a new project in the corresponding language.
 **Adding a library :**
 
 To add a library in a language, just follow these steps :
- - Create a folder in ***~/.bash_tools/.projia/\<language\>/lib/\<my_lib\>***
-  - Add all your library files inside.
-  - If this library requires another one to work, add another file named **.depend** as well in which you will give the list of all the required libraries names (One per line).
+ - Create a folder in ***~/.projia/\<language\>/lib/\<my_lib\>***
+ - Add all your library files inside.
+ - If this library requires another one to work, add another file named **.depend** as well in which you will give the list of all the required libraries names (One per line).
 
 **WARNING :** You may have seen that the libraries implemented by default
 are linked to an online git repository. That is NOT REQUIRED at all, though
-recommended. NO MORE FILES THAN THOSE GIVEN IN THE PROJIA UPDATER WILL BE
+recommended. ALL THE FILES WRITTEN IN ***~/.projia/updater*** WILL BE
 MODIFIED BY : *** projia -u ***.
 
 That's it for libraries.
@@ -151,7 +151,7 @@ Yes it was that simple.
 You might want to have multiples implementations of the same language
 so here is a solution : Add the same language under different names !
 
-Examples :
+**Examples :**
 ```bash
 projia --add C_standard
 projia --add C_mylibs
