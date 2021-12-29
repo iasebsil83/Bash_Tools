@@ -114,9 +114,8 @@ To add a library in a language, just follow these steps :
  - If this library requires another one to work, add another file named **.depend** as well in which you will give the list of all the required libraries names (One per line).
 
 **WARNING :** You may have seen that the libraries implemented by default
-are linked to an online git repository. That is NOT REQUIRED at all, though
-recommended. ALL THE FILES WRITTEN IN ***~/.projia/updater*** WILL BE
-MODIFIED BY : *** projia -u ***.
+are linked to an online git repository.<br> That is NOT REQUIRED at all, though
+recommended.<br> All the files given in ***~/.projia/updater*** will be modified by : *** projia -u ***.
 
 That's it for libraries.
 
