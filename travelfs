@@ -2,12 +2,14 @@
 
 
 
+
 # ---- declarations ----
 
 #actions
 include_hidden_files=0
 only_file_name=0
 exclude_symlinks=0
+
 
 
 
@@ -76,7 +78,7 @@ function travelfs_go() {
 		${command_line[@]}
 
 		#not empty subdirectory detection
-		if [[ -d $f && $(ls $f) != '' ]]; then
+		if [[ -d $f && ! isempty $f ]]; then
 			travelfs_go $f ${command_to_execute[@]}
 		fi
 	done
@@ -130,7 +132,7 @@ function travelfs_exec() {
 	done
 
 	#error cases
-	if [[ $path == '' || ! -e $path ]]; then
+	if [[ -z $path || ! -e $path ]]; then
 		echo "travelfs: Invalid path given : '$1'. Doesn't exist."
 		exit 1
 	fi
@@ -191,7 +193,7 @@ case $1 in
 		echo "This command is part of \"Bash Tools\"."
 		echo "For more information about \"Bash Tools\", please check :"
 		echo "    https://github.com/iasebsil83/Bash_Tools"
-		[[ $1 == '' ]] && exit 1 || exit 0
+		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
 	#anything

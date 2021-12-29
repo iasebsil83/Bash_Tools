@@ -1,0 +1,135 @@
+#!/bin/bash
+
+
+
+
+# ---- definitions ----
+include_line_feeds=0
+
+
+
+
+# ---- utilities ----
+
+#cutline execution code ($1: filename, $2:start line number, $3:stop line number)
+function cutline_exec() {
+	start=$2
+	stop=$3
+
+	#check integrity
+	isnbr $start && isnbr -n $stop || {
+		echo "cutline: invalid start-stop sequence '$start-$stop'."
+		exit 1
+	}
+
+	#read file line by line
+	line_nbr=0
+	while read -r line; do
+
+		#focused lines are passed => end program
+		if [[ $stop != -1 && $line_nbr -gt $stop ]]; then
+			break
+		fi
+
+		#we are in focused lines => accumulate them
+		if [[ $line_nbr -ge $start ]]; then
+			echo $line
+		fi
+
+		#if line is not only a line feed => do not increase line nbr
+		if [[ $include_line_feeds != 1 && -z line ]]; then
+			line_nbr=$(($line_nbr-1))
+		fi
+
+		#increase line number
+		line_nbr=$(($line_nbr+1))
+
+	done < $1
+}
+
+
+
+
+# ---- main ----
+case $1 in
+
+	#action 1 : help
+	'' | '-h' | '--help')
+		echo "Usage : cutline [action] <[start]-[stop]> [filename]"
+		echo "Get only a certain number of lines from a file."
+		echo "If no filename is given, cutline will read from standard input."
+		echo
+		echo "Actions :"
+		echo "  -h, --help       : Show this help message."
+		echo "  -l, --line-feeds : Don't skip line feeds."
+		echo
+		echo "NOTE : The start-stop sequence is required in all cases BUT"
+		echo "       the values of start/stop are optional."
+		echo "       That means that you must at least use a dash like :"
+		echo "                 cutline - myFile.txt"
+		echo
+		echo "Examples :"
+		echo "  > cutline"
+		echo "  #."
+		echo
+		echo "  > cutline"
+		echo "  #."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+		[[ -z $1 ]] && exit 1 || exit 0
+	;;
+
+	#include line feeds
+	'-l' | '--line-feeds')
+		include_line_feeds=1
+
+		#get start-stop
+		if [[ $2 == -* ]]; then
+			echo "cutline: Only 1 action is allowed in position 1 (at least 2 given : $1 $2)."
+			exit 1
+		fi
+		start=$(echo $2 | cut -d'-' -f 1)
+		stop=$( echo $2 | cut -d'-' -f 2)
+
+		#no limitations
+		if [[ -z $start ]]; then
+			start=0
+		fi
+		if [[ -z $stop ]]; then
+			stop=-1
+		fi
+
+		#execution
+		if [[ -z $3 ]]; then
+			cutline_exec /dev/stdin $start $stop
+		else
+			cutline_exec $3 $start $stop
+		fi
+	;;
+
+	#no undefined action catcher (start-stop sequence with empty start allowed)
+
+	#other
+	*)
+		#get start-stop
+		start=$(echo $1 | cut -d'-' -f 1)
+		stop=$( echo $1 | cut -d'-' -f 2)
+
+		#no limitations
+		if [[ -z $start ]]; then
+			start=0
+		fi
+		if [[ -z $stop ]]; then
+			stop=-1
+		fi
+
+		#execution
+		if [[ -z $2 ]]; then
+			cutline_exec /dev/stdin $start $stop
+		else
+			cutline_exec $2 $start $stop
+		fi
+	;;
+esac

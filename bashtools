@@ -2,6 +2,7 @@
 
 
 
+
 # ---- main ----
 case $1 in
 
@@ -18,7 +19,7 @@ case $1 in
 		echo "This command is part of \"Bash Tools\"."
 		echo "For more information about \"Bash Tools\", please check :"
 		echo "    https://github.com/iasebsil83/Bash_Tools"
-		[[ $1 == '' ]] && exit 1 || exit 0
+		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
 	#action 2 : show
@@ -39,13 +40,15 @@ case $1 in
 
 		#get the latest version from GitHub (https://github.com/iasebsil83/Bash_Tools)
 		git pull && {
+
 			#success
 			rm -f install
 			echo "Bash tools updated !"
 			cd $oldPath
 		} || {
+
 			#failure
-			echo "bash_tools: Could not update Bash tools.";
+			echo "bashtools: Could not update Bash tools.";
 			cd $oldPath
 			exit 1
 		}

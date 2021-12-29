@@ -3,13 +3,9 @@
 
 
 
-
-
 # ---- definitions ----
 delay=0.1    #default values
 separator=''
-
-
 
 
 
@@ -20,7 +16,7 @@ separator=''
 function printf_separator() {
 	if [[ $separator == -* ]]; then
 		printf -- $separator
-	elif [[ $separator != '' ]]; then
+	elif [[ ! -z $separator ]]; then
 		printf $separator
 	fi
 }
@@ -66,8 +62,6 @@ function HEX_checkLimit() {
 function HEX_random() {
 	HEX_checkLimit 1 $RANDOM
 }
-
-
 
 
 
@@ -151,41 +145,41 @@ case $1 in
 	#action 1 : help
 	'' | '-h' | '--help')
 		echo "Usage : randsuite [action]"
-                echo "Display a suite of random characters."
-                echo
-                echo "Actions :"
-                echo "  -b, --bin  [nbr]                  : Displays 0 or 1 randomly 'nbr' times."
+		echo "Display a suite of random characters."
+		echo
+		echo "Actions :"
+		echo "  -b, --bin  [nbr]                  : Displays 0 or 1 randomly 'nbr' times."
 		echo "                                      (leave 'nbr' empty for infinite loop)"
 		echo "             [-d/--delay <delay>]     Delay between generation (default is 0.1s)."
 		echo "             [-s/--separator [str]]   Separator between numbers."
 		echo "                                      (default is NONE, leave empty for ' ')."
-                echo "  -h, --help                        : Show this help message."
-                echo "  -H, --hex  [nbr]                  : Displays 0 to f randomly 'nbr' times."
+		echo "  -h, --help                        : Show this help message."
+		echo "  -H, --hex  [nbr]                  : Displays 0 to f randomly 'nbr' times."
 		echo "                                      (leave 'nbr' empty for infinite loop)"
 		echo "             [-d/--delay <delay>]     Same thing as '-b'."
-                echo "             [-s/--separator [str]]   Same thing as '-b'."
+		echo "             [-s/--separator [str]]   Same thing as '-b'."
 		echo
-                echo "Examples :"
-                echo "  > randsuite -b"
-                echo "  #generates a binary random suite like 0110010010... indefinitely."
+		echo "Examples :"
+		echo "  > randsuite -b"
+		echo "  #generates a binary random suite like 0110010010... indefinitely."
 		echo
-                echo "  > randsuite -H 5 -d 2"
-                echo "  #generates 6 hexadecimal random numbers like d61af4 with 2s delay between numbers."
+		echo "  > randsuite -H 5 -d 2"
+		echo "  #generates 6 hexadecimal random numbers like d61af4 with 2s delay between numbers."
 		echo
-                echo "  > randsuite -b -d 1"
-                echo "  #generates a random suite like 0110010010... indefinitely with 1s between numbers."
-                echo
-                echo "This command is part of \"Bash Tools\"."
-                echo "For more information about \"Bash Tools\", please check :"
-                echo "    https://github.com/iasebsil83/Bash_Tools"
-		[[ $1 == '' ]] && exit 1 || exit 0
+		echo "  > randsuite -b -d 1"
+		echo "  #generates a random suite like 0110010010... indefinitely with 1s between numbers."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
 	#action 2 : binary suite
 	'-b' | '--bin')
 
 		#no next arguments or it is another action => infinite loop
-		if [[ $2 == '' || ${2:0:1} == '-' ]]; then
+		if [[ -z $2 || ${2:0:1} == '-' ]]; then
 			while [[ 1 ]]; do
 				BIN_random
 				printf_separator
@@ -213,7 +207,7 @@ case $1 in
 	'-H' | '--hex')
 
 		#no next arguments or it is another action => infinite loop
-		if [[ $2 == '' || ${2:0:1} == '-' ]]; then
+		if [[ -z $2 || ${2:0:1} == '-' ]]; then
 			while [[ 1 ]]; do
 				HEX_random;
 				printf_separator

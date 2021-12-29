@@ -1,0 +1,123 @@
+#!/usr/bin/python3
+
+
+
+
+# ---------------- DECLARATIONS ----------------
+
+#maximum number of columns (data display preference)
+COLUMN_MAX = 200 #33
+
+#table view
+COLUMNS_ENABLED    = False #True
+TABLE_VIEW_ENABLED = False #True
+if TABLE_VIEW_ENABLED:
+	COLUMNS_ENABLED = True
+
+#dots instead of hexa characters
+DOTS_ENABLED = True
+
+#active line feeds
+LINE_FEED_ENABLED = False #True
+
+
+
+
+# ---------------- IMPORTATIONS ----------------
+
+#system
+import sys
+
+
+
+
+# ---------------- EXECUTION ----------------
+
+#check arguments
+if len(sys.argv) == 1:
+	print("bin2text: No filename given, use '--help' for more details.")
+	exit(1)
+
+#help
+if sys.argv[1] == "-h" or sys.argv[1] == "--help":
+	print("Usage : bin2text [action] <filename>")
+	print("Outputs the text corresponding to a binary file with the maximum readable characters.")
+	print()
+	print("NOTE : This tool is working in pair with command 'text2bin'.")
+	print()
+	print("Action :")
+	print("  -h, --help : Shows this help message.")
+	print()
+	print("This command is part of \"Bash Tools\".")
+	print("For more information about \"Bash Tools\", please check :")
+	print("    https://github.com/iasebsil83/Bash_Tools")
+	exit(0)
+
+#unknown argument
+elif sys.argv[1][0:1] == '-':
+	print("bin2text: Invalid action '" + sys.argv[1] + "'.")
+	exit(1)
+
+#something else => filename
+else:
+
+	#get file content
+	try:
+		f        = open(sys.argv[1], "rb")
+		raw_data = f.read()
+		f.close()
+
+	#error cases
+	except (FileNotFoundError, IsADirectoryError):
+		print("bin2text: Unable to read content of " + sys.argv[1] + ".")
+		exit(1)
+
+	#for each byte in data
+	column = 1
+	for b in raw_data:
+
+		#the only special allowed
+		if LINE_FEED_ENABLED and b == 0x0A:
+			print()
+			column = 0
+
+		#not readable
+		elif b < 32 or b > 126:
+
+			#dot
+			if DOTS_ENABLED:
+				print(".", end="")
+
+			#hexa
+			else:
+				h = hex(b)[2:]
+				if len(h) == 1:
+					print("0" + h, end="")
+				else:
+					print(h, end="")
+
+		#readable
+		else:
+			if DOTS_ENABLED:
+				print(chr(b), end="")
+			else:
+				print(" " + chr(b), end="")
+
+		#columns
+		if COLUMNS_ENABLED:
+			print("|", end="")
+
+		#automatic new line
+		if column == COLUMN_MAX:
+			column = 0
+			print()
+
+			#table view
+			if TABLE_VIEW_ENABLED:
+				for c in range(COLUMN_MAX):
+					if DOTS_ENABLED:
+						print("-+", end="")
+					else:
+						print("--+", end="")
+				print()
+		column += 1

@@ -1,0 +1,108 @@
+#!/bin/bash
+
+
+
+
+# ---- definitions ----
+stop=0
+prompt=0
+
+
+
+
+# ---- utilities ----
+
+#repeat execution code ($1:action, $2:repetition number, $@:command to repeat)
+function repeat_exec() {
+
+	#get action
+	case $1 in
+		'-p' | '--prompt')
+			prompt=1
+		;;
+		'-s' | '--stop')
+			stop=1
+		;;
+	esac
+
+	#build command to execute
+	index=0
+	command=''
+	for arg in $@; do
+		if [[ $index -gt 1 ]]; then
+			command+=' '$arg
+		fi
+
+		index=$(($index+1))
+	done
+
+	#repeat
+	for r in $(seq $2); do
+		$command || {
+			if [[ $stop == 1 ]]; then
+				exit 1
+			fi
+		}
+
+		#prompt
+		if [[ $prompt == 1 ]]; then
+			echo "Repeat > [Press ENTER to repeat command]"
+			read
+		fi
+	done
+}
+
+
+
+
+# ---- main ----
+case $1 in
+
+	#action 1 : help
+	'' | '-h' | '--help')
+		echo "Usage : repeat [action] <nbr> <command>..."
+		echo "Repeats a command several times."
+		echo
+		echo "Actions :"
+		echo "  -h, --help    : Show this help message."
+		echo "  -n, --no-stop : Don't stop if errors occured (default)."
+		echo "  -p, --prompt  : Prompt user between each repetition."
+		echo "  -s, --stop    : Stop at first error occuring."
+		echo
+		echo "NOTE : <command> can have multiple arguments."
+		echo "       Every word detected after it will be considered as part"
+		echo "       of the command."
+		echo "       HOWEVER, operators &, &&, | and || are NOT included."
+		echo
+		echo "Examples :"
+		echo "  > repeat 5 echo \$RANDOM"
+		echo "  #Prints a random number 5 times."
+		echo
+		echo "  > repeat --prompt 16 sudo apt update"
+		echo "  #Try updating packages 16 times with user confirmation"
+		echo "  #required between each repetition."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+		[[ -z $1 ]] && exit 1 || exit 0
+	;;
+
+	#allowed actions
+	'-n' | '--no-stop' | \
+	'-p' | '--prompt'  | \
+	'-s' | '--stop')
+		repeat_exec $@
+	;;
+
+	#undefined action
+	-*)
+		echo "repeat: Undefined action '$1'."
+		exit 1
+	;;
+
+	#other => execution as it was '-n' (action required)
+	*)
+		repeat_exec -n $@
+	;;
+esac

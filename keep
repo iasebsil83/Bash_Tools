@@ -2,6 +2,7 @@
 
 
 
+
 # ---- keep shortcuts ----
 
 #depending on mode ($1:index to seek, $2:mode)
@@ -11,7 +12,7 @@ function keep_mode() {
 	input=$(cat)
 
 	#empty input is not to filter ('ls -dl' will work differently)
-	if [[ ${input[@]} == '' ]]; then
+	if [[ -z ${input[@]} ]]; then
 		exit 0
 	fi
 
@@ -23,6 +24,7 @@ function keep_mode() {
 		fi
 	done
 }
+
 
 
 
@@ -50,7 +52,7 @@ case $1 in
 		echo "This command is part of \"Bash Tools\"."
 		echo "For more information about \"Bash Tools\", please check :"
 		echo "    https://github.com/iasebsil83/Bash_Tools"
-		[[ $1 == '' ]] && exit 1 || exit 0
+		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
 	#action 2 : directories only

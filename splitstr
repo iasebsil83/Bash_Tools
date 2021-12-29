@@ -2,6 +2,7 @@
 
 
 
+
 # ---- main ----
 case $1 in
 
@@ -29,7 +30,7 @@ case $1 in
 		echo "This command is part of \"Bash Tools\"."
 		echo "For more information about \"Bash Tools\", please check :"
 		echo "    https://github.com/iasebsil83/Bash_Tools"
-		[[ $1 == '' ]] && exit 1 || exit 0
+		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
 	#undefined action
@@ -41,7 +42,7 @@ case $1 in
 	#action 2 : split string
 	*)
 		#error case
-		if [[ $1 == '' ]]; then
+		if [[ -z $1 ]]; then
 			echo "splitstr: No delimiter given."
 			exit 1
 		fi
@@ -77,7 +78,7 @@ case $1 in
 			done
 
 			#print last element if existing
-			if [[ ${s:$startIndex} != '' ]]; then
+			if [[ ! -z ${s:$startIndex} ]]; then
 				echo "${s:$startIndex}"
 			fi
 		done

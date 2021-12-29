@@ -1,0 +1,196 @@
+#!/usr/bin/python3
+
+
+
+
+#system
+import os
+import sys
+
+
+
+
+# ---- CONSTANTS ----
+
+#compilations
+EXECUTABLE_COMPILE = "gcc -o "
+EXECUTABLE_FLAGS   = " -Wall -O2"
+DEPENDENCY_COMPILE = "gcc -c -Wall -O2 "
+
+#flags
+EXECUTABLE_OPTIONAL_FLAGS = "-lm -lGL -lglut -lGLU"
+DEPENDENCY_OPTIONAL_FLAGS = "-I/usr/include/GL -lm"
+
+#temporary files
+REMOVE_TEMPORARY_FILES="rm -f *.o"
+
+
+
+
+# ---- ARGUMENTS ----
+
+#no argument => equivalent to 'makegen $PWD/mkconf'
+if len(sys.argv) == 1:
+	exit( os.system("makegen " + os.getcwd() + "/mkconf") )
+
+#help menu
+if sys.argv[1] == '-h' or sys.argv[1] == '--help':
+	print("Usage : makegen [action] [file]")
+	print("Generate a 'Makefile' from the configuration given by [file].")
+	print("If [file] is empty, it will search for file 'mkconf' in current directory.")
+	print()
+	print("The configuration file must follow this patern :")
+	print("    #lines starting with '#' and empty lines are skipped")
+	print()
+	print("    executable_name")
+	print("    dependency1 header1 header2 ...")
+	print("    dependency2 header3 header4 ...")
+	print("    ...")
+	print()
+	print()
+	print("That will generate a makefile like :")
+	print("    executable_name: dependency1.o dependency2.o ...")
+	print("        gcc -o executable_name -Wall -O2 dependency1.o dependency2.o ... -lm -lGL")
+	print()
+	print("    dependency1.o: dependency1.c dependency1.h header1.h header2.h ...")
+	print("        gcc -c -Wall -O2 dependency1.c -lm")
+	print()
+	print("    dependency2.o: dependency2.c dependency2.h header3.h header4.h ...")
+	print("        gcc -c -Wall -O2 dependency1.c -lm")
+	print()
+	print("  ...")
+	print()
+	print()
+	print("NOTE : It is a common use to not create a header file for the some source codes")
+	print("       (especially the main one) but for the consistency of makegen, it is required")
+	print("       that EVERY SOURCE FILE have his own header.")
+	print("       Notice that a header can be empty.")
+	print()
+	print("Actions :")
+	print("  -h, --help : Show this help message.")
+	print("  -a, --auto : Automatically running 'make' after creating the makefile, then removing it.")
+	print()
+	print("Examples : ")
+	print("  > makegen my_config.conf")
+	print("  #.")
+	print("  > makegen -a")
+	print("  #generate a makefile from ")
+	print("  #including hidden files.")
+	print()
+	print("This command is part of \"Bash Tools\".")
+	print("For more information about \"Bash Tools\", please check :")
+	print("    https://github.com/iasebsil83/Bash_Tools")
+	exit(0)
+
+#auto mode : action placed before
+if sys.argv[1] == '-a' or sys.argv[1] == '--auto':
+	if len(sys.argv) >= 3:
+		exit( os.system("makegen " + sys.argv[2] + " -a") )
+	exit( os.system("makegen " + os.getcwd() + "/mkconf -a") )
+
+
+
+
+
+# ---- CONFIG FILE ----
+
+#get config file
+try:
+	f = open(sys.argv[1], "r")
+	raw_lines = f.read().split('\n')
+	f.close()
+
+#error case
+except:
+	print("makegen: Unable to read config file '" + sys.argv[1] + "'.")
+	exit(1)
+
+
+
+
+# ---- MAKEFILE ----
+
+#keep only uncommented lines
+lines = []
+for l in raw_lines:
+	if l != '' and l[0] != '#':
+		lines.append(l)
+
+#for each line
+makefile_text = ""
+for l in range(len(lines)):
+	current = lines[l].split(' ')
+
+	#no target given
+	if len(current) == 0:
+		print("makegen: No target given at line "+ str(l) + ".")
+		exit(1)
+
+
+
+	#1: executable compilation
+	if l == 0:
+
+		#line 1 : set target and dependencies
+		makefile_text += current[0] + ":"
+
+		#get dependencies object files
+		objs = ""
+		for d in lines[1:]:
+			objs += " " + d.split(' ')[0].split('/')[-1] + ".o"
+		makefile_text += objs
+
+		#line 2 : compilation command
+		makefile_text += "\n\t" + EXECUTABLE_COMPILE     + current[0] + EXECUTABLE_FLAGS + objs + " " + EXECUTABLE_OPTIONAL_FLAGS + "\n"
+		makefile_text +=   "\t" + REMOVE_TEMPORARY_FILES + "\n\n"
+
+
+
+	#2: dependency compilation
+	else:
+
+		#line 1 : set target and dependencies
+		makefile_text += current[0].split('/')[-1] + ".o: " + current[0] + ".c " + current[0] + ".h"
+		for arg in current[1:]:
+			makefile_text += " " + arg + ".h"
+
+		#line 2 : compilation command
+		makefile_text += "\n\t" + DEPENDENCY_COMPILE + current[0] + ".c " + DEPENDENCY_OPTIONAL_FLAGS + "\n\n"
+
+
+
+
+# ---- END ----
+
+#create makefile
+try:
+	f = open("Makefile", "w")
+	f.write(makefile_text)
+	f.close()
+
+	#action 'auto'
+	if len(sys.argv) >= 3 and (sys.argv[2] == '-a' or sys.argv[2] == 'auto'):
+
+		#auto make
+		error_code = os.system("make")
+		if error_code:
+			print("makegen: Unable to automatically make after creating 'Makefile'.")
+			exit(error_code)
+
+		#auto remove
+		error_code = os.system("rm Makefile")
+		if error_code:
+			print("makegen: Unable to remove 'Makefile' after executing it.")
+			exit(error_code)
+
+		#success in auto mode
+		print("Makefile generated, executed, then removed successfully !")
+		exit(0)
+
+#error case
+except:
+	print("makegen: Unable to create file 'Makefile'.")
+	exit(1)
+
+#end message
+print("Makefile generated !")

@@ -43,6 +43,6 @@ case $1 in
 		fi
 
 		#count how many elements exist inside
-		exit $(ls -aA $1 | wc -l)
+		exit $(ls -A $1 | wc -l)
 	;;
 esac

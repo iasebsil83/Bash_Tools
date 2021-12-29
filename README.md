@@ -1,6 +1,6 @@
 # **Bash Tools**
 
-***This repository contains a bunch of little tools that can help you in a bash terminal or just make the use of your bash terminal easier.***
+***This repository contains a bunch of tools that can help you in a bash terminal or just make the use of your bash terminal easier.***
 
 &nbsp;
 
@@ -66,23 +66,30 @@ There you go !
 Now, open a new terminal.
 You should be able to run these new commands :
 
-|  *command*  |*package dependencies*|       *bash_tools dependencies*       | *state* |
+|  *command*  |*package dependencies*|        *bash_tools dependencies*      | *state* |
 |:------------|---------------------:|--------------------------------------:|:-------:|
-| bashtools   |                  git |                            fulls keep | working |
+| bashtools   |                  git |                             fulls keep| working |
+| bin2text    |              python3 |                                       | working |
+| cutline     |                      |                                  isnbr| working |
 | find_dev    |                      |                                       | working |
-| fulls       |                      |                                       | working |
+| fulls       |                      |                                isempty| working |
 | human       |                      |                                       |  in dev |
-| keep        |                      |                                       | working |
+| isempty     |                      |                                       | working |
+| isnbr       |                      |                                       | working |
+| keep        |                      |                                isempty| working |
 | loclog      |                      |                                       | working |
+| makegen     |         python3 make |                                       | working |
 | multitask   |                      |                                       |  in dev |
 | pop         |                      |                                       | working |
 | projia      |                  git |fulls keep replaceall splitstr travelfs| working |
 | randsuite   |                      |                                       | working |
+| repeat      |                      |                                       | working |
 | replaceall  |                      |                                       | working |
 | splitstr    |                      |                                       | working |
-| sz          |                      |                   fulls keep travelfs | working |
-| tput_colors |                 tput |                                 fulls | working |
-| travelfs    |                      |             fulls replaceall splitstr | working |
+| sz          |                      |                    fulls keep travelfs| working |
+| text2bin    |              python3 |                                       | working |
+| tput_colors |                 tput |                                  fulls| working |
+| travelfs    |                      |              fulls replaceall splitstr| working |
 | update_all  |                  apt |                                       | working |
 
 To get any help on a command, use its help action as follow :

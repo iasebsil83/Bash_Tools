@@ -2,6 +2,7 @@
 
 
 
+
 # --- declarations ----
 
 #some settings
@@ -11,6 +12,7 @@ log_numbers_str="15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00"
 #split by ' '
 IFS=' ' read -ra log_numbers <<< $log_numbers_str
 log_length=$(( ${#log_numbers[@]} - 1 ))
+
 
 
 
@@ -24,6 +26,7 @@ function confirm() {
 		exit 1
 	fi
 }
+
 
 
 
@@ -69,7 +72,7 @@ case $1 in
 		echo "This command is part of \"Bash Tools\"."
 		echo "For more information about \"Bash Tools\", please check :"
 		echo "    https://github.com/iasebsil83/Bash_Tools"
-		[[ $1 == '' ]] && exit 1 || exit 0
+		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
 	#action 2 : clear logs
@@ -82,7 +85,7 @@ case $1 in
 		fi
 
 		#no number given => clear all logs
-		if [[ $2 == '' ]]; then
+		if [[ -z $2 ]]; then
 			confirm "Are you sure you want to clear all logs [y/n] ? " "loclog: Canceled clear."
 			for n in ${log_numbers[@]}; do
 				echo > $log_dir/latest-$n.log
@@ -92,7 +95,7 @@ case $1 in
 		else
 			#check number
 			nbr=$(( $log_length - $2 ))
-			if [[ ${log_numbers[$nbr]} == '' || $2 -gt $log_length ]]; then
+			if [[ -z ${log_numbers[$nbr]} || $2 -gt $log_length ]]; then
 				echo "loclog: Invalid number given '$2'."
 				exit 1
 			fi
@@ -158,7 +161,7 @@ case $1 in
 		fi
 
 		#no number given => show all logs
-		if [[ $2 == '' ]]; then
+		if [[ -z $2 ]]; then
 			for n in ${log_numbers[@]}; do
 				echo "latest-"$n".log {"
 				cat $log_dir/latest-$n.log
@@ -169,7 +172,7 @@ case $1 in
 		else
 			#check number
 			nbr=$(( $log_length - $2 ))
-			if [[ ${log_numbers[$nbr]} == '' || $2 -gt $log_length ]]; then
+			if [[ -z ${log_numbers[$nbr]} || $2 -gt $log_length ]]; then
 				echo "loclog: Invalid number given '$2'."
 				exit 1
 			fi

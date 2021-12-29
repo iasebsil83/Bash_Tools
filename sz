@@ -2,11 +2,13 @@
 
 
 
+
 # ---- declarations ----
 verbose_mode=0
 only_files=0
 recursive=0
 include_hidden_files=0
+
 
 
 
@@ -32,6 +34,7 @@ function sz_oneElement() {
 		fi
 	done
 }
+
 
 
 
@@ -134,6 +137,7 @@ function sz_exec() {
 	done
 	echo $elemNbr" elements "$totalSize" bytes"
 }
+
 
 
 

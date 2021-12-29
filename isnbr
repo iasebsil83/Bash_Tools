@@ -1,0 +1,123 @@
+#!/bin/bash
+
+
+
+
+# ---- utils ----
+
+#is integer ($1:value, $2:negative_allowed)
+function isInt() {
+
+	#check empty
+	[[ -z $1 ]] && return 1
+
+	#without numbers
+	woNbr=${1//[0-9]}
+
+	#negative
+	if [[ $2 == 1 && $1 == -* ]]; then
+		[[ $woNbr == '-' ]]
+		return $?
+	fi
+
+	#positive => only numbers allowed
+	[[ -z $woNbr ]]
+	return $?
+}
+
+#is float ($1:value, $2:negative_allowed)
+function isFloat() {
+	nbr=$1
+
+	#check empty
+	[[ -z $1 ]] && return 1
+
+	#without numbers
+	woNbr=${1//[0-9]}
+
+	#negative => remove sign
+	if [[ $2 == 1 && $1 == -* ]]; then
+		woNbr=${woNbr:1}
+		nbr=${1:1}
+	fi
+
+	#dot found (and only one)
+	if [[ $woNbr == '.' ]]; then
+		nbr_before_dot=$(echo $nbr | cut -d'.' -f 1)
+		nbr_after_dot=$( echo $nbr | cut -d'.' -f 2)
+
+		#dot must not be alone
+		[[ ! -z $nbr_before_dot && ! -z $nbr_after_dot ]]
+		return $?
+	fi
+
+	#no dot found => only numbers allowed
+	[[ -z $woNbr ]]
+	return $?
+}
+
+
+
+
+# ---- main ----
+case $1 in
+
+	#action 1 : help
+	'' | '-h' | '--help')
+		echo "Usage : isnbr [action(s)] <value>"
+		echo "Check whether a value is a number or not."
+		echo
+		echo "Actions :"
+		echo "  -f, --float    : Detect floating point value."
+		echo "  -h, --help     : Show this help message."
+		echo "  -i, --int      : Detect integer value (default)."
+		echo "  -n, --negative : Include negative numbers."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+		[[ -z $1 ]] && exit 1 || exit 0
+	;;
+
+	#action 1 : integer mode
+	'-i' | '--int')
+		nbr=$2
+		negative=0
+
+		#check negative
+		if [[ $2 == '-n' || $2 == '--negative' ]]; then
+			isInt $3 1
+		else
+			isInt $2 0
+		fi
+	;;
+
+	#action 2 : float mode
+	'-f' | '--float')
+		nbr=$2
+		negative=0
+
+		#check negative
+		if [[ $2 == '-n' || $2 == '--negative' ]]; then
+			isFloat $3 1
+		else
+			isFloat $2 0
+		fi
+	;;
+
+	#action 3 : negative
+	'-n' | '--negative')
+		if [[ $2 == '-f' || $2 == '--float' || $2 == '-i' || $2 == '--int' ]]; then
+			isnbr $2 -n $3
+		else
+			isnbr -i -n $2 #integer mode (default)
+		fi
+	;;
+
+	#no undefined action catcher (negative numbers allowed directly)
+
+	#no action : integer mode (default)
+	*)
+		isnbr -i $1
+	;;
+esac

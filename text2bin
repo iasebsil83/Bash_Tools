@@ -1,0 +1,110 @@
+#!/usr/bin/python3
+
+
+
+
+# ---------------- DECLARATIONS ----------------
+
+#characters allowed
+HEXADECIMALS = "0123456789abcdefABCDEF"
+CHARACTERS   = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+
+
+
+
+# ---------------- IMPORTATIONS ----------------
+
+#system
+import sys
+
+
+
+
+# ---------------- EXECUTION ----------------
+
+#check arguments
+if len(sys.argv) == 1:
+	print("text2bin: No source filename given, use '--help' for more details.")
+	exit(1)
+
+#help
+if sys.argv[1] == "-h" or sys.argv[1] == "--help":
+	print("Usage : text2bin [action] <src> <dst>")
+	print("Get text from file <src>, split it in blocks using spaces as delimiters, and write each block in binary in <dst>.")
+	print()
+	print("NOTE : This tool is the opposite of bin2text so for more information about the text format required,")
+	print("       please check out command 'bin2text'.")
+	print()
+	print("Action :")
+	print("  -h, --help : Shows this help message.")
+	print()
+	print("This command is part of \"Bash Tools\".")
+	print("For more information about \"Bash Tools\", please check :")
+	print("    https://github.com/iasebsil83/Bash_Tools")
+	exit(0)
+
+#invalid action (position 1)
+if sys.argv[1][0:1] == '-':
+	print("text2bin: Invalid action '" + sys.argv[1] + "'.")
+	exit(1)
+
+#2 arguments or more
+if len(sys.argv) >= 3:
+
+	#invalid action (position 2)
+	if sys.argv[2][0:1] == '-':
+		print("text2bin: Invalid action '" + sys.argv[2] + "'.")
+		exit(1)
+
+	#get file content
+	try:
+		f    = open(sys.argv[1], "r")
+		data = f.read()
+		f.close()
+
+	#error cases
+	except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError):
+		print("text2bin: Unable to read content of " + sys.argv[1] + ".")
+		exit(1)
+
+	#for each block in data
+	new_data = b''
+	for block in data.replace('\n', ' ').split(' '):
+
+		#void => skip
+		if block == '':
+			continue
+
+		#hex detected
+		if len(block) == 2:
+			if block[0] in HEXADECIMALS and block[1] in HEXADECIMALS:
+				new_data += bytes.fromhex(str(block))
+			else:
+				print("text2bin: Invalid hexadecimal binome '" + block + "'.")
+				exit(1)
+
+		#character detected
+		elif len(block) == 1:
+			if block in CHARACTERS:
+				new_data += block.encode()
+
+		#block is too big => error
+		else:
+			print("text2bin: Detected a block bigger than 2 characters (Only 1 char or 2 hex digits allowed).")
+			exit(1)
+
+	#write new data
+	try:
+		f = open(sys.argv[2], "wb")
+		f.write(new_data)
+		f.close()
+
+	#error cases
+	except IsADirectoryError:
+		print("text2bin: Unable to write into destination file.")
+		exit(1)
+
+#error case
+else:
+	print("text2bin: Missing destination file.")
+	exit(1)
