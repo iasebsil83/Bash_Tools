@@ -170,8 +170,7 @@ handle big projects.<br>(Notice that BashTools includes one : **makegen**)
 &nbsp;
 
 Projia is part of Bash tools.<br>
-More information about Bash Tools at :<br>
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; https://github.com/iasebsil83/Bash_Tools
+More information about Bash Tools at : https://github.com/iasebsil83/Bash_Tools
 
 That is all for this tool, hope you will enjoy !
 
