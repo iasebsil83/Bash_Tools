@@ -59,7 +59,7 @@ at each new project creation.
 So you can customize your project generation as you want by modifying the
 folders & files inside the "default" directory. Mind that you can also
 define some custom variables that you can use in your template files using
-the syntax : __myVariable__
+the syntax : \_\_myVariable\_\_
 
 They will be replaced by the text you have set.
 
@@ -70,10 +70,10 @@ There is 2 types of variable :
  - **global**  : Defined in a configuration file. (pseudo, copyright...)
 
 Command variables are :
-    - **\_\_project_name\_\_**  (project name given by the user)
-    - **\_\_language\_\_**      (selected language)
-    - **\_\_creation_date\_\_** (format : "DD MMM YYYY")
-    - **\_\_creation_hour\_\_** (format : "HH:mm:ss")
+ - **\_\_project_name\_\_**  (project name given by the user)
+ - **\_\_language\_\_**      (selected language)
+ - **\_\_creation_date\_\_** (format : "DD MMM YYYY")
+ - **\_\_creation_hour\_\_** (format : "HH:mm:ss")
 
 Global variables are configurable at :
 ```bash
@@ -109,19 +109,14 @@ creating a new project in the corresponding language.
 **Adding a library :**
 
 To add a library in a language, just follow these steps :
-    - Create a folder in ***~/.bash_tools/.projia/\<language\>/lib/\<my_lib\>***
-    - Add all your library files inside.
-    - If this library requires another one to work, add another file
-      named **.depend** as well in which you will give the list of all
-      the required libraries names (One per line).
+ - Create a folder in ***~/.bash_tools/.projia/\<language\>/lib/\<my_lib\>***
+  - Add all your library files inside.
+  - If this library requires another one to work, add another file named **.depend** as well in which you will give the list of all the required libraries names (One per line).
 
 **WARNING :** You may have seen that the libraries implemented by default
-are linked to an online git repository.
-
-That is NOT REQUIRED at all, though recommended.
-
-NO MORE FILES THAN THOSE GIVEN IN THE PROJIA UPDATER WILL BE
-MODIFIED BY : ***' projia -u '***.
+are linked to an online git repository. That is NOT REQUIRED at all, though
+recommended. NO MORE FILES THAN THOSE GIVEN IN THE PROJIA UPDATER WILL BE
+MODIFIED BY : *** projia -u ***.
 
 That's it for libraries.
 
