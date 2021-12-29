@@ -47,7 +47,10 @@ Answers to these questions are below.
 
 ## II] Templates
 
-Project templates are sorted by language and stored at ***~/.projia/\<language\>/default/***
+Project templates are sorted by language and stored at :
+```bash
+~/.projia/<language>/default/
+```
 (One folder per language)
 
 All the files & folders existing in the ***default*** folder will be copied
@@ -67,12 +70,15 @@ There is 2 types of variable :
  - **global**  : Defined in a configuration file. (pseudo, copyright...)
 
 Command variables are :
-    - **__project_name__**  (project name given by the user)
-    - **__language__**      (selected language)
-    - **__creation_date__** (format : "DD MMM YYYY")
-    - **__creation_hour__** (format : "HH:mm:ss")
+    - **\_\_project_name\_\_**  (project name given by the user)
+    - **\_\_language\_\_**      (selected language)
+    - **\_\_creation_date\_\_** (format : "DD MMM YYYY")
+    - **\_\_creation_hour\_\_** (format : "HH:mm:ss")
 
-Global variables are configurable at ***~/.projia/globvars.bash***.
+Global variables are configurable at :
+```bash
+~/.projia/globvars.bash
+```
 
 Check out the existing templates to get inspired on how to make yours.
 
@@ -83,7 +89,10 @@ Check out the existing templates to get inspired on how to make yours.
 ## III] Libraries
 
 Projia has a bunch of libraries available in a few languages that
-are located in ***~/.projia/<language>/lib/***
+are located in :
+```bash
+~/.projia/<language>/lib/
+```
 
 These libraries are utility libraries for some basic stuff (file
 management, network use...) and are quite easy to manage. They are not
@@ -91,7 +100,7 @@ required for the use of a feature, but recommended for an easier
 maintainability of the code.
 
 All that stuff has been made by myself (I.A.) but of course you can
-add your own libraries inside the "lib" folder. As soon as you do it,
+add your own libraries inside the ***lib*** folder. As soon as you do it,
 they will be automatically accessible via the command line when
 creating a new project in the corresponding language.
 
