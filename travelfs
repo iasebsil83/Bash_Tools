@@ -78,7 +78,7 @@ function travelfs_go() {
 		${command_line[@]}
 
 		#not empty subdirectory detection
-		if [[ -d $f && ! isempty $f ]]; then
+		if [[ -d $f && ! -z $(ls $f) ]]; then
 			travelfs_go $f ${command_to_execute[@]}
 		fi
 	done

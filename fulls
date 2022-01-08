@@ -41,7 +41,11 @@ function fulls_exec() {
 	done
 
 	#special case : empty directory
-	isempty $path && exit 0
+	if [[ -z $path ]]; then
+		isempty $PWD && exit 0
+	else
+		isempty $path && exit 0
+	fi
 
 	#path type
 	case $path in
@@ -73,7 +77,7 @@ function fulls_exec() {
 		#relative or empty path given
 		*)
 			#directories
-			if [[ -d $path ]]; then
+			if [[ -d $PWD/$path ]]; then
 
 				#add '/' at the end
 				if [[ ! -z $path && $path != *'/' ]]; then

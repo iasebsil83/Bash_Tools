@@ -13,16 +13,13 @@ import sys
 # ---- CONSTANTS ----
 
 #compilations
-EXECUTABLE_COMPILE = "gcc -o "
-EXECUTABLE_FLAGS   = " -Wall -O2"
-DEPENDENCY_COMPILE = "gcc -c -Wall -O2 "
-
-#flags
-EXECUTABLE_OPTIONAL_FLAGS = "-lm -lGL -lglut -lGLU"
-DEPENDENCY_OPTIONAL_FLAGS = "-I/usr/include/GL -lm"
+EXE_COMPILE       = "gcc -o "
+EXE_FLAGS         = " -Wall -O2"
+DEP_COMPILE       = "gcc -c -Wall -O2 "
+dep_optionalFlags = ""
 
 #temporary files
-REMOVE_TEMPORARY_FILES="rm -f *.o"
+REMOVE_TEMP_FILES="rm -f *.o"
 
 
 
@@ -42,23 +39,33 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
 	print("The configuration file must follow this patern :")
 	print("    #lines starting with '#' and empty lines are skipped")
 	print()
-	print("    executable_name")
-	print("    dependency1 header1 header2 ...")
-	print("    dependency2 header3 header4 ...")
+	print("    exe_name exe_flag1 exe_flag2 ...")
+	print("    dep1 header1 header2 ...")
+	print("    dep2 header3 header4 ...")
+	print("    :dep_flag1 dep_flag2 ... #define new depedency flags")
+	print("    dep3 header5 header6 ...")
+	print("    :                        #reset dependency flags (set empty flags)")
+	print("    dep4 header7 header8 ...")
 	print("    ...")
 	print()
 	print()
 	print("That will generate a makefile like :")
-	print("    executable_name: dependency1.o dependency2.o ...")
-	print("        gcc -o executable_name -Wall -O2 dependency1.o dependency2.o ... -lm -lGL")
+	print("    exe_name: dep1.o dep2.o dep3.o dep4.o")
+	print("        gcc -o exe_name -Wall -O2 dep1.o dep2.o dep3.o dep4.o exe_flag1 exe_flag2 ...")
 	print()
-	print("    dependency1.o: dependency1.c dependency1.h header1.h header2.h ...")
-	print("        gcc -c -Wall -O2 dependency1.c -lm")
+	print("    dep1.o: dep1.c dep1.h header1.h header2.h ...")
+	print("        gcc -c -Wall -O2 dep1.c")
 	print()
-	print("    dependency2.o: dependency2.c dependency2.h header3.h header4.h ...")
-	print("        gcc -c -Wall -O2 dependency1.c -lm")
+	print("    dep2.o: dep2.c dep2.h header3.h header4.h ...")
+	print("        gcc -c -Wall -O2 dep1.c")
 	print()
-	print("  ...")
+	print("    dep3.o: dep3.c dep3.h header5.h header6.h ...")
+	print("        gcc -c -Wall -O2 dep3.c dep_flag1 dep_flag2 ...")
+	print()
+	print("    dep4.o: dep4.c dep4.h header7.h header8.h ...")
+	print("        gcc -c -Wall -O2 dep4.c")
+	print()
+	print("    ...")
 	print()
 	print()
 	print("NOTE : It is a common use to not create a header file for the some source codes")
@@ -121,6 +128,13 @@ makefile_text = ""
 for l in range(len(lines)):
 	current = lines[l].split(' ')
 
+	#remove empty elements (multiple spaces)
+	new_current = []
+	for c in current:
+		if c != "":
+			new_current.append(c)
+	current = new_current
+
 	#no target given
 	if len(current) == 0:
 		print("makegen: No target given at line "+ str(l) + ".")
@@ -137,16 +151,30 @@ for l in range(len(lines)):
 		#get dependencies object files
 		objs = ""
 		for d in lines[1:]:
-			objs += " " + d.split(' ')[0].split('/')[-1] + ".o"
+			if d[0] != ':':
+				objs += " " + d.split(' ')[0].split('/')[-1] + ".o"
 		makefile_text += objs
 
+		#get exe optional flags
+		exe_optionalFlags = ""
+		for f in current[1:]:
+			exe_optionalFlags += f + " "
+
 		#line 2 : compilation command
-		makefile_text += "\n\t" + EXECUTABLE_COMPILE     + current[0] + EXECUTABLE_FLAGS + objs + " " + EXECUTABLE_OPTIONAL_FLAGS + "\n"
-		makefile_text +=   "\t" + REMOVE_TEMPORARY_FILES + "\n\n"
+		makefile_text += "\n\t" + EXE_COMPILE + current[0] + EXE_FLAGS + objs + " " + exe_optionalFlags + "\n"
+		makefile_text +=   "\t" + REMOVE_TEMP_FILES + "\n\n"
 
 
 
-	#2: dependency compilation
+	#2: dependency flag
+	elif current[0][0] == ':':
+		current[0] = current[0][1:] #remove ':' prefix
+
+		dep_optionalFlags = ""
+		for f in current:
+			dep_optionalFlags += f + " "
+
+	#3: dependency compilation
 	else:
 
 		#line 1 : set target and dependencies
@@ -155,7 +183,7 @@ for l in range(len(lines)):
 			makefile_text += " " + arg + ".h"
 
 		#line 2 : compilation command
-		makefile_text += "\n\t" + DEPENDENCY_COMPILE + current[0] + ".c " + DEPENDENCY_OPTIONAL_FLAGS + "\n\n"
+		makefile_text += "\n\t" + DEP_COMPILE + current[0] + ".c " + dep_optionalFlags + "\n\n"
 
 
 
@@ -168,29 +196,29 @@ try:
 	f.write(makefile_text)
 	f.close()
 
-	#action 'auto'
-	if len(sys.argv) >= 3 and (sys.argv[2] == '-a' or sys.argv[2] == 'auto'):
-
-		#auto make
-		error_code = os.system("make")
-		if error_code:
-			print("makegen: Unable to automatically make after creating 'Makefile'.")
-			exit(error_code)
-
-		#auto remove
-		error_code = os.system("rm Makefile")
-		if error_code:
-			print("makegen: Unable to remove 'Makefile' after executing it.")
-			exit(error_code)
-
-		#success in auto mode
-		print("Makefile generated, executed, then removed successfully !")
-		exit(0)
-
 #error case
 except:
 	print("makegen: Unable to create file 'Makefile'.")
 	exit(1)
+
+#action 'auto'
+if len(sys.argv) >= 3 and (sys.argv[2] == '-a' or sys.argv[2] == 'auto'):
+
+	#auto make
+	error_code = os.system("make")
+	if error_code:
+		print("makegen: Error(s) occured when running 'Makefile'.")
+		exit(error_code)
+
+	#auto remove
+	error_code = os.system("rm Makefile")
+	if error_code:
+		print("makegen: Unable to remove 'Makefile' after executing it.")
+		exit(error_code)
+
+	#success in auto mode
+	print("Makefile generated, executed, then removed successfully !")
+	exit(0)
 
 #end message
 print("Makefile generated !")
