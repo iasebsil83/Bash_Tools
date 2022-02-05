@@ -50,7 +50,7 @@ chmod 777 Bash_tools/install
 
 To uninstall bash tools, remove "Bash tools" section in file ~/.bashrc and then :
 ```bash
-rm -rf ~/.bash_tools ~/.projia
+rm -rf ~/.bash_tools
 ```
 
 There you go !
@@ -81,7 +81,6 @@ You should be able to run these new commands :
 | makegen     |         python3 make |                                       | working |
 | multitask   |                      |                                       |  in dev |
 | pop         |                      |                                       | working |
-| projia      |                  git |fulls keep replaceall splitstr travelfs| working |
 | randsuite   |                      |                                       | working |
 | repeat      |                      |                                       | working |
 | replaceall  |                      |                                       | working |
@@ -98,17 +97,6 @@ To get any help on a command, use its help action as follow :
 ```
 
 That's it for the available tools, I hope you will enjoy using them !
-
-&nbsp;
-
-&nbsp;
-
-**Note**: Command *'projia'* seems to have no library installed with it but actually,
-that's not the case. All the libraries will be downloaded from github during the
-installation process and they can be updated using :
-```bash
-'projia --update'
-```
 
 &nbsp;
 

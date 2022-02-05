@@ -108,8 +108,8 @@ case $1 in
 
 	#action 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : replaceall [action(s)] [file/directory] <src> [dst]"
-		echo "Replace all occurrences of a string by another."
+		echo "Usage : replaceall <action(s)> [file/directory] <src> [dst]"
+		echo "Replace all occurrences of a string by another one."
 		echo
 		echo "Actions :"
 		echo "  -a, --all       <dir>  : Same thing as '-d' including hidden files."
@@ -119,16 +119,16 @@ case $1 in
 		echo "  -l, --list             : Replace in list given via standard input."
 		echo "  -n, --noprompt         : Don't ask before overwriting files."
 		echo
-		echo "WARNING : Spaces are not supported in <src> strings!"
+		echo "WARNING : Spaces are not fully supported in <src> strings !"
 		echo
 		echo "NOTE : Argument [dst] can be undefined so that the command is more like a 'removeall'."
 		echo
 		echo "Examples :"
-		echo "  > replaceall -d mydir 'have to' must"
-		echo "  #Replaces all occurrences of 'have to' by 'must' in all files inside 'mydir'"
+		echo "  > replaceall -d mydir have had"
+		echo "  #Replaces all occurrences of 'have' by 'had' in every file inside 'mydir'."
 		echo
 		echo "  > ls -d /usr/include/* | replaceall --list /usr/include/"
-		echo "  #replace /usr/include/ by '' (nothing) in output of 'ls -d /usr/include/*'"
+		echo "  #replace '/usr/include/' by '' (nothing) in output of 'ls -d /usr/include/*'."
 		echo "  #(Equivalent of 'ls /usr/include')"
 		echo
 		echo "This command is part of \"Bash Tools\"."
