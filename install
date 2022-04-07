@@ -4,10 +4,24 @@
 
 # Installation program for bash tools.
 # This program removes itself when installation finished.
-mv Bash_Tools $HOME/.bash_tools                                             && \
-echo -e "\n\n\n# Bash tools by I.A. :"            >> ~/.bashrc              && \
-echo    "TERM=xterm-256color"                     >> ~/.bashrc              && \
-echo -e "PATH=\"\$PATH:$HOME/.bash_tools\"\n\n\n" >> ~/.bashrc              && \
+
+#install (also check if already installed)
+mkdir $HOME/.bash_tools || {
+	echo "bashtools: Folder '.bash_tools' already exists."
+	echo "           [Installation Aborted]"
+	exit 1
+}
+
+#install
+mv * $HOME/.bash_tools                                                      && \
+echo -e "\n\n\n# Bash tools by I.A. :"        >> ~/.bashrc                  && \
+echo    "TERM=xterm-256color"                 >> ~/.bashrc                  && \
+echo -e "PATH=\"\$PATH:$HOME/.bash_tools\"\n" >> ~/.bashrc                  && \
 rm $HOME/.bash_tools/install                                                && \
 echo "Bash tools installation done (you can find them in ~/.bash_tools)."   && \
-echo "You will need to restart a terminal to access to these new commands."
+echo "You will need to restart a terminal to access to these new commands." || {
+	echo "bashtools : Unable to install Bash Tools."
+	echo "            Are you executing this installer in its own directory ?"
+	echo "            [Installation Aborted]"
+	exit 1
+}

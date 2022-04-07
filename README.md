@@ -1,6 +1,6 @@
 # **Bash Tools**
 
-***This repository contains a bunch of tools that can help you in a bash terminal or just make the use of your bash terminal easier.***
+***Adding new tools in your bash terminal.***
 
 &nbsp;
 
@@ -32,20 +32,16 @@ That should be all for the requirements.
 
 ## II] Installation
 
-Get the repository from GitHub :
+To install :
 ```bash
+#get the repository from GitHub
 git clone https://github.com/iasebsil83/Bash_Tools
-```
 
-Launch the installer :
-```bash
-./Bash_Tools/install
-```
+#get inside
+cd Bash_Tools
 
-Installator did not launch ?
-Maybe the file is not executable :
-```bash
-chmod 777 Bash_tools/install
+#run installer
+./install
 ```
 
 To uninstall bash tools, remove "Bash tools" section in file ~/.bashrc and then :
