@@ -42,6 +42,7 @@ case $1 in
 		echo "  -f, --files       : Keep only existing files."
 		echo "  -h, --help        : Show this help message."
 		echo "  -r, --readable    : Keep only existing user readable files."
+		echo "  -t, --type <ext>  : Keep only files with extension '.<ext>'."
 		echo "  -w, --writable    : Keep only existing user writable files."
 		echo "  -x, --executable  : Keep only existing user executable files."
 		echo
@@ -98,6 +99,24 @@ case $1 in
 	#action 7 : user executable only
 	'-x' | '--executable')
 		keep_mode 3 x
+	;;
+
+	#action 8 : filter by extension
+	'-t' | '--type')
+
+		#check extension
+		if [[ -z $2 ]]; then
+			echo "keep: No extension given to filter."
+			exit 1
+		fi
+
+		#filter
+		input=$(cat)
+		for element in ${input[@]}; do
+			if [[ $element == *'.'$2 ]]; then
+				echo $element
+			fi
+		done
 	;;
 
 	#undefined action

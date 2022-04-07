@@ -16,6 +16,13 @@ function removeArgs() {
 	echo $newArgs
 }
 
+#check errors potentially occuring during replacement ($1:error state)
+function replaceall_echoError() {
+	echo "replaceall: Errors found during replacement."
+	echo "            [Replacement Aborted]"
+	return 1
+}
+
 
 
 
@@ -27,6 +34,13 @@ function replaceall_file() {
 	#check void arguments
 	[[ -z $2 ]] && echo "replaceall: No file given."       && exit 1
 	[[ -z $3 ]] && echo "replaceall: No src string given." && exit 1
+
+	#exclude binary files (ELF)
+	if [[ ! -z $(file $2 | grep ELF) ]]; then
+		echo "replaceall: File '$2' has been detected as binary."
+		echo "            [Replacement Aborted]"
+		return 1
+	fi
 
 	#check if file can be read
 	input=$(cat $2 2> /dev/null) || {
@@ -44,24 +58,33 @@ function replaceall_file() {
 		fi
 	fi
 
-	#reset file
-	echo -n '' > $2
+	#create a temporary file
+	echo "Replacing occurences of '$3' by '$4' from file '$2' in temporary file..."
+	tmp_file=$(mktemp bashtools-replaceall-XXXXXXXXXXXXXXXX)
 
 	#replace until no more occurrence found
 	cnt=0
 	content="${input[@]}"
 	while [[ $content == *$3* ]]; do
-		content="${content/$3/$4}"
+		content="${content/$3/$4}" || return $(replaceall_echoError)
 		cnt=$(($cnt + 1))
 	done
 
 	#write line character per character
 	for c in $(seq 0 ${#content}); do
-		echo -n "${content[$c]}" >> $2
+		echo -n "${content[$c]}" >> $tmp_file || return $(replaceall_echoError)
 	done
-	echo '' >> $2
+	echo '' >> $tmp_file
 
-	echo "Replaced $cnt occurrences of '$3' by '$4' in file '$2'."
+	#apply modification
+	echo "  Replaced in temporary file, now applying in the real file. (Do not Ctrl+C now)"
+	mv $tmp_file $2 || {
+		echo "replaceall: Unable to copy data from temporary file to real file."
+		echo "            [Replacements Aborted]"
+		return 1
+	}
+
+	echo "  Replaced $cnt occurrences."
 }
 
 #directory ($1:includeAllFiles, $2:promptEnabled, $@:all user arguments after action 'directory')
