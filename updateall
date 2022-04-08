@@ -8,7 +8,7 @@ case $1 in
 
 	#action 1 : help
 	'-h' | '--help')
-		echo "Usage : update_all [action]"
+		echo "Usage : updateall [action]"
 		echo "Update, upgrade, fix and clean all installed apt packages."
 		echo
 		echo "Actions :"
@@ -21,7 +21,7 @@ case $1 in
 
 	#undefined action
 	-*)
-		echo "update_all: Undefined action '$1'."
+		echo "updateall: Undefined action '$1'."
 		exit 1
 	;;
 
@@ -30,37 +30,37 @@ case $1 in
 
 		#1) update
 		echo -e "\nUpdating package list...\n" && sudo apt update || {
-			echo "update_all: Error updating packages list."
+			echo "updateall: Error updating packages list."
 			exit 1
 		}
 
 		#2) full-upgrade
 		echo -e "\nUpgrading packages...\n" && sudo apt full-upgrade || {
-			echo "update_all: Error upgrading packages."
+			echo "updateall: Error upgrading packages."
 			exit 1
 		}
 
 		#3) fix broken
 		echo -e "\nFixing broken packages...\n" && sudo apt install --fix-broken || {
-			echo "update_all: Error fixing broken packages."
+			echo "updateall: Error fixing broken packages."
 			exit 1
 		}
 
 		#4) fix missing
 		echo -e "\nFixing missing packages...\n" && sudo apt install --fix-missing || {
-			echo "update_all: Error fixing missing packages."
+			echo "updateall: Error fixing missing packages."
 			exit 1
 		}
 
 		#5) remove unused
 		echo -e "\nRemoving unused packages...\n" && sudo apt autoremove || {
-			echo "update_all: Error removing unused packages."
+			echo "updateall: Error removing unused packages."
 			exit 1
 		}
 
 		#6) clean apt folders
 		echo -e "\nCleaning all...\n" && sudo apt autoclean || {
-			echo "update_all: Error cleaning apt folders."
+			echo "updateall: Error cleaning apt folders."
 			exit 1
 		}
 		echo -e "\nAll packages have been updated."

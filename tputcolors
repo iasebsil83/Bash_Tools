@@ -8,7 +8,7 @@ case $1 in
 
 	#action 1 : help
 	'-h' | '--help')
-		echo "Usage : tput_colors [action] [nbr]"
+		echo "Usage : tputcolors [action] [nbr]"
 		echo "Shows all the available colors in tput."
 		echo "Argument 'nbr' is the number of colors to display per line."
 		echo
@@ -22,14 +22,14 @@ case $1 in
 
 	#undefined action
 	-*)
-		echo "tput_colors: Undefined action '$1'."
+		echo "tputcolors: Undefined action '$1'."
 		exit 1
 	;;
 
 	#action 2 : show all colors in tput
 	*)
 		#set number of colors per line (1st given argument)
-		if [[ $1 == '' ]]; then
+		if [[ -z $1 ]]; then
 			nbr=10 #default value
 		else
 			nbr=$1
