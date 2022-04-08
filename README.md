@@ -67,7 +67,7 @@ You should be able to run these new commands :
 | bashtools   |                  git |                             fulls keep| working |
 | bin2text    |              python3 |                                       | working |
 | cutline     |                      |                                  isnbr| working |
-| find_dev    |                      |                                       | working |
+| findev      |                      |                                       | working |
 | fulls       |                      |                                isempty| working |
 | human       |                      |                                       |  in dev |
 | isempty     |                      |                                       | working |
@@ -83,9 +83,9 @@ You should be able to run these new commands :
 | splitstr    |                      |                                       | working |
 | sz          |                      |                    fulls keep travelfs| working |
 | text2bin    |              python3 |                                       | working |
-| tput_colors |                 tput |                                  fulls| working |
+| tputcolors  |                 tput |                                  fulls| working |
 | travelfs    |                      |              fulls replaceall splitstr| working |
-| update_all  |                  apt |                                       | working |
+| updateall   |                  apt |                                       | working |
 
 To get any help on a command, use its help action as follow :
 ```bash

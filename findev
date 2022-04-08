@@ -8,7 +8,7 @@ case $1 in
 
 	#action 1 : help
 	'-h' | '--help')
-		echo "Usage : find_dev [action]"
+		echo "Usage : findev [action]"
                 echo "Helps you to know where a new device is added"
 		echo "to your computer (in /dev)."
 		echo
@@ -27,7 +27,7 @@ case $1 in
 
 	#undefined action
 	-*)
-		echo "find_dev: Undefined action '$1'."
+		echo "findev: Undefined action '$1'."
 		exit 1
 	;;
 
