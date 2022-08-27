@@ -7,11 +7,9 @@
 
 #some settings
 log_dir="$PWD/log"
-log_numbers_str="15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00"
-
-#split by ' '
-IFS=' ' read -ra log_numbers <<< $log_numbers_str
-log_length=$(( ${#log_numbers[@]} - 1 ))
+log_length=0
+log_numbers_str=''
+log_numbers=()
 
 
 
@@ -27,6 +25,59 @@ function confirm() {
 	fi
 }
 
+#build log informations ($1:number of logs required)
+function buildLogData() {
+	log_length=$1
+
+	#max limit : 99
+	isnbr $log_length && [[ $log_length != 0 ]] || {
+		echo "loclog: Please enter a number greater or equal than 2."
+		exit 1
+	}
+
+	#create log string
+	log_numbers_str=''
+	max=$(($1 - 1))
+	for n in $(seq -w $max); do
+
+		#concatenate
+		log_numbers_str="$n $log_numbers_str"
+	done
+	log_numbers_str="${log_numbers_str}0"
+
+	#add the 0 manually
+	if [[ $max -ge 10 ]]; then
+		log_numbers_str="${log_numbers_str}0"
+	fi
+	if [[ $max -ge 100 ]]; then
+		log_numbers_str="${log_numbers_str}0"
+	fi
+	if [[ $max -ge 1000 ]]; then
+		log_numbers_str="${log_numbers_str}0"
+	fi
+	if [[ $max -ge 10000 ]]; then
+		log_numbers_str="${log_numbers_str}0"
+	fi
+	if [[ $max -ge 100000 ]]; then
+		log_numbers_str="${log_numbers_str}0"
+	fi
+
+	#create log string list
+	IFS='' read -ra log_numbers <<< ${log_numbers_str[@]}
+}
+
+
+
+
+# ---- init ----
+
+#detect exixting logs
+if [[ -d $log_dir ]]; then
+	buildLogData $(fulls $log_dir | grep 'latest-' | wc -l)
+else
+	buildLogData 16
+fi
+
 
 
 
@@ -35,32 +86,31 @@ case $1 in
 
 	#action 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : loclog [action] [text]"
+		echo "Usage : loclog [option] [text]"
 		echo "Manage a local log system."
 		echo
-		if [[ -d log ]]; then
+		if [[ -d $log_dir ]]; then
 			echo "The actual log folder is :"
 			echo "    '$log_dir'"
 		else
 			echo "/!\ WARNING /!\ : NO LOG FOLDER DETECTED !"
 			echo "Please create one before any use of logs :"
-			echo "    loclog -n"
+			echo "    loclog --new <nbr>"
 		fi
 		echo
-		echo "Actions :"
-		echo "  -c --clear <nbr>    : Clear the content of a log file."
-		echo "                        If no number given, clear all logs."
-		echo "                        (Include a confirmation warning before)"
-		echo "  -d --delete         : Delete the current log folder if existing."
-		echo "                        (Include a confirmation warning before)"
-		echo "  -h --help           : Show this help message."
-		echo "  -n --new            : Create a new log directory in current path"
-		echo "                        with ${#log_numbers[@]} latest logs ready to use."
-		echo "  -s --show  <nbr>    : Show the content of the log number <nbr>."
-		echo "                        If no number given, show all logs."
-		echo "             <text>   : Push text <text> as the latest log."
-		echo "  -t --track <stream> : Reads the standard output of <stream> and store it"
-		echo "                        into logs dynamically."
+		echo "Options :"
+		echo "  -c, --clear <nbr>    : Clear the content of a log file."
+		echo "                         If no number given, clear all logs."
+		echo "                         (Includes a confirmation warning before)"
+		echo "  -d, --delete         : Delete the current log folder if existing."
+		echo "                         (Includes a confirmation warning before)"
+		echo "  -h, --help           : Show this help message."
+		echo "  -n, --new   [nbr]    : Create a new log directory in current path"
+		echo "                         with [nbr] latest logs ready to use (default 16)."
+		echo "  -s, --show  <nbr>    : Show the content of the log number <nbr>."
+		echo "                         If no number given, show all logs."
+		echo "  -t, --track <stream> : Read the standard output of <stream> and store it"
+		echo "                         into logs dynamically."
 		echo
 		echo "Examples :"
 		echo "  > loclog \"myText\""
@@ -79,7 +129,7 @@ case $1 in
 	'-c' | '--clear')
 
 		#check log directory
-		if [[ ! -d log ]]; then
+		if [[ ! -d $log_dir ]]; then
 			echo "loclog: Could not find a log folder here : Aborted clear."
 			exit 1
 		fi
@@ -93,16 +143,16 @@ case $1 in
 
 		#specific number
 		else
+
 			#check number
-			nbr=$(( $log_length - $2 ))
-			if [[ -z ${log_numbers[$nbr]} || $2 -gt $log_length ]]; then
+			if [[ ! -f $log_dir/latest-$2.log ]]; then
 				echo "loclog: Invalid number given '$2'."
 				exit 1
 			fi
 
 			#clear corresponding log
-			confirm "Are you sure you want to clear latest-"${log_numbers[$nbr]}".log [y/n] ? " "loclog: Canceled clear."
-			echo > $log_dir/latest-${log_numbers[$nbr]}.log
+			confirm 'Are you sure you want to clear latest-'$2'.log [y/n] ? ' 'loclog: Canceled clear.'
+			echo > $log_dir/latest-$2.log
 		fi
 	;;
 
@@ -110,14 +160,14 @@ case $1 in
 	'-d' | '--delete')
 
 		#detect log folder
-		if [[ -d log ]]; then
+		if [[ -d $log_dir ]]; then
 
 			#confirmation
 			echo "Are you sure you want to delete log folder"
 			confirm "(All data inside will be erased) [y/n] ? " "loclog: Canceled delete."
 
 			#remove log
-			rm -rf log
+			rm -rf $log_dir
 			echo "Deleted log folder."
 
 		#error case
@@ -131,31 +181,38 @@ case $1 in
 	'-n' | '--new')
 
 		#check if log folder already exists
-		if [[ -e log ]]; then
+		if [[ -e $log_dir ]]; then
 			echo "A log file or folder already exists in your location."
 			confirm "Do you really want to reset it (All data inside will be erased) [y/n] ? " "loclog: Canceled log directory creation."
 
 			#remove old log folder
 			echo "Removing existant log file or folder..."
-			rm -rf log && echo "Done." || {
+			rm -rf $log_dir && echo "Done." || {
 				echo "loclog: Aborted."
 				exit 1
 			}
 		fi
 
+		#build new log data
+		if [[ -z $2 ]]; then
+			buildLogData 16
+		else
+			buildLogData $2
+		fi
+
 		#create a new log directory + all the latests logs (empty)
-		mkdir log
+		mkdir -p $log_dir
 		for n in ${log_numbers[@]}; do
-			touch log/latest-$n.log
+			touch $log_dir/latest-$n.log
 		done
-		echo "Successfully created log folder with ${#log_numbers[@]} latests logs ready to use inside."
+		echo "Successfully created log folder with $log_length latests logs ready to use inside."
 	;;
 
 	#action 5 : show logs
 	'-s' | '--show')
 
 		#check log directory
-		if [[ ! -d log ]]; then
+		if [[ ! -d $log_dir ]]; then
 			echo "loclog: Could not find a log folder here : Aborted show."
 			exit 1
 		fi
@@ -163,24 +220,24 @@ case $1 in
 		#no number given => show all logs
 		if [[ -z $2 ]]; then
 			for n in ${log_numbers[@]}; do
-				echo "latest-"$n".log {"
+				echo 'latest-'$n'.log {'
 				cat $log_dir/latest-$n.log
-				echo "}"
+				echo '}'
 			done
 
 		#specific number
 		else
+
 			#check number
-			nbr=$(( $log_length - $2 ))
-			if [[ -z ${log_numbers[$nbr]} || $2 -gt $log_length ]]; then
+			if [[ ! -f $log_dir/latest-$2.log ]]; then
 				echo "loclog: Invalid number given '$2'."
 				exit 1
 			fi
 
 			#show corresponding log
-			echo "latest-"${log_numbers[$nbr]}".log {"
-			cat $log_dir/latest-${log_numbers[$nbr]}.log
-			echo "}"
+			echo 'latest-'$2'.log {'
+			cat $log_dir/latest-$2.log
+			echo '}'
 		fi
 	;;
 
@@ -202,17 +259,38 @@ case $1 in
 	#action 6 : push to latest log
 	*)
 		#check log directory
-		if [[ ! -d log ]]; then
-			echo "loclog: Could not find a log folder here : Aborted push."
+		if [[ ! -d $log_dir ]]; then
+			echo "loclog: Could not find a log folder here."
+			echo "        Aborted push."
 			exit 1
 		fi
 
+		#number of iterations
 		iterations_nbr=$(( $log_length - 1 ))
 
 		#shift all previous logs
-		for old in $(seq $iterations_nbr); do
-			new=$(( old + 1 ))
-			cp $log_dir/latest-${log_numbers[$new]}.log $log_dir/latest-${log_numbers[$old]}.log
+		for old in $(seq -w $iterations_nbr); do
+
+			#format numbers correctly
+			old=$(expr $old + 0)
+			new=$(($old-1))
+
+			#get the corresponding elements
+			file_nbr_old=''
+			file_nbr_new=''
+			c=0
+			for f in ${log_numbers}; do
+				if [[ $c == $old ]]; then
+					file_nbr_old=$f
+				fi
+				if [[ $c == $new ]]; then
+					file_nbr_new=$f
+				fi
+				c=$(($c+1))
+			done
+
+			#copy latest log into the old one
+			cp $log_dir/latest-$file_nbr_old.log $log_dir/latest-$file_nbr_new.log
 		done
 
 		#set new latest log
