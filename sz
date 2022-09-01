@@ -3,7 +3,7 @@
 
 
 
-# ---- declarations ----
+# ---- DECLARATIONS ----
 verbose_mode=0
 only_files=0
 recursive=0
@@ -12,7 +12,7 @@ include_hidden_files=0
 
 
 
-# ---- utilities ----
+# ---- UTILS ----
 
 #get size of one element ($1:filename)
 function sz_oneElement() {
@@ -38,9 +38,9 @@ function sz_oneElement() {
 
 
 
-# ---- sz execution ----
+# ---- SZ EXECUTION ----
 
-#gathering actions ($@:all parameters)
+#gathering options ($@:all parameters)
 function sz_exec() {
 	currentPath=''
 
@@ -68,13 +68,13 @@ function sz_exec() {
 				verbose=1
 			;;
 
-			#undefined action
+			#undefined option
 			-*)
-				echo "sz: Undefined action '$1'."
+				echo "sz: Undefined option '$1'."
 				exit 1
 			;;
 
-			#element found (not action)
+			#element found (not an option)
 			*)
 				if [[ -e $arg ]]; then
 					currentPath=$arg
@@ -102,6 +102,7 @@ function sz_exec() {
 			cmd="travelfs -s    $currentPath echo CURRENT"
 		fi
 	else
+
 		#hidden files
 		if [[ $include_hidden_files == 1 ]]; then
 			cmd="fulls -a $currentPath"
@@ -141,17 +142,17 @@ function sz_exec() {
 
 
 
-# ---- main ----
+# ---- MAIN ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'-h' | '--help')
-		echo "Usage : sz [action(s)] [file(s)]"
+		echo "Usage : sz [option(s)] [file(s)]"
 		echo "Gives the size of some elements in bytes."
 		echo "Also gives the number of elements counted."
 		echo "If no file is given, all elements in the current directory are selected."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -a, --all       : Include hidden elements."
 		echo "  -f, --files     : Analyse only files (no folder/stream/...)."
 		echo "  -h, --help      : Shows this help message."
@@ -161,6 +162,7 @@ case $1 in
 		echo "Examples :"
 		echo "  > sz"
 		echo "  #Gather the size of each element in the current directory."
+		echo
 		echo "  > sz -r -v foldy"
 		echo "  #get the size of all the elements in folder 'foldy' and all its subdirectories."
 		echo "  #also prints the name of each filename focused."
@@ -170,7 +172,7 @@ case $1 in
 		echo "    https://github.com/iasebsil83/Bash_Tools"
 	;;
 
-	#actions or not => gather actions
+	#options or not => gather options
 	*)
 		sz_exec $@
 	;;

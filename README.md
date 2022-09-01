@@ -64,28 +64,28 @@ You should be able to run these new commands :
 
 |  *command*  |*package dependencies*|        *bash_tools dependencies*      | *state* |
 |:------------|---------------------:|--------------------------------------:|:-------:|
-| bashtools   |                  git |                             fulls keep| working |
-| bin2text    |              python3 |                                       | working |
-| cutline     |                      |                                  isnbr| working |
-| findev      |                      |                                       | working |
-| fulls       |                      |                                isempty| working |
+| bashtools   |                  git |                            fulls keep |    ok   |
+| bin2text    |              python3 |                                       |    ok   |
+| cutline     |                      |                                 isnbr |    ok   |
+| findev      |                      |                                       |    ok   |
+| fulls       |                      |                               isempty |    ok   |
 | human       |                      |                                       |  in dev |
-| isempty     |                      |                                       | working |
-| isnbr       |                      |                                       | working |
-| keep        |                      |                                isempty| working |
-| loclog      |                      |                                       | working |
-| makegen     |         python3 make |                                       | working |
+| isempty     |                      |                                       |    ok   |
+| isnbr       |                      |                                       |    ok   |
+| keep        |                      |                               isempty |    ok   |
+| loclog      |                      |                                       |    ok   |
+| makegen     |         python3 make |                                       |    ok   |
 | multitask   |                      |                                       |  in dev |
-| pop         |                      |                                       | working |
-| randsuite   |                      |                                       | working |
-| repeat      |                      |                                       | working |
-| replaceall  |                      |                                       | working |
-| splitstr    |                      |                                       | working |
-| sz          |                      |                    fulls keep travelfs| working |
-| text2bin    |              python3 |                                       | working |
-| tputcolors  |                 tput |                                  fulls| working |
-| travelfs    |                      |              fulls replaceall splitstr| working |
-| updateall   |                  apt |                                       | working |
+| pop         |                      |                                       |    ok   |
+| randsuite   |                      |                                 isnbr |    ok   |
+| repeat      |                      |                                       |    ok   |
+| replaceall  |                      |                                       |    ok   |
+| splitstr    |                      |                                       |    ok   |
+| sz          |                      |                   fulls keep travelfs |    ok   |
+| text2bin    |              python3 |                                       |    ok   |
+| tputcolors  |                 tput |                                 fulls |    ok   |
+| travelfs    |                      |             fulls replaceall splitstr |    ok   |
+| updateall   |                  apt |                                       |    ok   |
 
 To get any help on a command, use its help action as follow :
 ```bash

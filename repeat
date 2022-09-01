@@ -3,19 +3,19 @@
 
 
 
-# ---- definitions ----
+# ---- DEFINITIONS ----
 stop=0
 prompt=0
 
 
 
 
-# ---- utilities ----
+# ---- UTILITIES ----
 
-#repeat execution code ($1:action, $2:repetition number, $@:command to repeat)
+#repeat execution code ($1:option, $2:repetition number, $@:command to repeat)
 function repeat_exec() {
 
-	#get action
+	#get option
 	case $1 in
 		'-p' | '--prompt')
 			prompt=1
@@ -55,15 +55,15 @@ function repeat_exec() {
 
 
 
-# ---- main ----
+# ---- MAIN ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : repeat [action] <nbr> <command>..."
+		echo "Usage : repeat [option] <nbr> <command>..."
 		echo "Repeats a command several times."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -h, --help    : Show this help message."
 		echo "  -n, --no-stop : Don't stop if errors occured (default)."
 		echo "  -p, --prompt  : Prompt user between each repetition."
@@ -88,20 +88,20 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#allowed actions
+	#allowed options
 	'-n' | '--no-stop' | \
 	'-p' | '--prompt'  | \
 	'-s' | '--stop')
 		repeat_exec $@
 	;;
 
-	#undefined action
+	#undefined option
 	-*)
-		echo "repeat: Undefined action '$1'."
+		echo "repeat: Undefined option '$1'."
 		exit 1
 	;;
 
-	#other => execution as it was '-n' (action required)
+	#other => execution as it was '-n' (option required)
 	*)
 		repeat_exec -n $@
 	;;

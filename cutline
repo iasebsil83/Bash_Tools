@@ -53,13 +53,13 @@ function cutline_exec() {
 # ---- main ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : cutline [action] <[start]-[stop]> [filename]"
+		echo "Usage : cutline [option] <[start]-[stop]> [filename]"
 		echo "Get only a certain number of lines from a file."
 		echo "If no filename is given, cutline will read from standard input."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -h, --help       : Show this help message."
 		echo "  -l, --line-feeds : Don't skip line feeds."
 		echo
@@ -69,11 +69,11 @@ case $1 in
 		echo "                 cutline - myFile.txt"
 		echo
 		echo "Examples :"
-		echo "  > cutline"
-		echo "  #."
+		echo "  > cutline 7-15 myFile.txt"
+		echo "  #Get content of myFile.txt from line 7 to 15 (included)."
 		echo
-		echo "  > cutline"
-		echo "  #."
+		echo "  > ls -1 | cutline 3-"
+		echo "  #List all the files and folders excluding the 2 first lines."
 		echo
 		echo "This command is part of \"Bash Tools\"."
 		echo "For more information about \"Bash Tools\", please check :"
@@ -87,7 +87,7 @@ case $1 in
 
 		#get start-stop
 		if [[ $2 == -* ]]; then
-			echo "cutline: Only 1 action is allowed in position 1 (at least 2 given : $1 $2)."
+			echo "cutline: Only 1 option is allowed in position 1 (at least 2 given : $1 $2)."
 			exit 1
 		fi
 		start=$(echo $2 | cut -d'-' -f 1)
@@ -109,7 +109,7 @@ case $1 in
 		fi
 	;;
 
-	#no undefined action catcher (start-stop sequence with empty start allowed)
+	#no undefined option catcher (start-stop sequence with empty start allowed)
 
 	#other
 	*)

@@ -3,9 +3,9 @@
 
 
 
-# ---- declarations ----
+# ---- DECLARATIONS ----
 
-#actions
+#options
 include_hidden_files=0
 only_file_name=0
 exclude_symlinks=0
@@ -13,7 +13,7 @@ exclude_symlinks=0
 
 
 
-# ---- travelfs ----
+# ---- TRAVELFS ----
 
 #go recursively ($1:current path, $@:command to execute)
 function travelfs_go() {
@@ -48,9 +48,7 @@ function travelfs_go() {
 
 		#exclude symlinks
 		if [[ $exclude_symlinks == 1 ]]; then
-			readlink -v $f &> /dev/null && {
-				continue
-			}
+			readlink -v $f &> /dev/null && continue
 		fi
 
 		#set current file name
@@ -87,7 +85,7 @@ function travelfs_go() {
 #travelfs ($@:user arguments)
 function travelfs_exec() {
 
-	#detect actions, path and command to execute
+	#detect options, path and command to execute
 	path=''
 	command_to_execute=''
 	mode=0
@@ -112,9 +110,9 @@ function travelfs_exec() {
 					exclude_symlinks=1
 				;;
 
-				#undefined action
+				#undefined option
 				-*)
-					echo "travelfs: Undefined action '$arg'."
+					echo "travelfs: Undefined option '$arg'."
 					exit 1
 				;;
 
@@ -151,14 +149,14 @@ function travelfs_exec() {
 # ---- main ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : travelfs [action(s)] <path> <command>..."
+		echo "Usage : travelfs [option(s)] <path> <command>..."
 		echo "Travels the file system recursively from directory <path>."
 		echo "For each file processed, <command> is executed as a bash command"
 		echo "accessing the current file path by using the keyword : CURRENT."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -a, --all      : Include hidden files/directory."
 		echo "  -h, --help     : Show this help message."
 		echo "  -r, --relative : CURRENT will be replaced by relative path."
@@ -172,8 +170,10 @@ case $1 in
 		echo "  #Shows each files & folders existing in /etc/default and its"
 		echo "  #sub-directories recursively."
 		echo
-		echo "  > travelfs -r -s /etc { [[ -f CURRENT ]]; echo $? }"
-		echo "  #"
+		echo "  > travelfs -a -r $HOME echo CURRENT"
+		echo "  #Shows each files and folders existing in your home directory"
+		echo "  #and its sub-directories recursively, including hidden files,"
+		echo "  #and printing only their basename."
 		echo
 		echo "WARNING : This command can take a long time to execute depending"
 		echo "          on which <path> you give it to work on."
@@ -183,12 +183,7 @@ case $1 in
 		echo "NOTE : <command> can have multiple arguments."
 		echo "       Every word detected after it will be considered as part"
 		echo "       of the command."
-		echo "       HOWEVER, operators &, &&, | and || are NOT included."
-		echo
-		echo "  > travelfs -a -r $HOME echo CURRENT | keep -f | keep -x"
-		echo "  #Shows each executable files existing in your home directory"
-		echo "  #and its sub-directories recursively, including hidden files,"
-		echo "  #and printing only their filename."
+		echo "       HOWEVER, operators &,&&,|,||,< and > are NOT included."
 		echo
 		echo "This command is part of \"Bash Tools\"."
 		echo "For more information about \"Bash Tools\", please check :"

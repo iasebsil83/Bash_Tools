@@ -3,7 +3,7 @@
 
 
 
-# --- declarations ----
+# --- DECLARATIONS ----
 
 #some settings
 log_dir="$PWD/log"
@@ -14,7 +14,7 @@ log_numbers=()
 
 
 
-# ---- tools ----
+# ---- TOOLS ----
 
 #ask confirmation for clearing logs ($1:message before, $2:message after)
 function confirm() {
@@ -69,7 +69,7 @@ function buildLogData() {
 
 
 
-# ---- init ----
+# ---- INIT ----
 
 #detect exixting logs
 if [[ -d $log_dir ]]; then
@@ -81,10 +81,10 @@ fi
 
 
 
-# ---- main ----
+# ---- MAIN ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'' | '-h' | '--help')
 		echo "Usage : loclog [option] [text]"
 		echo "Manage a local log system."
@@ -125,7 +125,7 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#action 2 : clear logs
+	#option 2 : clear logs
 	'-c' | '--clear')
 
 		#check log directory
@@ -156,7 +156,7 @@ case $1 in
 		fi
 	;;
 
-	#action 3 : delete logs
+	#option 3 : delete logs
 	'-d' | '--delete')
 
 		#detect log folder
@@ -177,7 +177,7 @@ case $1 in
 		fi
 	;;
 
-	#action 4 : new log directory
+	#option 4 : new log directory
 	'-n' | '--new')
 
 		#check if log folder already exists
@@ -208,7 +208,7 @@ case $1 in
 		echo "Successfully created log folder with $log_length latests logs ready to use inside."
 	;;
 
-	#action 5 : show logs
+	#option 5 : show logs
 	'-s' | '--show')
 
 		#check log directory
@@ -241,6 +241,7 @@ case $1 in
 		fi
 	;;
 
+	#option 6 : track stream
 	'-t' | '--track')
 
 		#while stream exists
@@ -250,13 +251,13 @@ case $1 in
 		done
 	;;
 
-	#undefined action
+	#undefined option
 	-*)
-		echo "loclog: Undefined action '$1'."
+		echo "loclog: Undefined option '$1'."
 		exit 1
 	;;
 
-	#action 6 : push to latest log
+	#option 6 : push to latest log
 	*)
 		#check log directory
 		if [[ ! -d $log_dir ]]; then

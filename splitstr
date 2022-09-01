@@ -3,15 +3,15 @@
 
 
 
-# ---- main ----
+# ---- MAIN ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : splitstr [action] <delimiter>"
+		echo "Usage : splitstr [option] <delimiter>"
 		echo "Splits the content from standard input into a string array."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -h, --help : Show this help message."
 		echo
 		echo "WARNING : If an array is given as input, each element of the array"
@@ -33,14 +33,15 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#undefined action
+	#undefined option
 	-*)
-		echo "splitstr: Undefined action '$1'."
+		echo "splitstr: Undefined option '$1'."
 		exit 1
 	;;
 
-	#action 2 : split string
+	#option 2 : split string
 	*)
+
 		#error case
 		if [[ -z $1 ]]; then
 			echo "splitstr: No delimiter given."
@@ -53,8 +54,8 @@ case $1 in
 		#for each string in standard input
 		input=$(cat)
 		for s in ${input[@]}; do
-
 			startIndex=0
+
 			#for each character in string
 			for c in $(seq 0 ${#s}); do
 

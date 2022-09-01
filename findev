@@ -6,32 +6,32 @@
 # ---- main ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'-h' | '--help')
-		echo "Usage : findev [action]"
-                echo "Helps you to know where a new device is added"
+		echo "Usage : findev [option]"
+		echo "Helps you to know where a new device is added"
 		echo "to your computer (in /dev)."
 		echo
 		echo "An alternative to this tools is running :"
 		echo "        ls -ult /dev"
 		echo "after having connected the device,"
 		echo "and then compare the last access times."
-                echo
-                echo "Actions :"
-                echo "  -h, --help : Show this help message."
-                echo
-                echo "This command is part of \"Bash Tools\"."
-                echo "For more information about \"Bash Tools\", please check :"
-                echo "    https://github.com/iasebsil83/Bash_Tools"
+		echo
+		echo "Options :"
+		echo "  -h, --help : Show this help message."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
 	;;
 
-	#undefined action
+	#undefined option
 	-*)
-		echo "findev: Undefined action '$1'."
+		echo "findev: Undefined option '$1'."
 		exit 1
 	;;
 
-	#action 2 : find dev process
+	#option 2 : find dev process
 	*)
 		#get dev list BEFORE connection
 		echo "Please ensure that the device to detect is not connected."
@@ -48,12 +48,17 @@ case $1 in
 		new_dev_nbr=0
 		echo "Here is the difference :"
 		for a in ${after[@]}; do
+
+			#search for the same item in previous list
 			found=0
 			for b in ${before[@]}; do
 				if [[ $a == $b ]]; then
 					found=1
+					break
 				fi
 			done
+
+			#no occurence found => new device
 			if [[ $found == 0 ]]; then
 				new_dev_nbr=$(($new_dev_nbr + 1))
 				echo "New device detected : $a"

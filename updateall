@@ -3,15 +3,15 @@
 
 
 
-# ---- main ----
+# ---- MAIN ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'-h' | '--help')
-		echo "Usage : updateall [action]"
+		echo "Usage : updateall [option]"
 		echo "Update, upgrade, fix and clean all installed apt packages."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -h, --help : Show this help message."
 		echo
 		echo "This command is part of \"Bash Tools\"."
@@ -19,13 +19,13 @@ case $1 in
 		echo "    https://github.com/iasebsil83/Bash_Tools"
 	;;
 
-	#undefined action
+	#undefined option
 	-*)
-		echo "updateall: Undefined action '$1'."
+		echo "updateall: Undefined option '$1'."
 		exit 1
 	;;
 
-	#action  2 : update all
+	#option  2 : update all
 	*)
 
 		#1) update

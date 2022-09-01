@@ -3,7 +3,7 @@
 
 
 
-# ---- utils ----
+# ---- UTILS ----
 
 #is integer ($1:value, $2:negative_allowed)
 function isInt() {
@@ -59,15 +59,15 @@ function isFloat() {
 
 
 
-# ---- main ----
+# ---- MAIN ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : isnbr [action(s)] <value>"
+		echo "Usage : isnbr [option(s)] <value>"
 		echo "Check whether a value is a number or not."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -f, --float    : Detect floating point value."
 		echo "  -h, --help     : Show this help message."
 		echo "  -i, --int      : Detect integer value (default)."
@@ -79,7 +79,7 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#action 1 : integer mode
+	#option 1 : integer mode
 	'-i' | '--int')
 		nbr=$2
 		negative=0
@@ -92,7 +92,7 @@ case $1 in
 		fi
 	;;
 
-	#action 2 : float mode
+	#option 2 : float mode
 	'-f' | '--float')
 		nbr=$2
 		negative=0
@@ -105,7 +105,7 @@ case $1 in
 		fi
 	;;
 
-	#action 3 : negative
+	#option 3 : negative
 	'-n' | '--negative')
 		if [[ $2 == '-f' || $2 == '--float' || $2 == '-i' || $2 == '--int' ]]; then
 			isnbr $2 -n $3
@@ -114,9 +114,9 @@ case $1 in
 		fi
 	;;
 
-	#no undefined action catcher (negative numbers allowed directly)
+	#no undefined option catcher (negative numbers allowed directly)
 
-	#no action : integer mode (default)
+	#no option : integer mode (default)
 	*)
 		isnbr -i $1
 	;;

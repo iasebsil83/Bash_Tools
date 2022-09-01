@@ -3,7 +3,7 @@
 
 
 
-# ---- utilities ----
+# ---- UTILS ----
 
 #remove arguments ($1:argument1 to remove, $2:argument2 to remove, $@:the rest of the arguments)
 function removeArgs() {
@@ -26,9 +26,9 @@ function replaceall_echoError() {
 
 
 
-# ---- file & directory cases ----
+# ---- FILE & DIRECTORY CASES ----
 
-#file ($1:promptEnabled, $@:all user arguments after action 'file')
+#file ($1:promptEnabled, $@:all user arguments after option 'file')
 function replaceall_file() {
 
 	#check void arguments
@@ -87,7 +87,7 @@ function replaceall_file() {
 	echo "  Replaced $cnt occurrences."
 }
 
-#directory ($1:includeAllFiles, $2:promptEnabled, $@:all user arguments after action 'directory')
+#directory ($1:includeAllFiles, $2:promptEnabled, $@:all user arguments after option 'directory')
 function replaceall_dir() {
 
 	#check void arguments
@@ -126,15 +126,15 @@ function replaceall_dir() {
 
 
 
-# ---- main ----
+# ---- MAIN ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : replaceall <action(s)> [file/directory] <src> [dst]"
+		echo "Usage : replaceall <option(s)> [file/directory] <src> [dst]"
 		echo "Replace all occurrences of a string by another one."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -a, --all       <dir>  : Same thing as '-d' including hidden files."
 		echo "  -d, --directory <dir>  : Replace in every file inside the directory given."
 		echo "  -f, --file      <file> : Replace in the file given."
@@ -160,22 +160,22 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#action 2 : replace in directory including hidden files
+	#option 2 : replace in directory including hidden files
 	'-a' | '--all')
 		replaceall_dir 1 1 $(removeArgs '-a' '--all' $@) #all files, prompt
 	;;
 
-	#action 3 : replace in directory
+	#option 3 : replace in directory
 	'-d' | '--directory')
 		replaceall_dir 0 1 $(removeArgs '-d' '--directory' $@) #not all files, prompt
 	;;
 
-	#action 4 : replace in file
+	#option 4 : replace in file
 	'-f' | '--file')
 		replaceall_file 1 $(removeArgs '-f' '--file' $@) #prompt
 	;;
 
-	#action 5 : replace in list given in stdin
+	#option 5 : replace in list given in stdin
 	'-l' | '--list')
 		[[ -z $2 ]] && echo "replaceall: No src string given." && exit 1
 
@@ -192,7 +192,7 @@ case $1 in
 		done
 	;;
 
-	#action 6 : no prompt
+	#option 6 : no prompt
 	'-n' | '--noprompt')
 		case $2 in
 
@@ -211,29 +211,29 @@ case $1 in
 				replaceall_file 0 $(removeArgs '-n' '--noprompt' $(removeArgs '-f' '--file' $@)) #no prompt
 			;;
 
-			#undefined action
+			#undefined option
 			-*)
-				echo "replaceall: Undefined action '$2'."
+				echo "replaceall: Undefined option '$2'."
 				exit 1
 			;;
 
-			#need an action
+			#need an option
 			*)
-				echo "replaceall: One more action is required."
+				echo "replaceall: One more option is required."
 				exit 1
 			;;
 		esac
 	;;
 
-	#undefined action
+	#undefined option
 	-*)
-		echo "replaceall: Undefined action '$1'."
+		echo "replaceall: Undefined option '$1'."
 		exit 1
 	;;
 
-	#need an action
+	#need an option
 	*)
-		echo "replaceall: An action is required."
+		echo "replaceall: At least one option is required."
 		exit 1
 	;;
 esac

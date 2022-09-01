@@ -2,15 +2,15 @@
 
 
 
-# ---- main ----
+# ---- MAIN ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : pop [action] <file>"
+		echo "Usage : pop [option] <file>"
 		echo "Read a file & clear it (not removing it)."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -h, --help : Show this help message."
 		echo
 		echo "This command is part of \"Bash Tools\"."
@@ -19,13 +19,13 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#undefined action
+	#undefined option
 	-*)
-		echo "pop: Undefined action '$1'."
+		echo "pop: Undefined option '$1'."
 		exit 1
 	;;
 
-	#action 2 : pop file
+	#option 2 : pop file
 	*)
 		cat $1 && echo '' > $1 || {
 			echo "pop: Unable to pop file '$1'."

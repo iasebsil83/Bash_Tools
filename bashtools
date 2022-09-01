@@ -6,12 +6,12 @@
 # ---- main ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : bashtools [action]"
+		echo "Usage : bashtools [option]"
 		echo "Do something on Bash Tools."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -h, --help   : Show this help message."
 		echo "  -s, --show   : Show all the available Bash Tools commands."
 		echo "  -u, --update : Update Bash Tools to the latest version."
@@ -22,7 +22,7 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#action 2 : show
+	#option 2 : show
 	'-s' | '--show')
 		echo "Here is a list of the available Bash Tools :"
 		list=$(fulls $HOME/.bash_tools | keep -f | keep -x)
@@ -31,7 +31,7 @@ case $1 in
 		done
 	;;
 
-	#action 3 : update
+	#option 3 : update
 	'-u' | '--update')
 
 		#go in bash_tools directory
@@ -57,9 +57,9 @@ case $1 in
 		rm -rf $HOME/.bash_tools/.projia
 	;;
 
-	#undefined action
+	#undefined option
 	*)
-		echo "bashtools: Undefined action or argument '$1'."
+		echo "bashtools: Undefined option or argument '$1'."
 		exit 1
 	;;
 esac

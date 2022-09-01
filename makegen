@@ -32,9 +32,9 @@ if len(sys.argv) == 1:
 
 #help menu
 if sys.argv[1] == '-h' or sys.argv[1] == '--help':
-	print("Usage : makegen [action] [file]")
+	print("Usage : makegen [option] [file]")
 	print("Generate a 'Makefile' from the configuration given by [file].")
-	print("If [file] is empty, it will search for file 'mkconf' in current directory.")
+	print("If [file] is empty, it will search for a file 'mkconf' in current directory.")
 	print()
 	print("The configuration file must follow this patern :")
 	print("    #lines starting with '#' and empty lines are skipped")
@@ -68,28 +68,30 @@ if sys.argv[1] == '-h' or sys.argv[1] == '--help':
 	print("    ...")
 	print()
 	print()
-	print("NOTE : It is a common use to not create a header file for the some source codes")
-	print("       (especially the main one) but for the consistency of makegen, it is required")
-	print("       that EVERY SOURCE FILE have his own header.")
+	print("NOTE : It is a common use to not create a header file for some source codes")
+	print("       (especially the main one) but for the consistency of makegen, it is")
+	print("       required that EVERY SOURCE FILE have his own header.")
 	print("       Notice that a header can be empty.")
 	print()
-	print("Actions :")
+	print("Options :")
 	print("  -h, --help : Show this help message.")
 	print("  -a, --auto : Automatically running 'make' after creating the makefile, then removing it.")
 	print()
 	print("Examples : ")
-	print("  > makegen my_config.conf")
-	print("  #.")
 	print("  > makegen -a")
-	print("  #generate a makefile from ")
-	print("  #including hidden files.")
+	print("  #Generate a Makefile from the present 'mkconf' file if existing in current directory.")
+	print("  #Directly after having made the Makefile, it will execute a 'make' command")
+	print("  #and then remove the generated Makefile.")
+	print()
+	print("  > makegen my_config.conf")
+	print("  #Generate a Makefile from 'my_config.conf'.")
 	print()
 	print("This command is part of \"Bash Tools\".")
 	print("For more information about \"Bash Tools\", please check :")
 	print("    https://github.com/iasebsil83/Bash_Tools")
 	exit(0)
 
-#auto mode : action placed before
+#auto mode : option placed before
 if sys.argv[1] == '-a' or sys.argv[1] == '--auto':
 	if len(sys.argv) >= 3:
 		exit( os.system("makegen " + sys.argv[2] + " -a") )
@@ -208,8 +210,8 @@ except:
 	print("makegen: Unable to create file 'Makefile'.")
 	exit(1)
 
-#action 'auto'
-if len(sys.argv) >= 3 and (sys.argv[2] == '-a' or sys.argv[2] == 'auto'):
+#option 'auto'
+if len(sys.argv) >= 3 and (sys.argv[2] == '-a' or sys.argv[2] == '--auto'):
 
 	#auto make
 	error_code = os.system("make")

@@ -40,12 +40,12 @@ if len(sys.argv) == 1:
 
 #help
 if sys.argv[1] == "-h" or sys.argv[1] == "--help":
-	print("Usage : bin2text [action] <filename>")
+	print("Usage : bin2text [option] <filename>")
 	print("Outputs the text corresponding to a binary file with the maximum readable characters.")
 	print()
 	print("NOTE : This tool is working in pair with command 'text2bin'.")
 	print()
-	print("Action :")
+	print("Options :")
 	print("  -h, --help : Shows this help message.")
 	print()
 	print("This command is part of \"Bash Tools\".")
@@ -55,7 +55,7 @@ if sys.argv[1] == "-h" or sys.argv[1] == "--help":
 
 #unknown argument
 elif sys.argv[1][0:1] == '-':
-	print("bin2text: Invalid action '" + sys.argv[1] + "'.")
+	print("bin2text: Invalid option '" + sys.argv[1] + "'.")
 	exit(1)
 
 #something else => filename

@@ -3,32 +3,32 @@
 
 
 
-# ---- fulls ----
+# ---- FULLS EXECUTION ----
 
 #fulls execution ($@:user arguments)
 function fulls_exec() {
 
-	#detect actions and path
+	#detect options and path
 	include_hidden_files=0
 	exclude_special=0
 	path=''
 	for arg in $@; do
 		case $arg in
 
-			#action 1 : include hidden files
+			#option 1 : include hidden files
 			'-a' | '--all')
 				include_hidden_files=1
 			;;
 
-			#action 2 : include hidden files except '.' and '..'.
+			#option 2 : include hidden files except '.' and '..'.
 			'-A' | '--All')
 				include_hidden_files=1
 				exclude_special=1
 			;;
 
-			#undefined action
+			#undefined option
 			-*)
-				echo "fulls: Undefined action '$arg'."
+				echo "fulls: Undefined option '$arg'."
 				exit 1
 			;;
 
@@ -108,26 +108,27 @@ function fulls_exec() {
 
 
 
-# ---- main ----
+# ---- MAIN ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'-h' | '--help')
-		echo "Usage : fulls [action(s)] [path]"
+		echo "Usage : fulls [option(s)] [path]"
 		echo "Similar to 'ls' command : Lists all the files and folders existing in [path]"
 		echo "                          with their full path (from /)."
 		echo "                          If [path] is empty, the current directory is used."
 		echo
-		echo "Actions :"
-		echo "  -h, --help   : Show this help message."
-		echo "  -a, --all    : Include hidden files.              (similar to 'ls -a')"
-		echo "  -A, --All    : Same as '-a' without '.' and '..'. (similar to 'ls -A')"
+		echo "Options :"
+		echo "  -h, --help : Show this help message."
+		echo "  -a, --all  : Include hidden files.              (similar to 'ls -a')"
+		echo "  -A, --All  : Same as '-a' without '.' and '..'. (similar to 'ls -A')"
 		echo
 		echo "Examples : "
 		echo "  > fulls ~"
-		echo "  #list all current files & folders in /usr/include with their full path."
+		echo "  #list all current files & folders in $HOME with their full path."
+		echo
 		echo "  > fulls -A /usr/include"
-		echo "  #list all current files & folders in $HOME with their full path"
+		echo "  #list all current files & folders in /usr/include with their full path"
 		echo "  #including hidden files."
 		echo
 		echo "This command is part of \"Bash Tools\"."
@@ -135,19 +136,19 @@ case $1 in
 		echo "    https://github.com/iasebsil83/Bash_Tools"
 	;;
 
-	#actions
+	#options
 	'-a' | '--all' |   \
 	'-A' | '--All')
 		fulls_exec $@
 	;;
 
-	#undefined action
+	#undefined option
 	-*)
-		echo "fulls: Undefined action '$1'."
+		echo "fulls: Undefined option '$1'."
 		exit 1
 	;;
 
-	#no action
+	#no option
 	*)
 		fulls_exec $@
 	;;

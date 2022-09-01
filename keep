@@ -31,12 +31,12 @@ function keep_mode() {
 # ---- main ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : keep [action]"
+		echo "Usage : keep [option]"
 		echo "Reads standard input and output only a selection."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -d, --directories : Keep only existing directories."
 		echo "  -e, --exist       : Keep only existing files or directories."
 		echo "  -f, --files       : Keep only existing files."
@@ -56,7 +56,7 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#action 2 : directories only
+	#option 2 : directories only
 	'-d' | '--directories')
 		input=$(cat)
 		for element in ${input[@]}; do
@@ -66,7 +66,7 @@ case $1 in
 		done
 	;;
 
-	#action 3 : existing only
+	#option 3 : existing only
 	'-e' | '--exist')
 		input=$(cat)
 		for element in ${input[@]}; do
@@ -76,7 +76,7 @@ case $1 in
 		done
 	;;
 
-	#action 4 : files only
+	#option 4 : files only
 	'-f' | '--files')
 		input=$(cat)
 		for element in ${input[@]}; do
@@ -86,22 +86,22 @@ case $1 in
 		done
 	;;
 
-	#action 5 : user readable only
+	#option 5 : user readable only
 	'-r' | '--readable')
 		keep_mode 1 r
 	;;
 
-	#action 6 : user writable only
+	#option 6 : user writable only
 	'-w' | '--writable')
 		keep_mode 2 w
 	;;
 
-	#action 7 : user executable only
+	#option 7 : user executable only
 	'-x' | '--executable')
 		keep_mode 3 x
 	;;
 
-	#action 8 : filter by extension
+	#option 8 : filter by extension
 	'-t' | '--type')
 
 		#check extension
@@ -119,13 +119,13 @@ case $1 in
 		done
 	;;
 
-	#undefined action
+	#undefined option
 	-*)
-		echo "keep: Undefined action '$1'."
+		echo "keep: Undefined option '$1'."
 		exit 1
 	;;
 
-	#no action => help with exit code
+	#no option => help with exit code
 	*)
 		keep
 	;;

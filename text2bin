@@ -29,13 +29,14 @@ if len(sys.argv) == 1:
 
 #help
 if sys.argv[1] == "-h" or sys.argv[1] == "--help":
-	print("Usage : text2bin [action] <src> <dst>")
-	print("Get text from file <src>, split it in blocks using spaces as delimiters, and write each block in binary in <dst>.")
+	print("Usage : text2bin [option] <src> <dst>")
+	print("Get text from file <src>, split it in blocks using spaces as delimiters,")
+	print("and write each block in binary in <dst>.")
 	print()
-	print("NOTE : This tool is the opposite of bin2text so for more information about the text format required,")
-	print("       please check out command 'bin2text'.")
+	print("NOTE : This tool is the opposite of command 'bin2text' so for more")
+	print("       information about the text format required, please check it out'.")
 	print()
-	print("Action :")
+	print("Options :")
 	print("  -h, --help : Shows this help message.")
 	print()
 	print("This command is part of \"Bash Tools\".")
@@ -43,17 +44,17 @@ if sys.argv[1] == "-h" or sys.argv[1] == "--help":
 	print("    https://github.com/iasebsil83/Bash_Tools")
 	exit(0)
 
-#invalid action (position 1)
+#invalid option (position 1)
 if sys.argv[1][0:1] == '-':
-	print("text2bin: Invalid action '" + sys.argv[1] + "'.")
+	print("text2bin: Invalid option '" + sys.argv[1] + "'.")
 	exit(1)
 
 #2 arguments or more
 if len(sys.argv) >= 3:
 
-	#invalid action (position 2)
+	#invalid option (position 2)
 	if sys.argv[2][0:1] == '-':
-		print("text2bin: Invalid action '" + sys.argv[2] + "'.")
+		print("text2bin: Invalid option '" + sys.argv[2] + "'.")
 		exit(1)
 
 	#get file content

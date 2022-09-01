@@ -3,14 +3,14 @@
 
 
 
-# ---- definitions ----
+# ---- DEFINITIONS ----
 delay=0.1    #default values
 separator=''
 
 
 
 
-# ---- utilities ----
+# ---- UTILS ----
 
 #printf $separator including the case that it starts with '-' (no arguments)
 function printf_separator() {
@@ -66,28 +66,24 @@ function HEX_random() {
 
 
 
-# ---- delay ----
+# ---- DELAY ----
 delayFound=0
 for arg in $@; do
 
-	#catch action 'delay'
+	#catch option 'delay'
 	if [[ $arg == '-d' || $arg == '--delay' ]]; then
 		delayFound=1
 		continue
 	fi
 
-	#action catched => get value on next argument
+	#option catched => get value on next argument
 	if [[ $delayFound == 1 ]]; then
 
 		#error cases
-		seq $arg &> /dev/null || {
+		isnbr $arg || {
 			echo "randsuite: Invalid delay '$arg' (Number required)."
 			exit 1
 		}
-		#if [[ ${arg%.*} -lt 0 ]]; then
-		#	echo "randsuite: Delay must be positive."
-		#	exit 1
-		#fi
 
 		#get delay
 		delay=$arg
@@ -111,17 +107,17 @@ fi
 
 
 
-# ---- separator ----
+# ---- SEPARATOR ----
 separatorFound=0
 for arg in $@; do
 
-	#catch action 'separator'
+	#catch option 'separator'
 	if [[ $arg == '-s' || $arg == '--separator' ]]; then
 		separatorFound=1
 		continue
 	fi
 
-	#action catched => get value on next argument
+	#option catched => get value on next argument
 	if [[ $separatorFound == 1 ]]; then
 		separator=$arg
 		separatorFound=0
@@ -139,15 +135,15 @@ fi
 
 
 
-# ---- main ----
+# ---- MAIN ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'' | '-h' | '--help')
-		echo "Usage : randsuite [action]"
+		echo "Usage : randsuite [option]"
 		echo "Display a suite of random characters."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -b, --bin  [nbr]                  : Displays 0 or 1 randomly 'nbr' times."
 		echo "                                      (leave 'nbr' empty for infinite loop)"
 		echo "             [-d/--delay <delay>]     Delay between generation (default is 0.1s)."
@@ -175,10 +171,10 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#action 2 : binary suite
+	#option 2 : binary suite
 	'-b' | '--bin')
 
-		#no next arguments or it is another action => infinite loop
+		#no next arguments or it is another option => infinite loop
 		if [[ -z $2 || ${2:0:1} == '-' ]]; then
 			while [[ 1 ]]; do
 				BIN_random
@@ -188,8 +184,9 @@ case $1 in
 
 		#iteration number specified => finite loop
 		else
+
 			#error case
-			seq $2 &> /dev/null || {
+			isnbr $2 || {
 				echo "randsuite: Invalid iteration number '$2' (Integer required)."
 				exit 1
 			}
@@ -203,10 +200,10 @@ case $1 in
 		fi
 	;;
 
-	#action 3 : hexadecimal suite
+	#option 3 : hexadecimal suite
 	'-H' | '--hex')
 
-		#no next arguments or it is another action => infinite loop
+		#no next arguments or it is another option => infinite loop
 		if [[ -z $2 || ${2:0:1} == '-' ]]; then
 			while [[ 1 ]]; do
 				HEX_random;
@@ -216,8 +213,9 @@ case $1 in
 
 		#iteration number specified => finite loop
 		else
+
 			#error case
-			seq $2 &> /dev/null || {
+			isnbr $2 || {
 				echo "randsuite: Invalid iteration number '$2' (Integer required)."
 				exit 1
 			}
@@ -243,9 +241,9 @@ case $1 in
 		exit 1
 	;;
 
-	#undefined action
+	#undefined option
 	-*)
-		echo "randsuite: Undefined action '$1'."
+		echo "randsuite: Undefined option '$1'."
 		exit 1
 	;;
 

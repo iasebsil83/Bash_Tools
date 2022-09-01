@@ -2,18 +2,19 @@
 
 
 
+
 # ---- main ----
 case $1 in
 
-	#action 1 : help
+	#option 1 : help
 	'-h' | '--help')
-		echo "Usage : isempty [action] <folder>"
+		echo "Usage : isempty [option] <folder>"
 		echo "Returns 0 if given folder is empty (except if showing help menu)."
 		echo "Else, returns the number of elements existing in the folder."
 		echo
 		echo "Returning 255 (-1) if an error occured."
 		echo
-		echo "Actions :"
+		echo "Options :"
 		echo "  -h, --help : Show this help message."
 		echo
 		echo "This command is part of \"Bash Tools\"."
@@ -22,9 +23,9 @@ case $1 in
 		exit 0
 	;;
 
-	#undefined action
+	#undefined option
 	-*)
-		echo "isempty: Undefined action '$1'."
+		echo "isempty: Undefined option '$1'."
 		exit 255
 	;;
 
@@ -36,6 +37,7 @@ case $1 in
 
 	#check folder
 	*)
+
 		#not a directory
 		if [[ ! -d $1 ]]; then
 			echo "isempty: '$1' is not a directory."
