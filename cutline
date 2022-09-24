@@ -3,13 +3,17 @@
 
 
 
-# ---- definitions ----
+# ---- DEFINITIONS ----
+
+#option 1
 include_line_feeds=0
 
 
 
 
-# ---- utilities ----
+
+
+# ---- UTILITIES ----
 
 #cutline execution code ($1: filename, $2:start line number, $3:stop line number)
 function cutline_exec() {
@@ -50,10 +54,14 @@ function cutline_exec() {
 
 
 
-# ---- main ----
+
+
+# ---- EXECUTION ----
+
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'' | '-h' | '--help')
 		echo "Usage : cutline [option] <[start]-[stop]> [filename]"
 		echo "Get only a certain number of lines from a file."
@@ -81,7 +89,7 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#include line feeds
+	#option 1 : include line feeds
 	'-l' | '--line-feeds')
 		include_line_feeds=1
 

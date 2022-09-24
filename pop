@@ -2,10 +2,12 @@
 
 
 
-# ---- MAIN ----
+# ---- EXECUTION ----
+
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'' | '-h' | '--help')
 		echo "Usage : pop [option] <file>"
 		echo "Read a file & clear it (not removing it)."

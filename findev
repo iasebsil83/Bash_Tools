@@ -3,10 +3,12 @@
 
 
 
-# ---- main ----
+# ---- EXECUTION ----
+
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'-h' | '--help')
 		echo "Usage : findev [option]"
 		echo "Helps you to know where a new device is added"
@@ -31,7 +33,7 @@ case $1 in
 		exit 1
 	;;
 
-	#option 2 : find dev process
+	#find dev process
 	*)
 		#get dev list BEFORE connection
 		echo "Please ensure that the device to detect is not connected."

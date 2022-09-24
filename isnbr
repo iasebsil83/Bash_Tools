@@ -59,10 +59,12 @@ function isFloat() {
 
 
 
-# ---- MAIN ----
+# ---- EXECUTION ----
+
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'' | '-h' | '--help')
 		echo "Usage : isnbr [option(s)] <value>"
 		echo "Check whether a value is a number or not."

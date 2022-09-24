@@ -3,7 +3,7 @@
 
 
 
-# ---- FULLS EXECUTION ----
+# ---- EXECUTION ----
 
 #fulls execution ($@:user arguments)
 function fulls_exec() {
@@ -106,12 +106,10 @@ function fulls_exec() {
 	esac
 }
 
-
-
-# ---- MAIN ----
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'-h' | '--help')
 		echo "Usage : fulls [option(s)] [path]"
 		echo "Similar to 'ls' command : Lists all the files and folders existing in [path]"

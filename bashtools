@@ -3,10 +3,12 @@
 
 
 
-# ---- main ----
+# ---- EXECUTION ----
+
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'' | '-h' | '--help')
 		echo "Usage : bashtools [option]"
 		echo "Do something on Bash Tools."
@@ -22,7 +24,7 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#option 2 : show
+	#option 1 : show
 	'-s' | '--show')
 		echo "Here is a list of the available Bash Tools :"
 		list=$(fulls $HOME/.bash_tools | keep -f | keep -x)
@@ -31,7 +33,7 @@ case $1 in
 		done
 	;;
 
-	#option 3 : update
+	#option 2 : update
 	'-u' | '--update')
 
 		#go in bash_tools directory

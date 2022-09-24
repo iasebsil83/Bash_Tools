@@ -14,6 +14,8 @@ log_numbers=()
 
 
 
+
+
 # ---- TOOLS ----
 
 #ask confirmation for clearing logs ($1:message before, $2:message after)
@@ -69,6 +71,8 @@ function buildLogData() {
 
 
 
+
+
 # ---- INIT ----
 
 #detect exixting logs
@@ -81,10 +85,14 @@ fi
 
 
 
-# ---- MAIN ----
+
+
+# ---- EXECUTION ----
+
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'' | '-h' | '--help')
 		echo "Usage : loclog [option] [text]"
 		echo "Manage a local log system."
@@ -125,7 +133,7 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#option 2 : clear logs
+	#option 1 : clear logs
 	'-c' | '--clear')
 
 		#check log directory
@@ -156,7 +164,7 @@ case $1 in
 		fi
 	;;
 
-	#option 3 : delete logs
+	#option 2 : delete logs
 	'-d' | '--delete')
 
 		#detect log folder
@@ -177,7 +185,7 @@ case $1 in
 		fi
 	;;
 
-	#option 4 : new log directory
+	#option 3 : new log directory
 	'-n' | '--new')
 
 		#check if log folder already exists
@@ -208,7 +216,7 @@ case $1 in
 		echo "Successfully created log folder with $log_length latests logs ready to use inside."
 	;;
 
-	#option 5 : show logs
+	#option 4 : show logs
 	'-s' | '--show')
 
 		#check log directory
@@ -241,7 +249,7 @@ case $1 in
 		fi
 	;;
 
-	#option 6 : track stream
+	#option 5 : track stream
 	'-t' | '--track')
 
 		#while stream exists
@@ -257,7 +265,7 @@ case $1 in
 		exit 1
 	;;
 
-	#option 6 : push to latest log
+	#no option : push to latest log
 	*)
 		#check log directory
 		if [[ ! -d $log_dir ]]; then

@@ -3,35 +3,12 @@
 
 
 
-# ---- keep shortcuts ----
+# ---- EXECUTION ----
 
-#depending on mode ($1:index to seek, $2:mode)
-function keep_mode() {
-
-	#read standard input
-	input=$(cat)
-
-	#empty input is not to filter ('ls -dl' will work differently)
-	if [[ -z ${input[@]} ]]; then
-		exit 0
-	fi
-
-	#get MODE info on file/folder
-	for element in ${input[@]}; do
-		info=$(ls -dl $element | cut -d ' ' -f 1)
-		if [[ ${info:$1:1} == $2 ]]; then
-			echo $element
-		fi
-	done
-}
-
-
-
-
-# ---- main ----
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'' | '-h' | '--help')
 		echo "Usage : keep [option]"
 		echo "Reads standard input and output only a selection."
@@ -56,7 +33,7 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#option 2 : directories only
+	#option 1 : directories only
 	'-d' | '--directories')
 		input=$(cat)
 		for element in ${input[@]}; do
@@ -66,7 +43,7 @@ case $1 in
 		done
 	;;
 
-	#option 3 : existing only
+	#option 2 : existing only
 	'-e' | '--exist')
 		input=$(cat)
 		for element in ${input[@]}; do
@@ -76,7 +53,7 @@ case $1 in
 		done
 	;;
 
-	#option 4 : files only
+	#option 3 : files only
 	'-f' | '--files')
 		input=$(cat)
 		for element in ${input[@]}; do
@@ -86,22 +63,37 @@ case $1 in
 		done
 	;;
 
-	#option 5 : user readable only
+	#option 4 : user readable only
 	'-r' | '--readable')
-		keep_mode 1 r
+		input=$(cat)
+		for element in ${input[@]}; do
+			if [[ -r $element ]]; then
+				echo $element
+			fi
+		done
 	;;
 
-	#option 6 : user writable only
+	#option 5 : user writable only
 	'-w' | '--writable')
-		keep_mode 2 w
+		input=$(cat)
+		for element in ${input[@]}; do
+			if [[ -w $element ]]; then
+				echo $element
+			fi
+		done
 	;;
 
-	#option 7 : user executable only
+	#option 6 : user executable only
 	'-x' | '--executable')
-		keep_mode 3 x
+		input=$(cat)
+		for element in ${input[@]}; do
+			if [[ -x $element ]]; then
+				echo $element
+			fi
+		done
 	;;
 
-	#option 8 : filter by extension
+	#option 7 : filter by extension
 	'-t' | '--type')
 
 		#check extension

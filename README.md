@@ -69,19 +69,16 @@ You should be able to run these new commands :
 | cutline     |                      |                                 isnbr |    ok   |
 | findev      |                      |                                       |    ok   |
 | fulls       |                      |                               isempty |    ok   |
-| human       |                      |                                       |  in dev |
 | isempty     |                      |                                       |    ok   |
 | isnbr       |                      |                                       |    ok   |
 | keep        |                      |                               isempty |    ok   |
 | loclog      |                      |                                       |    ok   |
 | makegen     |         python3 make |                                       |    ok   |
-| multitask   |                      |                                       |  in dev |
 | pop         |                      |                                       |    ok   |
 | randsuite   |                      |                                 isnbr |    ok   |
 | repeat      |                      |                                       |    ok   |
 | replaceall  |                      |                                       |    ok   |
 | splitstr    |                      |                                       |    ok   |
-| sz          |                      |                   fulls keep travelfs |    ok   |
 | text2bin    |              python3 |                                       |    ok   |
 | tputcolors  |                 tput |                                 fulls |    ok   |
 | travelfs    |                      |             fulls replaceall splitstr |    ok   |

@@ -3,10 +3,12 @@
 
 
 
-# ---- main ----
+# ---- EXECUTION ----
+
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'-h' | '--help')
 		echo "Usage : isempty [option] <folder>"
 		echo "Returns 0 if given folder is empty (except if showing help menu)."

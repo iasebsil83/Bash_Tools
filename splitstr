@@ -3,10 +3,12 @@
 
 
 
-# ---- MAIN ----
+# ---- EXECUTION ----
+
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'' | '-h' | '--help')
 		echo "Usage : splitstr [option] <delimiter>"
 		echo "Splits the content from standard input into a string array."
@@ -39,7 +41,7 @@ case $1 in
 		exit 1
 	;;
 
-	#option 2 : split string
+	#option 1 : split string
 	*)
 
 		#error case

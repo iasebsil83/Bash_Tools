@@ -3,9 +3,13 @@
 
 
 
+# ---- IMPORTATIONS----
+
 #system
 import os
 import sys
+
+
 
 
 
@@ -20,6 +24,8 @@ dep_optionalFlags = ""
 
 #temporary files
 REMOVE_TEMP_FILES="rm -f *.o"
+
+
 
 
 
@@ -101,6 +107,8 @@ if sys.argv[1] == '-a' or sys.argv[1] == '--auto':
 
 
 
+
+
 # ---- CONFIG FILE ----
 
 #get config file
@@ -113,6 +121,8 @@ try:
 except:
 	print("makegen: Unable to read config file '" + sys.argv[1] + "'.")
 	exit(1)
+
+
 
 
 
@@ -193,6 +203,8 @@ for l in range(len(lines)):
 
 		#line 2 : compilation command
 		makefile_text += "\n\t" + DEP_COMPILE + current[0] + ".c " + dep_optionalFlags + "\n\n"
+
+
 
 
 

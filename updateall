@@ -3,10 +3,12 @@
 
 
 
-# ---- MAIN ----
+# ---- EXECUTION ----
+
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'-h' | '--help')
 		echo "Usage : updateall [option]"
 		echo "Update, upgrade, fix and clean all installed apt packages."
@@ -25,7 +27,7 @@ case $1 in
 		exit 1
 	;;
 
-	#option  2 : update all
+	#no option : update all
 	*)
 
 		#1) update

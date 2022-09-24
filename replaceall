@@ -26,9 +26,11 @@ function replaceall_echoError() {
 
 
 
+
+
 # ---- FILE & DIRECTORY CASES ----
 
-#file ($1:promptEnabled, $@:all user arguments after option 'file')
+#file ($1:confirmEnabled, $@:all user arguments after option 'file')
 function replaceall_file() {
 
 	#check void arguments
@@ -48,7 +50,7 @@ function replaceall_file() {
 		return 1
 	}
 
-	#prompt
+	#confirm
 	if [[ $1 == 1 ]]; then
 		echo "Do you really want to overwrite file '$2'"
 		read -p "replacing occurrences of '$3' by '$4' [y/n] ? " response
@@ -87,7 +89,7 @@ function replaceall_file() {
 	echo "  Replaced $cnt occurrences."
 }
 
-#directory ($1:includeAllFiles, $2:promptEnabled, $@:all user arguments after option 'directory')
+#directory ($1:includeAllFiles, $2:confirmEnabled, $@:all user arguments after option 'directory')
 function replaceall_dir() {
 
 	#check void arguments
@@ -126,10 +128,14 @@ function replaceall_dir() {
 
 
 
-# ---- MAIN ----
+
+
+# ---- EXECUTION ----
+
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'' | '-h' | '--help')
 		echo "Usage : replaceall <option(s)> [file/directory] <src> [dst]"
 		echo "Replace all occurrences of a string by another one."
@@ -140,7 +146,7 @@ case $1 in
 		echo "  -f, --file      <file> : Replace in the file given."
 		echo "  -h, --help             : Show this help message."
 		echo "  -l, --list             : Replace in list given via standard input."
-		echo "  -n, --noprompt         : Don't ask before overwriting files."
+		echo "  -n, --no-confirm       : Don't ask before overwriting files."
 		echo
 		echo "WARNING : Spaces are not fully supported in <src> strings !"
 		echo
@@ -160,22 +166,22 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#option 2 : replace in directory including hidden files
+	#option 1 : replace in directory including hidden files
 	'-a' | '--all')
-		replaceall_dir 1 1 $(removeArgs '-a' '--all' $@) #all files, prompt
+		replaceall_dir 1 1 $(removeArgs '-a' '--all' $@) #all files, confirm
 	;;
 
-	#option 3 : replace in directory
+	#option 2 : replace in directory
 	'-d' | '--directory')
-		replaceall_dir 0 1 $(removeArgs '-d' '--directory' $@) #not all files, prompt
+		replaceall_dir 0 1 $(removeArgs '-d' '--directory' $@) #not all files, confirm
 	;;
 
-	#option 4 : replace in file
+	#option 3 : replace in file
 	'-f' | '--file')
-		replaceall_file 1 $(removeArgs '-f' '--file' $@) #prompt
+		replaceall_file 1 $(removeArgs '-f' '--file' $@) #confirm
 	;;
 
-	#option 5 : replace in list given in stdin
+	#option 4 : replace in list given in stdin
 	'-l' | '--list')
 		[[ -z $2 ]] && echo "replaceall: No src string given." && exit 1
 
@@ -192,23 +198,23 @@ case $1 in
 		done
 	;;
 
-	#option 6 : no prompt
-	'-n' | '--noprompt')
+	#option 5 : no confirm
+	'-n' | '--no-confirm')
 		case $2 in
 
 			#all files
 			'-a' | '--all')
-				replaceall_dir 1 0 $(removeArgs '-n' '--noprompt' $(removeArgs '-a' '--all' $@)) #all files, no prompt
+				replaceall_dir 1 0 $(removeArgs '-n' '--no-confirm' $(removeArgs '-a' '--all' $@)) #all files, no confirm
 			;;
 
 			#directory
 			'-d' | '--directory')
-				replaceall_dir 0 0 $(removeArgs '-n' '--noprompt' $(removeArgs '-d' '--directory' $@)) #not all files, no prompt
+				replaceall_dir 0 0 $(removeArgs '-n' '--no-confirm' $(removeArgs '-d' '--directory' $@)) #not all files, no confirm
 			;;
 
 			#file
 			'-f' | '--file')
-				replaceall_file 0 $(removeArgs '-n' '--noprompt' $(removeArgs '-f' '--file' $@)) #no prompt
+				replaceall_file 0 $(removeArgs '-n' '--no-confirm' $(removeArgs '-f' '--file' $@)) #no confirm
 			;;
 
 			#undefined option

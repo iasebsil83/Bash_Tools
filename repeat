@@ -4,8 +4,12 @@
 
 
 # ---- DEFINITIONS ----
+
+#options
 stop=0
 prompt=0
+
+
 
 
 
@@ -55,10 +59,14 @@ function repeat_exec() {
 
 
 
-# ---- MAIN ----
+
+
+# ---- EXECUTION ----
+
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'' | '-h' | '--help')
 		echo "Usage : repeat [option] <nbr> <command>..."
 		echo "Repeats a command several times."

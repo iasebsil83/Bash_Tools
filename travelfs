@@ -13,7 +13,9 @@ exclude_symlinks=0
 
 
 
-# ---- TRAVELFS ----
+
+
+# ---- EXECUTION ----
 
 #go recursively ($1:current path, $@:command to execute)
 function travelfs_go() {
@@ -144,9 +146,7 @@ function travelfs_exec() {
 	travelfs_go $path ${command_to_execute[@]}
 }
 
-
-
-# ---- main ----
+#main
 case $1 in
 
 	#option 1 : help

@@ -4,8 +4,12 @@
 
 
 # ---- DEFINITIONS ----
-delay=0.1    #default values
+
+#default values
+delay=0.1
 separator=''
+
+
 
 
 
@@ -66,7 +70,11 @@ function HEX_random() {
 
 
 
+
+
 # ---- DELAY ----
+
+#parse delay before all
 delayFound=0
 for arg in $@; do
 
@@ -108,6 +116,8 @@ fi
 
 
 # ---- SEPARATOR ----
+
+#parse separator before all
 separatorFound=0
 for arg in $@; do
 
@@ -135,10 +145,12 @@ fi
 
 
 
-# ---- MAIN ----
+# ---- EXECUTION ----
+
+#main
 case $1 in
 
-	#option 1 : help
+	#help
 	'' | '-h' | '--help')
 		echo "Usage : randsuite [option]"
 		echo "Display a suite of random characters."
@@ -171,12 +183,12 @@ case $1 in
 		[[ -z $1 ]] && exit 1 || exit 0
 	;;
 
-	#option 2 : binary suite
+	#optin 1 : binary suite
 	'-b' | '--bin')
 
 		#no next arguments or it is another option => infinite loop
 		if [[ -z $2 || ${2:0:1} == '-' ]]; then
-			while [[ 1 ]]; do
+			while :; do
 				BIN_random
 				printf_separator
 				sleep $delay
@@ -200,12 +212,12 @@ case $1 in
 		fi
 	;;
 
-	#option 3 : hexadecimal suite
+	#option 2 : hexadecimal suite
 	'-H' | '--hex')
 
 		#no next arguments or it is another option => infinite loop
 		if [[ -z $2 || ${2:0:1} == '-' ]]; then
-			while [[ 1 ]]; do
+			while :; do
 				HEX_random;
 				printf_separator
 				sleep $delay;
