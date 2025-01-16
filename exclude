@@ -1,0 +1,69 @@
+#!/bin/bash
+
+
+
+
+# ---- EXECUTION ----
+
+#main
+case $1 in
+
+	#help
+	'' | '-h' | '--help')
+		echo "Usage : exclude [option] words..."
+		echo "Read standard input and output it excluding some words."
+		echo
+		echo "Options :"
+		echo "  -c, --case : Ignore case distinction."
+		echo "  -h, --help : Show this help message."
+		echo
+		echo "Example :"
+		echo "  > echo 'What do you do here man seriously ?' | exclude do seriously '?' | exclude -c what"
+		echo "  #echos 'you here man'."
+		echo
+		echo "This command is part of \"Bash Tools\"."
+		echo "For more information about \"Bash Tools\", please check :"
+		echo "    https://github.com/iasebsil83/Bash_Tools"
+		[[ -z $1 ]] && exit 1 || exit 0
+	;;
+
+	#option 1 : ignore case
+	'-c' | '--case')
+
+		#exclude in uppercase
+		input=$(cat)
+		for element in ${input[@]}; do
+			match=false
+			for arg in $@; do
+				if [[ ${element^^} == ${arg^^} ]]; then
+					match=true
+					break
+				fi
+			done
+			$match || echo -n $element' '
+		done
+		echo
+	;;
+
+	#undefined option
+	-*)
+		echo "exclude: Undefined option '$1'." >&2
+		exit 1
+	;;
+
+	#no option
+	*)
+		input=$(cat)
+		for element in ${input[@]}; do
+			match=false
+			for arg in $@; do
+				if [[ $element == $arg ]]; then
+					match=true
+					break
+				fi
+			done
+			$match || echo -n $element' '
+		done
+		echo
+	;;
+esac
