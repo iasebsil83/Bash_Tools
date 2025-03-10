@@ -32,51 +32,45 @@ case $1 in
 
 		#1) update
 		echo -e "\nUpdating package list...\n"
-		sudo apt update | yes
-		if [[ $PIPESTATUS[0] != 0 ]]; then
+		yes | sudo apt update || {
 			echo "updateall: Error updating packages list." >&2
 			exit 1
-		fi
+		}
 
 		#2) full-upgrade
 		echo -e "\nUpgrading packages...\n"
-		sudo apt full-upgrade | yes
-		if [[ $PIPESTATUS[0] != 0 ]]; then
+		yes | sudo apt full-upgrade || {
 			echo "updateall: Error upgrading packages." >&2
 			exit 1
-		fi
+		}
 
 		#3) fix broken
 		echo -e "\nFixing broken packages...\n"
-		sudo apt install --fix-broken | yes
-		if [[ $PIPESTATUS[0] != 0 ]]; then
+		yes | sudo apt install --fix-broken || {
 			echo "updateall: Error fixing broken packages." >&2
 			exit 1
-		fi
+		}
 
 		#4) fix missing
 		echo -e "\nFixing missing packages...\n"
-		sudo apt install --fix-missing | yes
-		if [[ $PIPESTATUS[0] != 0 ]]; then
+		yes | sudo apt install --fix-missing || {
 			echo "updateall: Error fixing missing packages." >&2
 			exit 1
-		fi
+		}
 
 		#5) remove unused
 		echo -e "\nRemoving unused packages...\n"
-		sudo apt autoremove | yes
-		if [[ $PIPESTATUS[0] != 0 ]]; then
+		yes | sudo apt autoremove || {
 			echo "updateall: Error removing unused packages." >&2
 			exit 1
-		fi
+		}
 
 		#6) clean apt folders
 		echo -e "\nCleaning all...\n"
-		sudo apt autoclean | yes
-		if [[ $PIPESTATUS[0] != 0 ]]; then
+		yes | sudo apt autoclean || {
 			echo "updateall: Error cleaning apt folders." >&2
 			exit 1
-		fi
+		}
 		echo -e "\nAll packages have been updated."
 	;;
 esac
